@@ -38,3 +38,31 @@ def getArticles(request):
 
     serializer = ArticleSerializer(articles, many=True)
     return Response({'articles': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+
+@api_view(['POST'])
+# @permission_classes([IsAdminUser])
+def createArticle(request):
+    p1 = Pears.objects.get(id=1)
+    p2 = Pears.objects.get(id=2)
+    list = [p1, p2]
+    article = Article.objects.create(
+        title='',
+        task='',
+        description='作成中',
+    )
+    for element in list:
+        article.pears.add(element)
+    article.save()
+
+    serializer = ArticleSerializer(article, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getArticle(request, pk):
+    article = Article.objects.get(id=pk)
+    serializer = ArticleSerializer(article, many=False)
+    return Response(serializer.data)
+
+

@@ -10,7 +10,7 @@ class Pears(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['name']
         verbose_name = '品種'
         verbose_name_plural = '品種'
 
@@ -37,7 +37,7 @@ class Field(models.Model):
         return str(self.name)
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['name']
         verbose_name = '畑'
         verbose_name_plural = '畑'
 
