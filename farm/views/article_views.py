@@ -107,6 +107,23 @@ def getImages(request):
     return Response(serializer.data)
 
 
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def updateImage(request, pk):
+    photo = Images.objects.get(id=pk)
+    photo.image = request.FILES.get('image')
+    photo.save()
+    return Response('写真が更新されました')
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteImage(request, pk):
+    image = Images.objects.get(id=pk)
+    image.delete()  
+    return Response('写真は削除されました')
+
+
 @api_view(['POST'])
 def createPear(request):
     pear = Pears.objects.create(
@@ -122,3 +139,23 @@ def getPears(request):
     pears = Pears.objects.all()
     serializer = ImagesSerializer(pears, many=True)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updatePear(request, pk):
+    data = request.data
+    pear = Pears.objects.get(id=pk)
+    pear.name = data['name']
+    pear.save()
+    serializer = ArticleSerializer(pear, many=False)
+    return Response(serializer.data)
+
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deletePear(request, pk):
+    pear = Pears.objects.get(id=pk)
+    pear.delete()  
+    return Response('写真は削除されました')

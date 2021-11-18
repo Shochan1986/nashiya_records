@@ -9,6 +9,7 @@ from farm.views.user_views import (
 )
 
 from farm.views.article_views import (
+    deleteImage,
     getArticles, 
     createArticle, 
     getArticle, 
@@ -17,9 +18,13 @@ from farm.views.article_views import (
 
     createImage,
     getImages,
+    updateImage,
+    deleteImage,
 
     createPear,
     getPears,
+    updatePear,
+    deletePear,
 )
 
 urlpatterns = [
@@ -38,7 +43,12 @@ urlpatterns = [
 
     path('images/create/', createImage),
     path('images/', getImages),
+    path('images/update/<str:pk>/', updateImage),
+    path('images/delete/<str:pk>/', deleteImage),
 
     path('pears/create/', createPear),
     path('pears/', getPears),
+    path('pears/update/<str:pk>/', updatePear),
+    path('pears/delete/<str:pk>/', deletePear),
+
 ]
