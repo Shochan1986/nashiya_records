@@ -67,6 +67,7 @@ def updateUser(request, pk):
     user.username = data['email']
     user.email = data['email']
     user.is_staff = data['isAdmin']
+    user.is_superuser = data['isSuper']
     user.save()
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
