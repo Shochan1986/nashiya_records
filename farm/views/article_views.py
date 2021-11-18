@@ -81,6 +81,7 @@ def updateArticle(request, pk):
     # article.description = data['description']
     # article.title = data['title']
     # article.task = data['task']
+    # article.is_public = data['is_public']
     for elem in pears_list:
         article.pears.add(elem)
     article.save()
