@@ -43,9 +43,11 @@ def getArticles(request):
 @api_view(['POST'])
 # @permission_classes([IsAdminUser])
 def createArticle(request):
+    list = []
     p1 = Pears.objects.get(id=1)
     p2 = Pears.objects.get(id=2)
-    list = [p1, p2]
+    list.append(p1)
+    list.append(p2)
     article = Article.objects.create(
         title='',
         task='',
@@ -65,4 +67,31 @@ def getArticle(request, pk):
     serializer = ArticleSerializer(article, many=False)
     return Response(serializer.data)
 
+
+@api_view(['PUT'])
+# @permission_classes([IsAdminUser])
+def updateArticle(request, pk):
+    data = request.data
+    article = Article.objects.get(id=pk)
+    pears_list = []
+    pears_ids = data['pears']
+    article.pears.clear()
+    for pear_id in pears_ids:
+        pears_list.append(pear_id)
+    # article.description = data['description']
+    # article.title = data['title']
+    # article.task = data['task']
+    for elem in pears_list:
+        article.pears.add(elem)
+    article.save()
+    serializer = ArticleSerializer(article, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+# @permission_classes([IsAdminUser])
+def deleteArticle(request, pk):
+    article = Article.objects.get(id=pk)
+    article.delete()  
+    return Response('写真は削除されました')
 
