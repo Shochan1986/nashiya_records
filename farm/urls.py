@@ -1,5 +1,11 @@
-from django.urls import path, include
-from farm.views import getArticles, createArticle, getArticle, updateArticle, deleteArticle
+from django.urls import path
+from farm.views.article_views import (
+    getArticles, 
+    createArticle, 
+    getArticle, 
+    updateArticle, 
+    deleteArticle
+)
 
 urlpatterns = [
     path('', getArticles,),
