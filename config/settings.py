@@ -138,6 +138,12 @@ MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 from datetime import timedelta
 
 SIMPLE_JWT = {
