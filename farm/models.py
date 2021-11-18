@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Pears(models.Model):
@@ -43,6 +44,7 @@ class Field(models.Model):
 
 
 class Article(models.Model):
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='ユーザー', related_name='articles')
     title = models.CharField('タイトル' ,max_length=300, null=True, )
     field = models.ForeignKey(Field, models.SET_NULL, blank=True, null=True, verbose_name='畑', related_name='articles')
     task = models.CharField('内容', max_length=300, blank=True, null=True, )
