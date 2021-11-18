@@ -30,8 +30,8 @@ class Images(models.Model):
 
 
 class Field(models.Model):
-    name = models.ImageField('名前', null=True)
-    place = models.ImageField('場所', null=True)
+    name = models.CharField('名前', null=True, max_length=300)
+    place = models.CharField('場所', null=True, max_length=400)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
     def __str__(self):
@@ -39,8 +39,8 @@ class Field(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = '畑'
-        verbose_name_plural = '畑'
+        verbose_name = '作業場'
+        verbose_name_plural = '作業場'
 
 
 class Article(models.Model):
