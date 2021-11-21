@@ -66,8 +66,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         return dict
         
     def get_pears_names(self, obj):
-        ids = obj.pears.values_list('name', flat=True)
-        return ids
+        names = obj.pears.values_list('name', flat=True)
+        return names
 
     class Meta:
         model = Article
