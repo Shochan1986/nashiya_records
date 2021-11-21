@@ -27,7 +27,7 @@ def getArticles(request):
             )
     articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
-    paginator = Paginator(articles, 5)
+    paginator = Paginator(articles, 3)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
