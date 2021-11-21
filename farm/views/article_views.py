@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
+from django.db.models import Q
 
 
 @api_view(['GET'])
@@ -18,7 +19,13 @@ def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-    articles = Article.objects.filter(title__icontains=query)
+    queryset = (
+                Q(title__icontains=query) |
+                Q(task__icontains=query) |
+                Q(description__icontains=query) |
+                Q(pears__name__icontains=query) 
+            )
+    articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
     paginator = Paginator(articles, 5)
     try:
@@ -30,8 +37,19 @@ def getArticles(request):
     if page == None:
         page = 1
     page = int(page)
+    start_index = articles.start_index()
+    end_index = articles.end_index()
     serializer = ArticleSerializer(articles, many=True)
-    return Response({'articles': serializer.data, 'page': page, 'pages': paginator.num_pages})
+    return Response(
+        {
+            'articles': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
 
 
 @api_view(['POST'])
