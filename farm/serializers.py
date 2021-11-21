@@ -59,7 +59,11 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     def get_pears_ids(self, obj):
         ids = obj.pears.values_list('id', flat=True)
-        return ids
+        if ids:
+            dict = {(i + 1): True for i in range(0, len(ids))}
+        else:
+            dict = {(i + 1): False for i in range(0, len(ids))}
+        return dict
         
     def get_pears_names(self, obj):
         ids = obj.pears.values_list('name', flat=True)

@@ -35,7 +35,7 @@ def getArticles(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def createArticle(request):
     pears_list = []
     p1 = Pears.objects.get(id=1)
@@ -67,7 +67,7 @@ def updateArticle(request, pk):
     article.description = data['description']
     article.title = data['title']
     article.task = data['task']
-    article.is_public = data['is_public']
+    article.is_public = data['isPublic']
     pears_list = []
     pears_ids = data['pears']
     article.pears.clear()
@@ -137,7 +137,7 @@ def createPear(request):
 @permission_classes([IsAdminUser])
 def getPears(request):
     pears = Pears.objects.all()
-    serializer = ImagesSerializer(pears, many=True)
+    serializer = PearsSerializer(pears, many=True)
     return Response(serializer.data)
 
 
@@ -148,7 +148,7 @@ def updatePear(request, pk):
     pear = Pears.objects.get(id=pk)
     pear.name = data['name']
     pear.save()
-    serializer = ArticleSerializer(pear, many=False)
+    serializer = PearsSerializer(pear, many=False)
     return Response(serializer.data)
 
 
