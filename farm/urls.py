@@ -15,6 +15,7 @@ from farm.views.article_views import (
     getArticle, 
     updateArticle, 
     deleteArticle,
+    getPublicArticles,
 
     createImage,
     getImages,
@@ -38,6 +39,7 @@ urlpatterns = [
     path('users/delete/<str:pk>/', deleteUser, name="user-delete"),
 
     path('articles/', getArticles,),
+    path('articles/public/', getPublicArticles,),
     path('articles/create/', createArticle),
     path('articles/<str:pk>/', getArticle),
     path('articles/update/<str:pk>/', updateArticle),

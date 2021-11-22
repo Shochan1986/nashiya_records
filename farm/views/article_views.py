@@ -24,9 +24,48 @@ def getArticles(request):
     queryset = (
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
-                Q(pears__name__icontains=query) 
+                Q(pears__name__icontains=query) | 
+                Q(fields__name__icontains=query)  
             )
     articles = Article.objects.filter(queryset).distinct()
+    page = request.query_params.get('page')
+    paginator = Paginator(articles, 6)
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = articles.start_index()
+    end_index = articles.end_index()
+    serializer = ArticleSerializer(articles, many=True)
+    return Response(
+        {
+            'articles': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
+
+
+@api_view(['GET'])
+def getPublicArticles(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(pears__name__icontains=query) | 
+                Q(fields__name__icontains=query)  
+            )
+    articles = Article.objects.filter(is_public=True).filter(queryset).distinct()
     page = request.query_params.get('page')
     paginator = Paginator(articles, 6)
     try:
@@ -65,7 +104,7 @@ def createArticle(request):
     article = Article.objects.create(
         title='準備中',
         date=datetime.now().date(),
-        description='作成中',
+        description='詳細は後ほど。。。',
     )
     for elem_p in pears_list:
         article.pears.add(elem_p)
