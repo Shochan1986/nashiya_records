@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.fields import Field
 from farm.models import Pears, Images, Fields, Article
 from farm.serializers import (
     PearsSerializer,
@@ -58,13 +59,18 @@ def createArticle(request):
     pears_list = []
     p1 = Pears.objects.get(id=1)
     pears_list.append(p1)
+    fields_list = []
+    f1 = Fields.objects.get(id=1)
+    fields_list.append(f1)
     article = Article.objects.create(
         title='準備中',
         task='準備中',
         description='作成中',
     )
-    for element in pears_list:
-        article.pears.add(element)
+    for elem_p in pears_list:
+        article.pears.add(elem_p)
+    for elem_f in fields_list:
+        article.fields.add(elem_f)
     article.save()
     serializer = ArticleSerializer(article, many=False)
     return Response(serializer.data)
