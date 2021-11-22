@@ -97,8 +97,15 @@ def updateArticle(request, pk):
     article.pears.clear()
     for pear_id in pears_ids:
         pears_list.append(pear_id)
-    for elem in pears_list:
-        article.pears.add(elem)
+    for elem_p in pears_list:
+        article.pears.add(elem_p)
+    fields_list = []
+    fields_ids = data['fields']
+    article.fields.clear()
+    for field_id in fields_ids:
+        fields_list.append(field_id)
+    for elem_f in fields_list:
+        article.fields.add(elem_f)
     article.save()
     serializer = ArticleSerializer(article, many=False)
     return Response(serializer.data)
@@ -183,3 +190,11 @@ def deletePear(request, pk):
     pear = Pears.objects.get(id=pk)
     pear.delete()  
     return Response('写真は削除されました')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getFields(request):
+    fields = Fields.objects.all()
+    serializer = FieldsSerializer(fields, many=True)
+    return Response(serializer.data)

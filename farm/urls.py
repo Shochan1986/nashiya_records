@@ -25,6 +25,8 @@ from farm.views.article_views import (
     getPears,
     updatePear,
     deletePear,
+
+    getFields,
 )
 
 urlpatterns = [
@@ -50,5 +52,7 @@ urlpatterns = [
     path('pears/', getPears),
     path('pears/update/<str:pk>/', updatePear),
     path('pears/delete/<str:pk>/', deletePear),
+
+    path('fields/', getFields),
 
 ]
