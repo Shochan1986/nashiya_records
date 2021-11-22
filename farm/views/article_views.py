@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q
+from datetime import datetime, timedelta
 
 
 @api_view(['GET'])
@@ -22,13 +23,12 @@ def getArticles(request):
         query = ''
     queryset = (
                 Q(title__icontains=query) |
-                Q(task__icontains=query) |
                 Q(description__icontains=query) |
                 Q(pears__name__icontains=query) 
             )
     articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
-    paginator = Paginator(articles, 3)
+    paginator = Paginator(articles, 6)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
@@ -64,7 +64,7 @@ def createArticle(request):
     fields_list.append(f1)
     article = Article.objects.create(
         title='準備中',
-        task='準備中',
+        date=datetime.now().date(),
         description='作成中',
     )
     for elem_p in pears_list:
@@ -90,7 +90,7 @@ def updateArticle(request, pk):
     article = Article.objects.get(id=pk)
     article.description = data['description']
     article.title = data['title']
-    article.task = data['task']
+    article.date = data['date']
     article.is_public = data['isPublic']
     pears_list = []
     pears_ids = data['pears']

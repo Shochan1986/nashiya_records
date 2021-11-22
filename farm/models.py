@@ -47,7 +47,7 @@ class Article(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='ユーザー', related_name='articles')
     title = models.CharField('タイトル' ,max_length=300, null=True, )
     fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場', related_name='articles')
-    task = models.CharField('内容', max_length=300, blank=True, null=True, )
+    date = models.DateField('日付', blank=True, null=True, )
     description = models.TextField('詳細', blank=True, null=True, )
     start_time = models.DateTimeField('開始時間', blank=True, null=True, )
     end_time = models.DateTimeField('終了時間', blank=True, null=True, )
