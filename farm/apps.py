@@ -6,3 +6,6 @@ class FarmConfig(AppConfig):
     name = 'farm'
     verbose_name = '農園'
     verbose_name_plural = '農園'
+
+    def ready(self):
+        import farm.signals

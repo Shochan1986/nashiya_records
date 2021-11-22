@@ -16,21 +16,10 @@ class Pears(models.Model):
         verbose_name_plural = '品種'
 
 
-class ImageAlbum(models.Model):
-    def default(self):
-        return self.images.filter(default=True).first()
-
-    class Meta:
-        verbose_name = 'アルバム'
-        verbose_name_plural = 'アルバム'
-
-
 class Images(models.Model):
-    name = models.CharField('名前', max_length=255, blank=True, null=True, )
+    url = models.URLField('URL', max_length=255, blank=True, null=True)
     image = models.ImageField('画像ファイル', null=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
-    default = models.BooleanField('初期設定', default=False, null=True)
-    album = models.ForeignKey(ImageAlbum, related_name='images', on_delete=models.CASCADE, blank=True, null=True, )
 
     def __str__(self):
         return str(self.image.url)
@@ -69,7 +58,6 @@ class Article(models.Model):
     published_at = models.DateTimeField(blank=True, null=True, verbose_name='完成日時')
     images = models.ManyToManyField(Images, blank=True, verbose_name='画像', related_name='articles')
     pears = models.ManyToManyField(Pears, blank=True, verbose_name='品種', related_name='articles')
-    album = models.OneToOneField(ImageAlbum, related_name='article', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

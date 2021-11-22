@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from environs import Env 
+
+env = Env() 
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +45,8 @@ INSTALLED_APPS = [
     'farm.apps.FarmConfig',
     'rest_framework', # new
     "corsheaders", # new
+    'cloudinary_storage', # new
+    'cloudinary', # new
 ]
 
 MIDDLEWARE = [
@@ -132,6 +138,7 @@ STATICFILES_FINDERS = [
 
 MEDIA_URL = '/media/' # new 
 MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' # new 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -178,3 +185,8 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
 ]
 
+CLOUDINARY_STORAGE = { 
+    'CLOUD_NAME': env("CLOUDINARY_CLOUD_NAME"),
+    'API_KEY': env("CLOUDINARY_API_KEY"),
+    'API_SECRET': env("CLOUDINARY_API_SECRET")
+}   

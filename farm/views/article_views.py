@@ -145,6 +145,13 @@ def updateArticle(request, pk):
         fields_list.append(field_id)
     for elem_f in fields_list:
         article.fields.add(elem_f)
+    images_list = []
+    images_ids = data['images']
+    article.images.clear()
+    for image_id in images_ids:
+        images_list.append(image_id)
+    for elem_i in images_list:
+        article.images.add(elem_i)
     article.save()
     serializer = ArticleSerializer(article, many=False)
     return Response(serializer.data)
@@ -161,11 +168,14 @@ def deleteArticle(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createImage(request):
-    images = request.FILES.getlist('images')
-    for image in images:
-        photo = Images()
-        photo.image = image
-        photo.save()
+    photo = request.FILES.get('image')
+    image = Images(image=photo)
+    image.save()
+    # images = request.FILES.getlist('images')
+    # for image in images:
+    #     photo = Images()
+    #     photo.image = image
+    #     photo.save()
     return Response('画像がアップロードされました')
 
 
