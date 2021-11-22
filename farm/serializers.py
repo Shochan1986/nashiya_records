@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from farm.models import Article, Field, Pears, Images
+from farm.models import Article, Fields, Pears, Images
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 
@@ -34,9 +34,9 @@ class UserSerializerWithToken(UserSerializer):
         return str(token.access_token)
 
 
-class FieldSerializer(serializers.ModelSerializer):
+class FieldsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Field
+        model = Fields
         fields = '__all__'
 
 
@@ -56,6 +56,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     pears = serializers.PrimaryKeyRelatedField(queryset=Pears.objects.all(), write_only=True)
     pears_ids = serializers.SerializerMethodField(read_only=True)
     pears_names = serializers.SerializerMethodField(read_only=True)
+    fields = serializers.PrimaryKeyRelatedField(queryset=Fields.objects.all(), write_only=True)
+    fields_ids = serializers.SerializerMethodField(read_only=True)
+    fields_names = serializers.SerializerMethodField(read_only=True)
 
     def get_pears_ids(self, obj):
         ids = obj.pears.values_list('id', flat=True)
@@ -66,7 +69,16 @@ class ArticleSerializer(serializers.ModelSerializer):
         names = obj.pears.values_list('name', flat=True)
         return names
 
+    def get_fields_ids(self, obj):
+        ids = obj.fields.values_list('id', flat=True)
+        dict = {(ids[i]): True for i in range(0, len(ids))}
+        return dict
+
+    def get_fields_names(self, obj):
+        names = obj.fields.values_list('name', flat=True)
+        return names
+
     class Meta:
         model = Article
-        fields = ['id', 'title', 'field', 'task', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
-                'published_at', 'images', 'pears', 'pears_ids', 'pears_names']
+        fields = ['id', 'title', 'fields', 'task', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
+                'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names']

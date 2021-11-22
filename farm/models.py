@@ -29,7 +29,7 @@ class Images(models.Model):
         verbose_name_plural = '写真'
 
 
-class Field(models.Model):
+class Fields(models.Model):
     name = models.CharField('名前', null=True, max_length=300)
     place = models.CharField('場所', null=True, max_length=400)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
@@ -46,7 +46,7 @@ class Field(models.Model):
 class Article(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='ユーザー', related_name='articles')
     title = models.CharField('タイトル' ,max_length=300, null=True, )
-    field = models.ForeignKey(Field, models.SET_NULL, blank=True, null=True, verbose_name='畑', related_name='articles')
+    fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場', related_name='articles')
     task = models.CharField('内容', max_length=300, blank=True, null=True, )
     description = models.TextField('詳細', blank=True, null=True, )
     start_time = models.DateTimeField('開始時間', blank=True, null=True, )

@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from farm.models import Pears, Images, Field, Article
+from farm.models import Pears, Images, Fields, Article
 from farm.serializers import (
     PearsSerializer,
     ImagesSerializer,
-    FieldSerializer,
+    FieldsSerializer,
     ArticleSerializer
 )
 from rest_framework.decorators import api_view, permission_classes
