@@ -17,7 +17,7 @@ class Pears(models.Model):
 
 
 class Images(models.Model):
-    url = models.URLField('URL', max_length=255, blank=True, null=True)
+    url = models.URLField('URL', blank=True, null=True)
     image = models.ImageField('画像ファイル', null=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 

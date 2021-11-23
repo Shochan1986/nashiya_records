@@ -168,19 +168,19 @@ def deleteArticle(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createImage(request):
-    photo = request.FILES.get('image')
-    image = Images(image=photo)
-    image.save()
-    # images = request.FILES.getlist('images')
-    # for image in images:
-    #     photo = Images()
-    #     photo.image = image
-    #     photo.save()
+    # photo = request.FILES.get('image')
+    # image = Images(image=photo)
+    # image.save()
+    images = request.FILES.getlist('images')
+    for image in images:
+        photo = Images()
+        photo.image = image
+        photo.save()
     return Response('画像がアップロードされました')
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def getImages(request):
     images = Images.objects.all()
     serializer = ImagesSerializer(images, many=True)
