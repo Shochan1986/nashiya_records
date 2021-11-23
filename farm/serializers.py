@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 import cloudinary
 
-
 class UserSerializer(serializers.ModelSerializer):
     _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
@@ -90,7 +89,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     def get_images_urls(self, obj):
         urls = obj.images.values_list('url', flat=True)
         return urls
-
 
     class Meta:
         model = Article

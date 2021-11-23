@@ -63,7 +63,7 @@ class Article(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['-date']
         verbose_name = '日報'
         verbose_name_plural = '日報'
 
