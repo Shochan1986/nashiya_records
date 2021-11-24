@@ -183,6 +183,7 @@ SIMPLE_JWT = {
 CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:8000',
     'http://localhost:3000',
+    'https://nashiya-reports.netlify.app',
 ]
 
 CLOUDINARY_STORAGE = { 
@@ -190,3 +191,11 @@ CLOUDINARY_STORAGE = {
     'API_KEY': env("CLOUDINARY_API_KEY"),
     'API_SECRET': env("CLOUDINARY_API_SECRET")
 }   
+
+if os.getcwd() == '/app':
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_SECONDS = 1000000
