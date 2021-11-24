@@ -118,7 +118,7 @@ def createArticle(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def getArticle(request, pk):
     article = Article.objects.get(id=pk)
     serializer = ArticleSerializer(article, many=False)
