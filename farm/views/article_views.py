@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -55,6 +56,7 @@ def getArticles(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getPublicArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -116,6 +118,7 @@ def createArticle(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getArticle(request, pk):
     article = Article.objects.get(id=pk)
     serializer = ArticleSerializer(article, many=False)
@@ -188,7 +191,7 @@ def getImages(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getPaginatedImages(request):
     images = Images.objects.all()
     page = request.query_params.get('page')
@@ -230,6 +233,7 @@ def deleteImage(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def createPear(request):
     pear = Pears.objects.create(
         name="作成中"
