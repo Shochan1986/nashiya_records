@@ -19,6 +19,7 @@ from farm.views.article_views import (
 
     createImage,
     getImages,
+    getImage,   
     getPaginatedImages,
     updateImage,
     deleteImage,
@@ -48,7 +49,8 @@ urlpatterns = [
 
     path('images/create/', createImage),
     path('images/', getImages),
-    path('images/paginated/', getPaginatedImages),
+    path('images/<str:pk>/', getImage),
+    path('images-paginated/', getPaginatedImages),
     path('images/update/<str:pk>/', updateImage),
     path('images/delete/<str:pk>/', deleteImage),
 

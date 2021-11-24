@@ -118,7 +118,7 @@ def createArticle(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getArticle(request, pk):
     article = Article.objects.get(id=pk)
     serializer = ArticleSerializer(article, many=False)
@@ -215,13 +215,23 @@ def getPaginatedImages(request):
     )
 
 
-@api_view(['DELETE'])
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getImage(request, pk):
+    image = Images.objects.get(id=pk)
+    serializer = ImagesSerializer(image, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def updateImage(request, pk):
-    photo = Images.objects.get(id=pk)
-    photo.image = request.FILES.get('image')
-    photo.save()
-    return Response('写真が更新されました')
+    data = request.data
+    image = Images.objects.get(id=pk)
+    image.comment = data['comment']
+    image.save()
+    serializer = ImagesSerializer(image, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['DELETE'])
