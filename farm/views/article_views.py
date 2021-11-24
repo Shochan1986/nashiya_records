@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q
-from datetime import datetime, timedelta
+from django.utils import timezone
 
 
 @api_view(['GET'])
@@ -105,7 +105,7 @@ def createArticle(request):
     fields_list.append(f1)
     article = Article.objects.create(
         title='準備中',
-        date=datetime.now().date(),
+        date=timezone.now().date(),
         description='詳細は後ほど。。。',
     )
     for elem_p in pears_list:
