@@ -73,3 +73,19 @@ class Article(models.Model):
             self.published_at = timezone.now()
         super().save(*args, **kwargs)
 
+
+class LinePush(models.Model):
+    line_id = models.CharField(max_length=50, primary_key=True, verbose_name="LineID", default="0")
+    line_name = models.CharField(max_length=100, verbose_name="Line表示名", null=True)
+    line_picture_url = models.URLField(verbose_name="Line画像URL", null=True)
+    line_status_message = models.CharField(max_length=100, blank=True, null=True, verbose_name="Lineメッセージ")
+    unfollow = models.BooleanField(default=False, verbose_name="ブロック", null=True)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name="登録日時")
+
+    def __str__(self):
+        return self.line_id
+    
+    class Meta:
+        verbose_name = ('LINE登録者リスト')
+        verbose_name_plural = ('LINE登録者リスト')
+        ordering = ['-create_time']

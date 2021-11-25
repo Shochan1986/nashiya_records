@@ -32,6 +32,8 @@ from farm.views.article_views import (
     getFields,
 )
 
+from farm.views.line_views import callback
+
 urlpatterns = [
     path('users/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 	path('users/register/', registerUser, name="register"),
@@ -61,4 +63,5 @@ urlpatterns = [
 
     path('fields/', getFields),
 
+    path('callback/', callback, name='callback'),
 ]
