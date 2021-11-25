@@ -1,9 +1,35 @@
 from django.contrib import admin
 from farm.models import Article, Fields, Images, Pears, LinePush
+from django.utils.safestring import mark_safe
+
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
     list_display = ('title', 'date', 'is_public')
+    list_editable = ('is_public', )
+
+
+class ImagesAdmin(admin.ModelAdmin):
+    model = Images
+    list_display = ('show_image', 'comment', 'url')
+    list_editable = ('comment',)
+    ordering = ('-created',)
+    list_per_page = 15
+
+    def show_image(self, obj):
+        return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image.url))
+
+
+class PearsAdmin(admin.ModelAdmin):
+    model = Pears
+    list_display = ('name', 'number')
+    list_editable = ('number',)
+
+
+class FieldsAdmin(admin.ModelAdmin):
+    model = Fields
+    list_display = ('name', 'number')
+    list_editable = ('number',)
 
 
 class LinePushAdmin(admin.ModelAdmin):
@@ -29,9 +55,9 @@ class LinePushAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
-admin.site.register(Fields)
-admin.site.register(Images)
-admin.site.register(Pears)
+admin.site.register(Fields, FieldsAdmin)
+admin.site.register(Images, ImagesAdmin)
+admin.site.register(Pears, PearsAdmin)
 admin.site.register(LinePush, LinePushAdmin)
 
 admin.site.site_header = "梨屋さん 日報アプリ"

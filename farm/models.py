@@ -7,12 +7,13 @@ from cloudinary.models import CloudinaryField
 class Pears(models.Model):
     name = models.CharField('品種', null=True, max_length=200)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
+    number = models.PositiveIntegerField('番号', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ['number']
         verbose_name = '品種'
         verbose_name_plural = '品種'
 
@@ -45,15 +46,16 @@ class Images(models.Model):
 class Fields(models.Model):
     name = models.CharField('名前', null=True, max_length=300)
     place = models.CharField('場所', null=True, max_length=400)
+    number = models.PositiveIntegerField('番号', null=True, blank=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
     def __str__(self):
         return str(self.name)
 
     class Meta:
-        ordering = ['name']
-        verbose_name = '作業場'
-        verbose_name_plural = '作業場'
+        ordering = ['number']
+        verbose_name = '作業場所'
+        verbose_name_plural = '作業場所'
 
 
 class Article(models.Model):
