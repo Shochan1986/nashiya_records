@@ -86,6 +86,6 @@ class LinePush(models.Model):
         return self.line_id
     
     class Meta:
-        verbose_name = ('LINE登録者リスト')
-        verbose_name_plural = ('LINE登録者リスト')
+        verbose_name = ('LINE登録')
+        verbose_name_plural = ('LINE登録')
         ordering = ['-create_time']
