@@ -26,7 +26,8 @@ def getArticles(request):
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
                 Q(pears__name__icontains=query) | 
-                Q(fields__name__icontains=query)  
+                Q(fields__name__icontains=query) | 
+                Q(images__comment__icontains=query)  
             )
     articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
@@ -65,7 +66,8 @@ def getPublicArticles(request):
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
                 Q(pears__name__icontains=query) | 
-                Q(fields__name__icontains=query)  
+                Q(fields__name__icontains=query) |
+                Q(images__comment__icontains=query)  
             )
     articles = Article.objects.filter(is_public=True).filter(queryset).distinct()
     page = request.query_params.get('page')
@@ -196,7 +198,10 @@ def getPaginatedImages(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-    queryset = (Q(comment__icontains=query))
+    queryset = (
+                Q(comment__icontains=query) |
+                Q(image__icontains=query)  
+            )
     images = Images.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
     paginator = Paginator(images, 12)
