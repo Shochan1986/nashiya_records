@@ -193,7 +193,11 @@ def getImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getPaginatedImages(request):
-    images = Images.objects.all()
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (Q(comment__icontains=query))
+    images = Images.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
     paginator = Paginator(images, 12)
     try:
@@ -206,11 +210,16 @@ def getPaginatedImages(request):
         page = 1
     page = int(page)
     serializer = ImagesSerializer(images, many=True)
+    start_index = images.start_index()
+    end_index = images.end_index()
     return Response(
         {
             'images': serializer.data, 
             'page': page, 
             'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
         }
     )
 

@@ -58,8 +58,8 @@ class Fields(models.Model):
 
 class Article(models.Model):
     user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='ユーザー', related_name='articles')
-    title = models.CharField('タイトル' ,max_length=300, null=True, )
-    fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場', related_name='articles')
+    title = models.CharField('作業内容' ,max_length=300, null=True, )
+    fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場所', related_name='articles')
     date = models.DateField('日付', blank=True, null=True, )
     description = models.TextField('詳細', blank=True, null=True, )
     start_time = models.DateTimeField('開始時間', blank=True, null=True, )

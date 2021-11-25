@@ -1,0 +1,6 @@
+記事の投稿・編集のお知らせです。
+
+{{ article.title }}
+https://nashiya-reports.netlify.app/article/{{article.id}}
+
+＊この通知は送信専用アカウントから送信されています。
