@@ -47,9 +47,27 @@ class PearsSerializer(serializers.ModelSerializer):
 
 
 class ImagesSerializer(serializers.ModelSerializer):
+    thumbnail = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Images
         fields = '__all__'
+
+    def get_thumbnail(self, obj):
+        return obj.image.url
+
+    def to_representation(self, instance):
+        representation = super(ImagesSerializer, self).to_representation(instance)
+        if instance.image:
+            thumbnailUrl = cloudinary.utils.cloudinary_url(instance.image.build_url(transformation=[
+                {'width': 450 },
+                {'fetch_format': "auto"},
+                {'quality': 'auto:eco'},
+                {'dpr': 'auto'},
+                {'effect': 'auto_contrast'},
+                ]))
+            representation['thumbnail'] = thumbnailUrl[0]
+        return representation
+
 
 
 class ArticleSerializer(serializers.ModelSerializer):

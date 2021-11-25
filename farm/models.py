@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 class Pears(models.Model):
@@ -18,7 +19,17 @@ class Pears(models.Model):
 
 class Images(models.Model):
     url = models.URLField('URL', blank=True, null=True)
-    image = models.ImageField('画像ファイル', null=True)
+    image = CloudinaryField(
+        null=True, 
+        verbose_name=('画像ファイル'),
+         transformation={ 
+            "quality": "auto", 
+            'dpr': "auto", 
+            "fetch_format":"auto", 
+            "angle":"exif", 
+            "effect":"auto_contrast" 
+            }, 
+        )
     comment = models.TextField('コメント', blank=True, null=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
