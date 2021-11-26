@@ -80,6 +80,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     images = serializers.PrimaryKeyRelatedField(queryset=Images.objects.all(), write_only=True)
     images_ids = serializers.SerializerMethodField(read_only=True)
     images_urls = serializers.SerializerMethodField(read_only=True)
+    images_comments = serializers.SerializerMethodField(read_only=True)
     images_data = serializers.SerializerMethodField(read_only=True)
 
     def get_pears_ids(self, obj):
@@ -105,6 +106,11 @@ class ArticleSerializer(serializers.ModelSerializer):
         dict = {(ids[i]): True for i in range(0, len(ids))}
         return dict
 
+    def get_images_comments(self, obj):
+        ids = obj.images.values_list('comment', flat=True)
+        dict = {(ids[i]): True for i in range(0, len(ids))}
+        return dict
+
     def get_images_urls(self, obj):
         urls = obj.images.values_list('url', flat=True)
         return urls
@@ -117,4 +123,4 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'fields', 'date', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
-                'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 'images_urls', 'images_data']
+                'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 'images_urls', 'images_comments', 'images_data']

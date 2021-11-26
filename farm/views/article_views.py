@@ -204,7 +204,7 @@ def getPaginatedImages(request):
             )
     images = Images.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
-    paginator = Paginator(images, 6)
+    paginator = Paginator(images, 9, orphans=1)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
