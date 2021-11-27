@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.fields import Field
-from farm.models import Pears, Images, Fields, Article
+from farm.models import Category, Pears, Images, Fields, Article
 from farm.serializers import (
     PearsSerializer,
     ImagesSerializer,
     FieldsSerializer,
-    ArticleSerializer
+    ArticleSerializer,
+    CategorySerializer
 )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -17,7 +18,7 @@ from django.utils import timezone
 
 
 @api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -99,6 +100,7 @@ def getPublicArticles(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createArticle(request):
+    cat = Category.objects.get(id=1)
     pears_list = []
     p1 = Pears.objects.get(id=1)
     pears_list.append(p1)
@@ -108,6 +110,7 @@ def createArticle(request):
     article = Article.objects.create(
         title='準備中',
         date=timezone.now().date(),
+        category=cat,
         description='詳細は後ほど。。。',
     )
     for elem_p in pears_list:
@@ -135,6 +138,8 @@ def updateArticle(request, pk):
     article.description = data['description']
     article.title = data['title']
     article.date = data['date']
+    cat = Category.objects.get(id=data['category'])
+    article.category = cat
     article.is_public = data['isPublic']
     pears_list = []
     pears_ids = data['pears']
@@ -299,4 +304,12 @@ def deletePear(request, pk):
 def getFields(request):
     fields = Fields.objects.all()
     serializer = FieldsSerializer(fields, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getCategories(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)

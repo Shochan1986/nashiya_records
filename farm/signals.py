@@ -26,10 +26,11 @@ def images_url_save(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Article)
 def article_create_notification(sender, instance, created, **kwargs):
-    if instance.is_public:
-        context = {
-            'article': instance,
-        }
-        message = render_to_string('notify_message.txt', context)
-        for push in LinePush.objects.filter(unfollow=False):
-            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    if not getattr(instance, 'from_admin_site', False):
+        if instance.is_public:
+            context = {
+                'article': instance,
+            }
+            message = render_to_string('notify_message.txt', context)
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))

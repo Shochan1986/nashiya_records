@@ -12,7 +12,7 @@ from farm.views.article_views import (
     deleteImage,
     getArticles, 
     createArticle, 
-    getArticle, 
+    getArticle,
     updateArticle, 
     deleteArticle,
     getPublicArticles,
@@ -30,6 +30,8 @@ from farm.views.article_views import (
     deletePear,
 
     getFields,
+
+    getCategories, 
 )
 
 from farm.views.line_views import callback
@@ -62,6 +64,8 @@ urlpatterns = [
     path('pears/delete/<str:pk>/', deletePear),
 
     path('fields/', getFields),
+
+    path('categories/', getCategories),
 
     path('callback/', callback, name='callback'),
 ]
