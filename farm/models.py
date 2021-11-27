@@ -58,8 +58,23 @@ class Fields(models.Model):
         verbose_name_plural = '作業場所'
 
 
+class Category(models.Model):
+    name = models.CharField('名前', null=True, max_length=300)
+    number = models.PositiveIntegerField('番号', null=True, blank=True)
+    created = models.DateTimeField('追加日', auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        ordering = ['number']
+        verbose_name = '分類'
+        verbose_name_plural = '分類'
+
+
 class Article(models.Model):
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='ユーザー', related_name='articles')
+    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='投稿者', related_name='articles')
+    category = models.ForeignKey(Category, models.SET_NULL, blank=True, null=True, verbose_name='分類', related_name='articles')
     title = models.CharField('作業内容' ,max_length=300, null=True, )
     fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場所', related_name='articles')
     date = models.DateField('日付', blank=True, null=True, )
@@ -102,3 +117,40 @@ class LinePush(models.Model):
         verbose_name = ('LINE登録')
         verbose_name_plural = ('LINE登録')
         ordering = ['-create_time']
+
+
+class Comment(models.Model):
+    article = models.ForeignKey(
+        Article, on_delete=models.CASCADE, related_name='comments', verbose_name="日報"
+    )
+    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
+    text = models.TextField(verbose_name=('本文'), null=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('コメント')
+        verbose_name_plural = ('コメント')
+
+    def __str__(self):
+        return self.text
+
+
+class Reply(models.Model):
+    comment = models.ForeignKey(
+        Comment, 
+        on_delete=models.CASCADE, 
+        related_name='replies',
+        verbose_name='返信'
+    )
+    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
+    text = models.TextField(verbose_name=('本文'), null=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('返信')
+        verbose_name_plural = ('返信')
