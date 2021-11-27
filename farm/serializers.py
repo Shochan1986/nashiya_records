@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from farm.models import Article, Fields, Pears, Images
+from farm.models import Article, Fields, Pears, Images, Category
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 import cloudinary
@@ -46,6 +46,12 @@ class PearsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+
 class ImagesSerializer(serializers.ModelSerializer):
     thumbnail = serializers.SerializerMethodField(read_only=True)
     class Meta:
@@ -71,6 +77,8 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), write_only=True)
+    category_name = serializers.SerializerMethodField(read_only=True)
     pears = serializers.PrimaryKeyRelatedField(queryset=Pears.objects.all(), write_only=True)
     pears_ids = serializers.SerializerMethodField(read_only=True)
     pears_names = serializers.SerializerMethodField(read_only=True)
@@ -120,7 +128,17 @@ class ArticleSerializer(serializers.ModelSerializer):
         serializer = ImagesSerializer(images, many=True)
         return serializer.data
 
+    def get_category_id(self, obj):
+        return obj.category.id
+
+    def get_category_name(self, obj):
+        if obj.category is not None:
+            return obj.category.name
+        else:
+            return None
+
     class Meta:
         model = Article
-        fields = ['id', 'title', 'fields', 'date', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
-                'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 'images_urls', 'images_comments', 'images_data']
+        fields = ['id', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
+                'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
+                'images_urls', 'images_comments', 'images_data']

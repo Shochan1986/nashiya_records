@@ -17,7 +17,7 @@ from django.utils import timezone
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:

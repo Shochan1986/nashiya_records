@@ -1,12 +1,12 @@
 from django.contrib import admin
-from farm.models import Article, Fields, Images, Pears, LinePush
+from farm.models import Article, Fields, Images, Pears, LinePush, Category
 from django.utils.safestring import mark_safe
 
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
-    list_display = ('title', 'date', 'is_public')
-    list_editable = ('is_public', )
+    list_display = ('title', 'date', 'category', 'is_public')
+    list_editable = ('is_public', 'category')
 
 
 class ImagesAdmin(admin.ModelAdmin):
@@ -22,6 +22,12 @@ class ImagesAdmin(admin.ModelAdmin):
 
 class PearsAdmin(admin.ModelAdmin):
     model = Pears
+    list_display = ('name', 'number')
+    list_editable = ('number',)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    model = Category
     list_display = ('name', 'number')
     list_editable = ('number',)
 
@@ -58,6 +64,7 @@ admin.site.register(Article, ArticleAdmin)
 admin.site.register(Fields, FieldsAdmin)
 admin.site.register(Images, ImagesAdmin)
 admin.site.register(Pears, PearsAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(LinePush, LinePushAdmin)
 
 admin.site.site_header = "梨屋さん 日報アプリ"
