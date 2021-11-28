@@ -33,6 +33,8 @@ from farm.views.article_views import (
 
 from farm.views.line_views import callback
 
+from farm.views.comment_view import createArticleComment
+
 urlpatterns = [
     path('users/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 	path('users/register/', registerUser, name="register"),
@@ -47,6 +49,8 @@ urlpatterns = [
     path('articles/<str:pk>/', getArticle),
     path('articles/update/<str:pk>/', updateArticle),
     path('articles/delete/<str:pk>/', deleteArticle),
+
+    path('articles/<str:pk>/comments/', createArticleComment, name="create-comment"),
 
     path('images/create/', createImage),
     path('images/', getImages),

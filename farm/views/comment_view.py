@@ -1,10 +1,5 @@
 from django.shortcuts import render
-from rest_framework.serializers import Serializer
-from farm.models import Comment, Reply, Article
-from farm.serializers import (
-    CommentSerializer,
-    ReplySerializer
-)
+from farm.models import Comment, Article
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response

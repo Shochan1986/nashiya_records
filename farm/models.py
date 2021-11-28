@@ -134,23 +134,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class Reply(models.Model):
-    comment = models.ForeignKey(
-        Comment, 
-        on_delete=models.CASCADE, 
-        related_name='replies',
-        verbose_name='返信'
-    )
-    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
-    text = models.TextField(verbose_name=('本文'), null=True)
-    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
-
-    def __str__(self):
-        return self.text
-
-    class Meta:
-        ordering = ['-created']
-        verbose_name = ('返信')
-        verbose_name_plural = ('返信')

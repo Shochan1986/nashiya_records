@@ -1,10 +1,16 @@
 from django.contrib import admin
-from farm.models import Article, Fields, Images, Pears, LinePush, Category
+from farm.models import Article, Fields, Images, Pears, LinePush, Category, Comment
 from django.utils.safestring import mark_safe
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 1
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
+    inlines = [
+        CommentInline,
+    ]
     list_display = ('title', 'date', 'category', 'is_public')
     list_editable = ('is_public', 'category')
 
@@ -12,7 +18,6 @@ class ArticleAdmin(admin.ModelAdmin):
         obj.from_admin_site = True 
         obj.save()
         super(ArticleAdmin, self).save_model(request, obj, form, change)
-
 
 
 class ImagesAdmin(admin.ModelAdmin):
@@ -66,12 +71,18 @@ class LinePushAdmin(admin.ModelAdmin):
     get_date_formatted.short_description = '登録日'
 
 
+class CommentAdmin(admin.ModelAdmin):
+    model = Comment
+    list_display = ('article', 'author', 'text')
+
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Fields, FieldsAdmin)
 admin.site.register(Images, ImagesAdmin)
 admin.site.register(Pears, PearsAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(LinePush, LinePushAdmin)
+admin.site.register(Comment, CommentAdmin)
 
 admin.site.site_header = "梨屋さん 日報アプリ"
 admin.site.index_title = '編集画面'                
