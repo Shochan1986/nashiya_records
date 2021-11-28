@@ -24,10 +24,7 @@ from farm.views.article_views import (
     updateImage,
     deleteImage,
 
-    createPear,
     getPears,
-    updatePear,
-    deletePear,
 
     getFields,
 
@@ -58,10 +55,7 @@ urlpatterns = [
     path('images/update/<str:pk>/', updateImage),
     path('images/delete/<str:pk>/', deleteImage),
 
-    path('pears/create/', createPear),
     path('pears/', getPears),
-    path('pears/update/<str:pk>/', updatePear),
-    path('pears/delete/<str:pk>/', deletePear),
 
     path('fields/', getFields),
 

@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from rest_framework.fields import Field
 from farm.models import Category, Pears, Images, Fields, Article
 from farm.serializers import (
     PearsSerializer,
@@ -261,42 +259,12 @@ def deleteImage(request, pk):
     return Response('写真は削除されました')
 
 
-@api_view(['POST'])
-@permission_classes([IsAdminUser])
-def createPear(request):
-    pear = Pears.objects.create(
-        name="作成中"
-    )
-    serializer = PearsSerializer(pear, many=False)
-    return Response(serializer.data)
-
-
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getPears(request):
     pears = Pears.objects.all()
     serializer = PearsSerializer(pears, many=True)
     return Response(serializer.data)
-
-
-@api_view(['PUT'])
-@permission_classes([IsAdminUser])
-def updatePear(request, pk):
-    data = request.data
-    pear = Pears.objects.get(id=pk)
-    pear.name = data['name']
-    pear.save()
-    serializer = PearsSerializer(pear, many=False)
-    return Response(serializer.data)
-
-
-
-@api_view(['DELETE'])
-@permission_classes([IsAdminUser])
-def deletePear(request, pk):
-    pear = Pears.objects.get(id=pk)
-    pear.delete()  
-    return Response('写真は削除されました')
 
 
 @api_view(['GET'])

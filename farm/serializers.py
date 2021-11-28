@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from farm.models import Article, Fields, Pears, Images, Category
+from farm.models import Article, Fields, Pears, Images, Category, Comment, Reply
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 import cloudinary
@@ -75,6 +75,17 @@ class ImagesSerializer(serializers.ModelSerializer):
         return representation
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class ReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reply
+        fields = '__all__'
+
 
 class ArticleSerializer(serializers.ModelSerializer):
     category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), write_only=True)
@@ -90,6 +101,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     images_urls = serializers.SerializerMethodField(read_only=True)
     images_comments = serializers.SerializerMethodField(read_only=True)
     images_data = serializers.SerializerMethodField(read_only=True)
+    comments = serializers.SerializerMethodField(read_only=True)
 
     def get_pears_ids(self, obj):
         ids = obj.pears.values_list('id', flat=True)
@@ -137,8 +149,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_comments(self, obj):
+        comments = obj.comments.all()
+        serializer = CommentSerializer(comments, many=True)
+        return serializer.data
+
     class Meta:
         model = Article
         fields = ['id', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
                 'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
-                'images_urls', 'images_comments', 'images_data']
+                'images_urls', 'images_comments', 'images_data', 'comments']
