@@ -1,12 +1,11 @@
 from django.template.loader import render_to_string
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from farm.models import Images
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
     TextSendMessage, 
 )
-from farm.models import LinePush, Article
+from farm.models import LinePush, Article, Comment, Images
 from environs import Env 
 
 env = Env() 
@@ -34,3 +33,15 @@ def article_create_notification(sender, instance, created, **kwargs):
             message = render_to_string('notify_message.txt', context)
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(post_save, sender=Comment)
+def comment_create_notification(sender, instance, created, **kwargs):
+    if created:
+        context = {
+            'author': instance.author,
+            'article': instance.article,
+        }
+        message = render_to_string('comment_message.txt', context)
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))

@@ -1,0 +1,7 @@
+日報「{{ article.title }}」 にコメントが投稿されました。
+{% if author %}投稿者：{{ author }}{% endif %}
+
+以下のURLからご確認ください。
+https://nashiya-reports.netlify.app/article/{{article.id}}
+
+＊この通知は送信専用アカウントから送信されています。
