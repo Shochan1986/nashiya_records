@@ -3,10 +3,6 @@ from farm.models import Comment, Article
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from rest_framework import status
-from django.db.models import Q
-from django.utils import timezone
 
 
 @api_view(['POST'])
@@ -21,3 +17,4 @@ def createArticleComment(request, pk):
         text=data['text']
     )
     return Response({'detail': 'コメントが追加されました'})
+

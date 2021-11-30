@@ -33,7 +33,7 @@ from farm.views.article_views import (
 
 from farm.views.line_views import callback
 
-from farm.views.comment_view import createArticleComment
+from farm.views.others_view import createArticleComment
 
 urlpatterns = [
     path('users/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
