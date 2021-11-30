@@ -2,6 +2,7 @@ from rest_framework import serializers
 from farm.models import Article, Fields, Pears, Images, Category, Comment
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
+from django.utils.html import linebreaks, urlize 
 import cloudinary
 
 class UserSerializer(serializers.ModelSerializer):
@@ -76,12 +77,18 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    main_text = serializers.SerializerMethodField(read_only=True) 
+
+    def get_main_text(self, obj):  
+        return urlize(linebreaks(obj.text))
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'article', 'author', 'text', 'created', 'main_text']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    main_text = serializers.SerializerMethodField(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), write_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
     pears = serializers.PrimaryKeyRelatedField(queryset=Pears.objects.all(), write_only=True)
@@ -96,6 +103,9 @@ class ArticleSerializer(serializers.ModelSerializer):
     images_comments = serializers.SerializerMethodField(read_only=True)
     images_data = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+
+    def get_main_text(self, obj):  
+        return urlize(linebreaks(obj.description))
 
     def get_pears_ids(self, obj):
         ids = obj.pears.values_list('id', flat=True)
@@ -150,6 +160,6 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['id', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'start_time', 'end_time', 'created', 'updated', 'is_public', 
+        fields = ['id', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 'created', 'updated', 'is_public', 
                 'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
                 'images_urls', 'images_comments', 'images_data', 'comments']
