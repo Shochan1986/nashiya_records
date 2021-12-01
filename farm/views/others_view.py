@@ -18,3 +18,10 @@ def createArticleComment(request, pk):
     )
     return Response({'detail': 'コメントが追加されました'})
 
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    comment.delete()  
+    return Response('コメントは削除されました')
