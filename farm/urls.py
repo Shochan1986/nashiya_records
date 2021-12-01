@@ -36,6 +36,7 @@ from farm.views.line_views import callback
 from farm.views.others_view import(
     createArticleComment, 
     updateComment,
+    getComment,
     deleteComment,
     )
 
@@ -55,6 +56,7 @@ urlpatterns = [
     path('articles/delete/<str:pk>/', deleteArticle),
 
     path('articles/<str:pk>/comments/', createArticleComment, name="create-comment"),
+    path('comments/<str:pk>/', getComment),
     path('comments/update/<str:pk>/', updateComment),
     path('comments/delete/<str:pk>/', deleteComment),
 

@@ -20,6 +20,14 @@ def createArticleComment(request, pk):
     return Response({'detail': 'コメントが追加されました'})
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    serializer = CommentSerializer(comment, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def updateComment(request, pk):
