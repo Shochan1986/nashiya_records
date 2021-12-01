@@ -126,6 +126,7 @@ class Comment(models.Model):
     author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
     text = models.TextField(verbose_name=('本文'), null=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+    updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
 
     class Meta:
         ordering = ['-created']

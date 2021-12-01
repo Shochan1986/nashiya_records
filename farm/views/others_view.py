@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from farm.models import Comment, Article
+from farm.serializers import CommentSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -17,6 +18,17 @@ def createArticleComment(request, pk):
         text=data['text']
     )
     return Response({'detail': 'コメントが追加されました'})
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateComment(request, pk):
+    data = request.data
+    comment = Comment.objects.get(id=pk)
+    comment.text = data['text']
+    comment.save()
+    serializer = CommentSerializer(comment, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['DELETE'])
