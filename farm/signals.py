@@ -48,7 +48,7 @@ def comment_create_notification(sender, instance, created, **kwargs):
 
 
 @receiver(post_delete, sender=Comment)
-def comment_create_notification(sender, instance, created, **kwargs):
+def comment_delete_notification(sender, instance, created, **kwargs):
     if instance.author:
         message = f'「{instance.author}」さんが日報「{instance.article}」へのコメントを削除しました。'
         for push in LinePush.objects.filter(unfollow=False):
