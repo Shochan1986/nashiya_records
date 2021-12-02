@@ -11,8 +11,8 @@ class ArticleAdmin(admin.ModelAdmin):
     inlines = [
         CommentInline,
     ]
-    list_display = ('title', 'date', 'category', 'is_public')
-    list_editable = ('is_public', 'category')
+    list_display = ('title', 'date', 'user', 'category', 'is_public')
+    list_editable = ('is_public', 'user', 'category')
 
     def save_model(self, request, obj, form, change):
         obj.from_admin_site = True 
