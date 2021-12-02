@@ -13,10 +13,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -100,6 +101,7 @@ def getPublicArticles(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createArticle(request):
+    user = User.objects.get(id=1)
     cat = Category.objects.get(id=1)
     pears_list = []
     p1 = Pears.objects.get(id=1)
@@ -108,6 +110,7 @@ def createArticle(request):
     f1 = Fields.objects.get(id=1)
     fields_list.append(f1)
     article = Article.objects.create(
+        user=user,
         title='準備中',
         date=timezone.now().date(),
         category=cat,
@@ -135,6 +138,7 @@ def getArticle(request, pk):
 def updateArticle(request, pk):
     data = request.data
     article = Article.objects.get(id=pk)
+    article.user = User.objects.get(id=data['user'])
     article.description = data['description']
     article.title = data['title']
     article.date = data['date']

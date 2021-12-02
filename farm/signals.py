@@ -5,6 +5,8 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
     TextSendMessage, 
 )
+from django.db.models.signals import pre_save
+from django.contrib.auth.models import User
 from farm.models import LinePush, Article, Comment, Images
 from environs import Env 
 
@@ -13,6 +15,15 @@ env.read_env()
 
 line_bot_api = LineBotApi(channel_access_token=env("LINE_CHANNEL_ACCESS_TOKEN"))
 handler = WebhookHandler(channel_secret=env("LINE_CHANNEL_SECRET"))
+
+
+def updateUser(sender, instance, **kwargs):
+    user = instance
+    if user.email != '':
+        user.username = user.email
+
+
+pre_save.connect(updateUser ,sender=User)
 
 
 @receiver(post_save, sender=Images)

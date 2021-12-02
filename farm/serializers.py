@@ -89,6 +89,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True)
+    user__id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    user_first_name = serializers.SerializerMethodField(read_only=True)
     category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), write_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
     pears = serializers.PrimaryKeyRelatedField(queryset=Pears.objects.all(), write_only=True)
@@ -157,9 +159,18 @@ class ArticleSerializer(serializers.ModelSerializer):
         comments = obj.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return serializer.data
+    
+    def get_user__id(self, obj):
+        return obj.user.id
+
+    def get_user_first_name(self, obj):
+        if obj.user is not None:
+            return obj.user.first_name
+        else:
+            return None
 
     class Meta:
         model = Article
-        fields = ['id', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 'created', 'updated', 'is_public', 
+        fields = ['id', 'user', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 'created', 'updated', 'is_public', 
                 'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
-                'images_urls', 'images_comments', 'images_data', 'comments']
+                'images_urls', 'images_comments', 'images_data', 'comments', 'user__id', 'user_first_name']
