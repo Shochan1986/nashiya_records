@@ -1,5 +1,5 @@
 from django.template.loader import render_to_string
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
@@ -43,5 +43,13 @@ def comment_create_notification(sender, instance, created, **kwargs):
             'article': instance.article,
         }
         message = render_to_string('comment_message.txt', context)
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(post_delete, sender=Comment)
+def comment_create_notification(sender, instance, created, **kwargs):
+    if instance.author:
+        message = f'「{instance.author}」さんが日報「{instance.article}」へのコメントを削除しました。'
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
