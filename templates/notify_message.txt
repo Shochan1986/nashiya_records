@@ -1,6 +1,7 @@
 日報の投稿・編集のお知らせです。
 
 「{{ article.title }}」
+{% if article.user %}作成：{{ article.user.first_name }}{% endif %}
 {% if article.category %}＃{{ article.category.name }}{% endif %}
 https://nashiya-reports.netlify.app/article/{{article.id}}
 
