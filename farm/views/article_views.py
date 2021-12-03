@@ -33,7 +33,7 @@ def getArticles(request):
             )
     articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
-    paginator = Paginator(articles, 6)
+    paginator = Paginator(articles, 6, orphans=1)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
@@ -77,7 +77,7 @@ def getPublicArticles(request):
             )
     articles = Article.objects.filter(is_public=True).filter(queryset).distinct()
     page = request.query_params.get('page')
-    paginator = Paginator(articles, 6)
+    paginator = Paginator(articles, 6, orphans=1)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
@@ -214,7 +214,7 @@ def getPaginatedImages(request):
     queryset = (
                 Q(comment__icontains=query) |
                 Q(author__icontains=query) |
-                Q(image__icontains=query)  
+                Q(image__icontains='http')  
             )
     images = Images.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
