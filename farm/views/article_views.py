@@ -17,7 +17,7 @@ from django.contrib.auth.models import User
 
 
 @api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getArticles(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -28,7 +28,8 @@ def getArticles(request):
                 Q(pears__name__icontains=query) | 
                 Q(fields__name__icontains=query) | 
                 Q(images__comment__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(user__first_name__icontains=query)
             )
     articles = Article.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
@@ -69,7 +70,8 @@ def getPublicArticles(request):
                 Q(pears__name__icontains=query) | 
                 Q(fields__name__icontains=query) |
                 Q(images__comment__icontains=query) | 
-                Q(comments__text__icontains=query)  
+                Q(comments__text__icontains=query) |
+                Q(user__first_name__icontains=query) 
             )
     articles = Article.objects.filter(is_public=True).filter(queryset).distinct()
     page = request.query_params.get('page')
