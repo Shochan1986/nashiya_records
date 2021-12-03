@@ -211,7 +211,7 @@ def getPaginatedImages(request):
         query = ''
     queryset = (
                 Q(comment__icontains=query) |
-                Q(image__icontains=query)  
+                Q(author__icontains=query)  
             )
     images = Images.objects.filter(queryset).distinct()
     page = request.query_params.get('page')
