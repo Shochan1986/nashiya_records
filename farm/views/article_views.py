@@ -251,8 +251,10 @@ def getImage(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def updateImage(request, pk):
+    user = request.user
     data = request.data
     image = Images.objects.get(id=pk)
+    image.author = user.first_name
     image.comment = data['comment']
     image.save()
     serializer = ImagesSerializer(image, many=False)

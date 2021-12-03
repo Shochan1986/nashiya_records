@@ -22,8 +22,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 class ImagesAdmin(admin.ModelAdmin):
     model = Images
-    list_display = ('show_image', 'comment', 'url')
-    list_editable = ('comment',)
+    list_display = ('show_image', 'comment', 'author', 'url',)
+    list_editable = ('comment','author',)
     ordering = ('-created',)
     list_per_page = 15
 

@@ -31,6 +31,7 @@ class Images(models.Model):
             "effect":"auto_contrast" 
             }, 
         )
+    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True, blank=True)
     comment = models.TextField('コメント', blank=True, null=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
