@@ -28,7 +28,6 @@ def getArticles(request):
                 Q(pears__name__icontains=query) | 
                 Q(fields__name__icontains=query) | 
                 Q(images__comment__icontains=query) |
-                Q(comments__text__icontains=query) |
                 Q(user__first_name__icontains=query)
             )
     articles = Article.objects.filter(queryset).distinct()
@@ -70,6 +69,7 @@ def getPublicArticles(request):
                 Q(pears__name__icontains=query) | 
                 Q(fields__name__icontains=query) |
                 Q(images__comment__icontains=query) | 
+                Q(comments__author__icontains=query) |
                 Q(comments__text__icontains=query) |
                 Q(user__first_name__icontains=query) 
             )
