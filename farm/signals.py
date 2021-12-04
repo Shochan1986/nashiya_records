@@ -51,13 +51,7 @@ def user_deleted_notification(sender, instance, **kwargs):
 def article_create_notification(sender, instance, created, **kwargs):
     if not getattr(instance, 'from_admin_site', False):
         if instance.id is None: 
-            if instance.is_public:
-                    context = {
-                        'article': instance,
-                    }
-                    message = render_to_string('notify_message.txt', context)
-                    for push in LinePush.objects.filter(unfollow=False):
-                        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+            pass
         else:
             previous = Article.objects.get(id=instance.id)
             if previous.is_public != instance.is_public:
