@@ -21,8 +21,6 @@ def updateUser(sender, instance, **kwargs):
     user = instance
     if user.email != '':
         user.username = user.email
-
-
 pre_save.connect(updateUser ,sender=User)
 
 
@@ -34,16 +32,42 @@ def images_url_save(sender, instance, created, **kwargs):
             instance.save()
 
 
-@receiver(post_save, sender=Article)
+@receiver(post_save, sender=User)
+def user_registered_notification(sender, instance, created, **kwargs):
+    if created:
+        message = f'「{instance.first_name}」さんのアカウントが登録されました。'
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(post_delete, sender=User)
+def user_deleted_notification(sender, instance, **kwargs):
+    message = f'「{instance.first_name}」さんのアカウントが削除されました。'
+    for push in LinePush.objects.filter(unfollow=False):
+        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(pre_save, sender=Article)
 def article_create_notification(sender, instance, created, **kwargs):
     if not getattr(instance, 'from_admin_site', False):
-        if instance.is_public:
-            context = {
-                'article': instance,
-            }
-            message = render_to_string('notify_message.txt', context)
-            for push in LinePush.objects.filter(unfollow=False):
-                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+        if instance.id is None: 
+            if instance.is_public:
+                    context = {
+                        'article': instance,
+                    }
+                    message = render_to_string('notify_message.txt', context)
+                    for push in LinePush.objects.filter(unfollow=False):
+                        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+        else:
+            previous = Article.objects.get(id=instance.id)
+            if previous.is_public != instance.is_public:
+                if not previous.is_public:
+                    context = {
+                        'article': instance,
+                    }
+                    message = render_to_string('notify_message.txt', context)
+                    for push in LinePush.objects.filter(unfollow=False):
+                        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
 @receiver(post_save, sender=Comment)
