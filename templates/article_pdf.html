@@ -8,9 +8,8 @@
                 font-family: HeiseiMin-W3;
             }
 
-            img { 
-                zoom: 80%; 
-                width: 450px;
+            img {  
+                width: 325px;
                 height: auto;
                 object-fit: cover;
                 max-width: 100%;
@@ -57,12 +56,11 @@
                 / <pdf:pagecount>
             </div>
         <p style="text-align: right;">{{article.date}}</p>
-        <h1 style="text-align: center;">{{article.title}}</h1>
+        <h1 style="text-align: center;font-weight: bold;">{{article.title}}</h1>
         <h2 style="text-align: center;">作成：{{article.user.first_name}}</h2>
-        <h2 style="text-align: center;">分類：{{article.category.name}}</h2>
+        <h2 style="text-align: center;">「{{article.category.name}}」</h2>
         <p style="text-align: center;">{{pears}}</p>
         <p style="text-align: center;">{{fields}}</p>
-        <h3 style="text-align: center;">詳細：</h3>
         <p style="text-align: center;">{{article.description}}</p>
         <div class="img-container">
             {% for img in images %}
