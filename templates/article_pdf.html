@@ -43,6 +43,13 @@
                     left: 50pt; width: 512pt; top: 772pt; height: 20pt;
                 }
             }
+            img { 
+                zoom: 80%; 
+                width: 350px;
+                height: auto;
+                object-fit: cover;
+                max-width: 100%;
+            }
         </style>
     </head>
 
@@ -65,7 +72,7 @@
         <h3 style="text-align: center;">詳細：</h3>
         <p style="text-align: center;">{{article.description}}</p>
         {% for img in images %}
-        <img src="{{img.url}}" width="250" style="margin: 5px;width: 250px;height: auto;max-width: 100%;" />
+        <img src="{{img.url}}" alt={{img.url}}/>
         {% endfor %}
     </body>
 </html>
