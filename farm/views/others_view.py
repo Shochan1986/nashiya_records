@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 @api_view(['POST'])
@@ -50,8 +51,7 @@ def deleteComment(request, pk):
     return Response('コメントは削除されました')
 
 
-@api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@staff_member_required
 def pdfExport(request, pk):
     template_name = "article_pdf.html"
     article = Article.objects.get(id=pk)
