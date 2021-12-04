@@ -49,7 +49,7 @@ def user_deleted_notification(sender, instance, **kwargs):
 
 @receiver(post_save, sender=User)
 def user_is_staff_notification(sender, instance, created, **kwargs):
-    if instance.is_staff:
+    if instance.is_staff == True:
         message = f'「{instance.first_name}」さんのアカウントが承認されました。'
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
