@@ -47,7 +47,7 @@ def user_deleted_notification(sender, instance, **kwargs):
         line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
-@receiver(post_save, sender=Article)
+@receiver(post_save, sender=User)
 def user_is_stuff_notification(sender, instance, created, **kwargs):
     if instance.is_stuff:
         message = f'「{instance.first_name}」さんのアカウントが承認されました。'
