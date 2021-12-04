@@ -8,26 +8,15 @@
                 font-family: HeiseiMin-W3;
             }
 
+            body {
+                margin: 10px;
+            }
+
             table {
                 table-layout: fixed;
                 width: 100%;
                 border: 1px solid black;
                 -pdf-word-wrap: CJK;
-            }
-
-            table th {
-                text-align: left;
-                padding: 3px;
-                padding-bottom: 0;
-                background-color: lightblue;
-            }
-
-            table td {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                padding: 3px;
-                padding-bottom: 0;
             }
             @page {
                 size: a4 portrait;
@@ -50,6 +39,11 @@
                 object-fit: cover;
                 max-width: 100%;
             }
+
+            .img-container {
+                display: flex;
+                flex-direction: column;
+            }
         </style>
     </head>
 
@@ -71,8 +65,10 @@
         <p style="text-align: center;">{{fields}}</p>
         <h3 style="text-align: center;">詳細：</h3>
         <p style="text-align: center;">{{article.description}}</p>
-        {% for img in images %}
-        <img src="{{img.url}}" alt={{img.url}}/>
-        {% endfor %}
+        <div class="img-container">
+            {% for img in images %}
+            <img src="{{img.url}}" alt={{img.url}}/>
+            {% endfor %}
+        </div>
     </body>
 </html>
