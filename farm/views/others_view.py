@@ -51,7 +51,7 @@ def deleteComment(request, pk):
 
 
 @api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def pdfExport(request, pk):
     template_name = "article_pdf.html"
     article = Article.objects.get(id=pk)
