@@ -8,6 +8,7 @@ from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.html import linebreaks, urlize 
 
 
 @api_view(['POST'])
@@ -58,11 +59,13 @@ def pdfExport(request, pk):
     pears = ",".join(map(str, article.pears.all())) 
     fields = ",".join(map(str, article.fields.all())) 
     images = article.images.all()
+    text = urlize(linebreaks(article.description))
     context = {
         "article": article, 
         "pears": pears,
         "fields": fields,
         "images": images,
+        "text": text,
         }
     template = get_template(template_name)
     html = template.render(context)
