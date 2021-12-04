@@ -8,6 +8,19 @@
                 font-family: HeiseiMin-W3;
             }
 
+            img { 
+                zoom: 80%; 
+                width: 350px;
+                height: auto;
+                object-fit: cover;
+                max-width: 100%;
+            }
+
+            .img-container {
+                display: flex;
+                flex-direction: column;
+            }
+
             body {
                 margin: 10px;
             }
@@ -32,18 +45,6 @@
                     left: 50pt; width: 512pt; top: 772pt; height: 20pt;
                 }
             }
-            img { 
-                zoom: 80%; 
-                width: 350px;
-                height: auto;
-                object-fit: cover;
-                max-width: 100%;
-            }
-
-            .img-container {
-                display: flex;
-                flex-direction: column;
-            }
         </style>
     </head>
 
@@ -59,15 +60,15 @@
         <h1 style="text-align: center;">{{article.title}}</h1>
         <h2 style="text-align: center;">作成：{{article.user.first_name}}</h2>
         <h2 style="text-align: center;">分類：{{article.category.name}}</h2>
-        <h4 style="text-align: center;">品種</h4>
         <p style="text-align: center;">{{pears}}</p>
-        <h4 style="text-align: center;">作業場</h4>
         <p style="text-align: center;">{{fields}}</p>
         <h3 style="text-align: center;">詳細：</h3>
         <p style="text-align: center;">{{article.description}}</p>
         <div class="img-container">
             {% for img in images %}
-            <img src="{{img.url}}" alt={{img.url}}/>
+            <p>
+                <img src="{{img.url}}" alt={{img.url}}/>
+            </p>
             {% endfor %}
         </div>
     </body>
