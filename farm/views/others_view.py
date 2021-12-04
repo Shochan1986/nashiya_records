@@ -55,8 +55,15 @@ def deleteComment(request, pk):
 def pdfExport(request, pk):
     template_name = "article_pdf.html"
     article = Article.objects.get(id=pk)
+    pears = ",".join(map(str, article.pears.all())) 
+    fields = ",".join(map(str, article.fields.all())) 
     images = article.images.all()
-    context = {"article": article, "images": images}
+    context = {
+        "article": article, 
+        "pears": pears,
+        "fields": fields,
+        "images": images,
+        }
     template = get_template(template_name)
     html = template.render(context)
     response = HttpResponse(content_type='application/pdf')
