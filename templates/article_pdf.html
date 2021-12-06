@@ -10,7 +10,7 @@
 
             img {  
                 width: 350px;
-                height: 300px;
+                height: auto;
                 object-fit: cover;
                 max-width: 100%;
             }
@@ -52,7 +52,7 @@
             <div id="header_content" style="text-align: left;">梨屋さん 日報</div>
 
             <!-- Content for Static Frame 'footer_frame' -->
-            <div id="footer_content" style="text-align: center;">梨屋さん &copy; {% now "Y" %}  ページ <pdf:pagenumber> / <pdf:pagecount>
+            <div id="footer_content" style="text-align: center;">梨屋さん &copy; {% now "Y" %}   ページ <pdf:pagenumber> / <pdf:pagecount>
             </div>
         <p style="text-align: right;">{{article.date}} ({{article.date|date:"D"}})</p>
         <h1 style="text-align: center;font-weight: bold;">{{article.title}}</h1>
