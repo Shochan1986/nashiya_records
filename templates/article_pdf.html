@@ -52,10 +52,10 @@
             <div id="header_content" style="text-align: left;">梨屋さん 日報</div>
 
             <!-- Content for Static Frame 'footer_frame' -->
-            <div id="footer_content" style="text-align: center;">梨屋さん &copy; 2021 - ページ <pdf:pagenumber>
+            <div id="footer_content" style="text-align: center;">梨屋さん &copy; ({{article.date|date:"Y"}} - ページ <pdf:pagenumber>
                 / <pdf:pagecount>
             </div>
-        <p style="text-align: right;">{{article.date}} ({{article.date|date:"l"}})</p>
+        <p style="text-align: right;">{{article.date}} ({{article.date|date:"D"}})</p>
         <h1 style="text-align: center;font-weight: bold;">{{article.title}}</h1>
         <h3 style="text-align: center;">作成：{{article.user.first_name}}</h3>
         <h2 style="text-align: center;">「{{article.category.name}}」</h2>
