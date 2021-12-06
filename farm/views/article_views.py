@@ -75,7 +75,7 @@ def getPublicArticles(request):
                 Q(comments__text__icontains=query) |
                 Q(user__first_name__icontains=query) 
             )
-    articles = Article.objects.filter(is_public=True).filter(queryset).distinct()
+    articles = Article.objects.filter(is_public=True).filter(queryset).distinct().order_by('-published_at')
     page = request.query_params.get('page')
     paginator = Paginator(articles, 6, orphans=1)
     try:
