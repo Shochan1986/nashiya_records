@@ -116,7 +116,7 @@ def createArticle(request):
     article = Article.objects.create(
         user=user,
         title='準備中',
-        date=timezone.now().date(),
+        date='',
         category=cat,
         description='詳細は後ほど。。。',
     )
