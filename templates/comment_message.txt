@@ -2,7 +2,7 @@
 {% if author %}投稿者：{{ author }}{% endif %}
 {% if text %}
 内容：
-{{ text|urlize|linebreaksbr|truncatechars:50 }}
+{{ text|truncatechars:40 }}
 {% endif %}
 
 詳しくは、以下のURLからご確認ください。
