@@ -1,5 +1,9 @@
 日報「{{ article.title }}」 にコメントが投稿されました。
 {% if author %}投稿者：{{ author }}{% endif %}
+{% if text %}
+内容：
+{{ text|urlize|linebreaksbr|truncatechars:30 }}
+{% endif %}
 
 以下のURLからご確認ください。
 https://nashiya-reports.netlify.app/article/{{article.id}}

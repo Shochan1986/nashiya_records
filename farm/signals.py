@@ -82,6 +82,7 @@ def comment_create_notification(sender, instance, created, **kwargs):
         context = {
             'author': instance.author,
             'article': instance.article,
+            'text': instance.text,
         }
         message = render_to_string('comment_message.txt', context)
         for push in LinePush.objects.filter(unfollow=False):
