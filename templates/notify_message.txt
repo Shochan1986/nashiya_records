@@ -1,8 +1,10 @@
-日報の投稿のお知らせです。
+日報発行のお知らせです。
 
-「{{ article.title }}」
+作業内容：「{{ article.title }}」
 {% if article.user %}作成：{{ article.user.first_name }}{% endif %}
 {% if article.category %}＃{{ article.category.name }}{% endif %}
-https://nashiya-reports.netlify.app/article/{{article.id}}
+詳細：
+{% if article.description %}{{ article.description|truncatechars:60 }}{% endif %}
 
-＊この通知は送信専用アカウントから送信されています。
+詳しくは、以下のURLからご確認ください。
+https://nashiya-reports.netlify.app/article/{{article.id}}
