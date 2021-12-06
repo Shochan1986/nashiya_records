@@ -78,6 +78,7 @@ class FieldsAdmin(admin.ModelAdmin):
 class LinePushAdmin(admin.ModelAdmin):
     model = LinePush
     list_display = ('line_name', 'unfollow', 'get_date_formatted', 'line_id', )
+    list_editable = ('unfollow',)
     
     def change_view(self, request, object_id, form_url='', extra_context=None):
         self.readonly_fields = (
