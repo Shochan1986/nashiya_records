@@ -8,6 +8,7 @@ from linebot.models import (
 from django.db.models.signals import pre_save
 from django.contrib.auth.models import User
 from farm.models import LinePush, Article, Comment, Images
+from django.utils import timezone
 from environs import Env 
 
 env = Env() 
@@ -67,7 +68,9 @@ def user_not_admitted_notification(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Article)
 def article_published_notification(sender, instance, created, **kwargs):
     if not getattr(instance, 'from_admin_site', False):
-        if instance.is_public:
+        if instance.is_public and not instance.published_at:
+            instance.published_at = timezone.now()
+            instance.save()
             context = {
                 'article': instance,
             }

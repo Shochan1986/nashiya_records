@@ -97,10 +97,10 @@ class Article(models.Model):
         verbose_name = '日報'
         verbose_name_plural = '日報'
 
-    def save(self, *args, **kwargs):
-        if self.is_public and not self.published_at:
-            self.published_at = timezone.now()
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.is_public and not self.published_at:
+    #         self.published_at = timezone.now()
+    #     super().save(*args, **kwargs)
 
 
 class LinePush(models.Model):
