@@ -108,10 +108,10 @@ def createArticle(request):
     user = User.objects.get(id=1)
     cat = Category.objects.get(id=1)
     pears_list = []
-    p1 = Pears.objects.get(name="南の畑")
+    p1 = Pears.objects.get(id=1)
     pears_list.append(p1)
     fields_list = []
-    f1 = Fields.objects.get(id=1)
+    f1 = Fields.objects.get(name="南の畑")
     fields_list.append(f1)
     article = Article.objects.create(
         user=user,
