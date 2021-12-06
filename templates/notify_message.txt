@@ -1,4 +1,4 @@
-日報の投稿・編集のお知らせです。
+日報の投稿のお知らせです。
 
 「{{ article.title }}」
 {% if article.user %}作成：{{ article.user.first_name }}{% endif %}
