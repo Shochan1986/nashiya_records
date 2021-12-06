@@ -107,23 +107,13 @@ def getPublicArticles(request):
 def createArticle(request):
     user = User.objects.get(id=1)
     cat = Category.objects.get(id=1)
-    pears_list = []
-    p1 = Pears.objects.get(id=1)
-    pears_list.append(p1)
-    fields_list = []
-    f1 = Fields.objects.get(name="南の畑")
-    fields_list.append(f1)
     article = Article.objects.create(
         user=user,
-        title='準備中',
+        title='作成中',
         date=timezone.now().date(),
         category=cat,
-        description='詳細は後ほど。。。',
+        description='詳細を記入しましょう。。。',
     )
-    for elem_p in pears_list:
-        article.pears.add(elem_p)
-    for elem_f in fields_list:
-        article.fields.add(elem_f)
     article.save()
     serializer = ArticleSerializer(article, many=False)
     return Response(serializer.data)
