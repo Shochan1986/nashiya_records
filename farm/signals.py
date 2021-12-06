@@ -79,6 +79,13 @@ def article_published_notification(sender, instance, created, **kwargs):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
+@receiver(post_delete, sender=Article)
+def article_delete_notification(sender, instance, **kwargs):
+    message = f'日報「{instance.title}」が削除されました。'
+    for push in LinePush.objects.filter(unfollow=False):
+        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
 @receiver(post_save, sender=Comment)
 def comment_create_notification(sender, instance, created, **kwargs):
     if created:
