@@ -102,6 +102,11 @@ class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('article', 'author', 'text')
 
+    def save_model(self, request, obj, form, change):
+        obj.from_admin_site = True 
+        obj.save()
+        super(ArticleAdmin, self).save_model(request, obj, form, change)
+
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Fields, FieldsAdmin)

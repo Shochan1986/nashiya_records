@@ -81,27 +81,30 @@ def article_published_notification(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Article)
 def article_delete_notification(sender, instance, **kwargs):
-    message = f'日報「{instance.title}」が削除されました。'
-    for push in LinePush.objects.filter(unfollow=False):
-        line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    if not getattr(instance, 'from_admin_site', False):
+        message = f'日報「{instance.title}」が削除されました。'
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
 @receiver(post_save, sender=Comment)
 def comment_create_notification(sender, instance, created, **kwargs):
-    if created:
-        context = {
-            'author': instance.author,
-            'article': instance.article,
-            'text': instance.text,
-        }
-        message = render_to_string('comment_message.txt', context)
-        for push in LinePush.objects.filter(unfollow=False):
-            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    if not getattr(instance, 'from_admin_site', False):
+        if created:
+            context = {
+                'author': instance.author,
+                'article': instance.article,
+                'text': instance.text,
+            }
+            message = render_to_string('comment_message.txt', context)
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
 @receiver(post_delete, sender=Comment)
 def comment_delete_notification(sender, instance, **kwargs):
-    if instance.author:
-        message = f'「{instance.author}」さんが日報「{instance.article}」へのコメントを削除しました。'
-        for push in LinePush.objects.filter(unfollow=False):
-            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    if not getattr(instance, 'from_admin_site', False):
+        if instance.author:
+            message = f'「{instance.author}」さんが日報「{instance.article}」へのコメントを削除しました。'
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
