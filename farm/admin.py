@@ -105,7 +105,7 @@ class CommentAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.from_admin_site = True 
         obj.save()
-        super(ArticleAdmin, self).save_model(request, obj, form, change)
+        super(CommentAdmin, self).save_model(request, obj, form, change)
 
 
 admin.site.register(Article, ArticleAdmin)
