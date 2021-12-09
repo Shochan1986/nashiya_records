@@ -44,6 +44,10 @@ class ArticleAdmin(admin.ModelAdmin):
         obj.from_admin_site = True 
         obj.save()
         super(ArticleAdmin, self).save_model(request, obj, form, change)
+        
+    def delete_model(self, request, obj):
+        obj.from_admin_site = True
+        super(ArticleAdmin, self).delete_model(request, obj)
 
 
 class ImagesAdmin(admin.ModelAdmin):
