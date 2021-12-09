@@ -8,7 +8,9 @@ from xhtml2pdf import pisa
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.html import linebreaks, urlize 
+from django.utils.html import linebreaks, urlize
+from django_pandas.io import read_frame
+from django.utils import timezone
 
 
 @api_view(['POST'])
@@ -75,4 +77,50 @@ def pdfExport(request, pk):
     pdf_status = pisa.CreatePDF(html, dest=response)
     if pdf_status.err:
         return HttpResponse('何からのエラーが発生しました。 <pre>' + html + '</pre>')
+    return response
+
+
+@staff_member_required
+def csvExport(request):
+    articles = Article.objects.all().order_by('-created')
+    df = read_frame(articles, 
+        fieldnames=[
+            'id',
+            'title', 
+            'date', 
+            'user', 
+            'category', 
+            # 'fields',
+            # 'pears',
+            'description',
+            'is_public',
+            'created',
+            'published_at',
+            ]
+    )
+    column_labels = [
+        'ID',
+        '作業内容',
+        '作業日付',
+        '作成者',
+        '分類',
+        # '作業場所',
+        # '品種',
+        '詳細',
+        '完了',
+        '作成日',
+        '完了日',
+    ]
+    df.columns = column_labels
+    df['作成日'] = df['作成日'].dt.strftime('%Y-%m-%d')
+    df['完了'] = df['完了'] * 1
+    df['完了'] = df['完了'].replace({
+        1: '完了',
+        0: '下書き',
+    })
+    df['完了日'] = df['完了日'].dt.strftime('%Y-%m-%d')
+    date = timezone.now().date()
+    response = HttpResponse(content_type='text/csv;charset=CP932')
+    response['Content-Disposition'] = f'attachment; filename=covid19_梨屋さん日報アプリ {date}.csv'
+    df.to_csv(path_or_buf=response, encoding='utf-8-sig', index=None)
     return response

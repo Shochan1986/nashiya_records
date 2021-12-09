@@ -40,6 +40,7 @@ from farm.views.others_view import(
     deleteComment,
 
     pdfExport,
+    csvExport,
     )
 
 urlpatterns = [
@@ -78,4 +79,5 @@ urlpatterns = [
     path('callback/', callback, name='callback'),
 
     path('pdf/<str:pk>/', pdfExport, name='pdf'),
+    path('csv/', csvExport, name='csv'),
 ]
