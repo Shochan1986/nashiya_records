@@ -11,6 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.html import linebreaks, urlize
 from django_pandas.io import read_frame
 from django.utils import timezone
+import urllib, csv
 
 
 @api_view(['POST'])
@@ -83,44 +84,40 @@ def pdfExport(request, pk):
 @staff_member_required
 def csvExport(request):
     articles = Article.objects.all().order_by('-created')
-    df = read_frame(articles, 
-        fieldnames=[
-            'id',
-            'title', 
-            'date', 
-            'user', 
-            'category', 
-            # 'fields',
-            # 'pears',
-            'description',
-            'is_public',
-            'created',
-            'published_at',
-            ]
-    )
-    column_labels = [
-        'ID',
+    date = timezone.now().date()
+    response = HttpResponse(content_type='text/csv;charset=CP932')
+    filename = urllib.parse.quote((f'梨屋さん日報アプリ {date}.csv').encode("utf8"))
+    response['Content-Disposition'] = 'filename*=UTF-8\'\'{}'.format(filename)
+    writer = csv.writer(response)
+    writer.writerow([
+        '番号',
         '作業内容',
         '作業日付',
-        '作成者Eメール',
+        '作成者',
         '分類',
-        # '作業場所',
-        # '品種',
+        '作業場所',
+        '品種',
         '詳細',
         '完了',
         '作成日',
         '完了日',
-    ]
-    df.columns = column_labels
-    df['作成日'] = df['作成日'].dt.strftime('%Y-%m-%d')
-    df['完了'] = df['完了'] * 1
-    df['完了'] = df['完了'].replace({
-        1: '完了',
-        0: '下書き',
-    })
-    df['完了日'] = df['完了日'].dt.strftime('%Y-%m-%d')
-    date = timezone.now().date()
-    response = HttpResponse(content_type='text/csv;charset=CP932')
-    response['Content-Disposition'] = f'attachment; filename=covid19_梨屋さん日報アプリ {date}.csv'
-    df.to_csv(path_or_buf=response, encoding='utf-8-sig', index=None)
+        '画像URL',
+    ])
+
+    index = 0
+    for index, article in enumerate(articles, start=1):
+        writer.writerow([
+            str(index),
+            article.title,
+            article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+            article.user.first_name,
+            article.category.name,
+            '、 '.join([elem.name for elem in article.fields.all()]), 
+            '、 '.join([elem.name for elem in article.pears.all()]), 
+            article.description,
+            article.get_is_public_display(),
+            article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+            article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+            ' '.join([elem.url for elem in article.images.all()]), 
+        ])
     return response

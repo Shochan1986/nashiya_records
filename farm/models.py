@@ -74,6 +74,9 @@ class Category(models.Model):
 
 
 class Article(models.Model):
+
+    PUBLISHED_CHOICES = ((True, '完了済'), (False, '下書中'))
+
     user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='投稿者', related_name='articles')
     category = models.ForeignKey(Category, models.SET_NULL, blank=True, null=True, verbose_name='分類', related_name='articles')
     title = models.CharField('作業内容' ,max_length=300, null=True, )
@@ -84,7 +87,7 @@ class Article(models.Model):
     end_time = models.DateTimeField('終了時間', blank=True, null=True, )
     created = models.DateTimeField('作成日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
-    is_public = models.BooleanField('完成', default=False, null=True, )
+    is_public = models.BooleanField('完成', default=False, null=True, choices=PUBLISHED_CHOICES, )
     published_at = models.DateTimeField(blank=True, null=True, verbose_name='完成日時')
     images = models.ManyToManyField(Images, blank=True, verbose_name='画像', related_name='articles')
     pears = models.ManyToManyField(Pears, blank=True, verbose_name='品種', related_name='articles')
