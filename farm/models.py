@@ -77,8 +77,8 @@ class Article(models.Model):
 
     PUBLISHED_CHOICES = ((True, '完了済'), (False, '下書中'))
 
-    user = models.ForeignKey(User, models.SET_NULL, blank=True, null=True, verbose_name='投稿者', related_name='articles')
-    category = models.ForeignKey(Category, models.SET_NULL, blank=True, null=True, verbose_name='分類', related_name='articles')
+    user = models.ForeignKey(User, models.SET_NULL, null=True, verbose_name='投稿者', related_name='articles')
+    category = models.ForeignKey(Category, models.SET_NULL, null=True, verbose_name='分類', related_name='articles')
     title = models.CharField('作業内容' ,max_length=300, null=True, )
     fields = models.ManyToManyField(Fields, blank=True, verbose_name='作業場所', related_name='articles')
     date = models.DateField('日付', blank=True, null=True, )

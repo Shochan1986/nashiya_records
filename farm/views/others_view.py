@@ -118,6 +118,6 @@ def csvExport(request):
             article.get_is_public_display(),
             article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
             article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-            ' '.join([elem.url for elem in article.images.all()]), 
+            '\n'.join([elem.url for elem in article.images.all()]), 
         ])
     return response
