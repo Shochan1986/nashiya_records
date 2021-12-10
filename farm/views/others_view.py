@@ -9,7 +9,6 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.html import linebreaks, urlize
-from django_pandas.io import read_frame
 from django.utils import timezone
 import urllib, csv
 
@@ -151,7 +150,7 @@ def createCommentLike(request, pk):
         user=user,
         comment=comment.last(),
     )
-    return Response({'detail': '「いいね」が追加 or 削除されました'})
+    return Response({'detail': '「いいね」が追加されました'})
 
 
 @api_view(['GET'])
