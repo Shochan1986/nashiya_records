@@ -107,22 +107,36 @@ def csvExport(request):
 
     index = 0
     for index, article in enumerate(articles, start=1):
-        writer.writerow([
-            str(index),
-            article.id,
-            article.title,
-            article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-            article.user.first_name,
-            article.category.name,
-            '、 '.join([elem.name for elem in article.fields.all()]), 
-            '、 '.join([elem.name for elem in article.pears.all()]), 
-            article.description,
-            article.get_is_public_display(),
-            article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-            article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-            if article.images:
+        if article.images:
+            writer.writerow([
+                str(index),
+                article.id,
+                article.title,
+                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.user.first_name,
+                article.category.name,
+                '、 '.join([elem.name for elem in article.fields.all()]), 
+                '、 '.join([elem.name for elem in article.pears.all()]), 
+                article.description,
+                article.get_is_public_display(),
+                article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 '\n'.join([elem.url for elem in article.images.all()]), 
-            else:
-                '',
-        ])
+            ])
+        else:
+            writer.writerow([
+                str(index),
+                article.id,
+                article.title,
+                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.user.first_name,
+                article.category.name,
+                '、 '.join([elem.name for elem in article.fields.all()]), 
+                '、 '.join([elem.name for elem in article.pears.all()]), 
+                article.description,
+                article.get_is_public_display(),
+                article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                '', 
+            ])
     return response
