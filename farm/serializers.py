@@ -100,7 +100,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentLikeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CommentLike
         fields = '__all__'
@@ -190,6 +189,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['id', 'user', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 'created', 'updated', 'is_public', 
+        fields = ['id', 'user', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 
+                'created', 'updated', 'is_public', 
                 'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
                 'images_urls', 'images_comments', 'images_data', 'comments', 'user__id', 'user_first_name']

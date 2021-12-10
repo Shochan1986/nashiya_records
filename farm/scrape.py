@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-from datetime import date, datetime, timedelta
-from urllib.request import Request, urlopen
 
 
 def get_weather_from_location_today(original_location):

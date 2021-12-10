@@ -41,7 +41,6 @@ def callback(request):
 def handle_follow(event):
     line_id = event.source.user_id
     profile = line_bot_api.get_profile(line_id)
-    profile_name = profile.display_name
     profile_exists = LinePush.objects.filter(line_id=line_id).count() != 0
     if profile_exists:
         user_profile = LinePush.objects.get(line_id=line_id)
