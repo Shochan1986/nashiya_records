@@ -86,11 +86,12 @@ def csvExport(request):
     articles = Article.objects.all().order_by('-created')
     date = timezone.now().date()
     response = HttpResponse(content_type='text/csv;charset=CP932')
-    filename = urllib.parse.quote((f'梨屋さん日報アプリ {date}.csv').encode("utf8"))
+    filename = urllib.parse.quote((f'梨屋さん日報 {date}.csv').encode("utf8"))
     response['Content-Disposition'] = 'filename*=UTF-8\'\'{}'.format(filename)
     writer = csv.writer(response)
     writer.writerow([
         '番号',
+        'ID',
         '作業内容',
         '作業日付',
         '作成者',
@@ -108,6 +109,7 @@ def csvExport(request):
     for index, article in enumerate(articles, start=1):
         writer.writerow([
             str(index),
+            article.id,
             article.title,
             article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
             article.user.first_name,
