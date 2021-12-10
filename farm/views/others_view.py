@@ -107,7 +107,7 @@ def csvExport(request):
 
     index = 0
     for index, article in enumerate(articles, start=1):
-        if article.images:
+        if article.published_at:
             writer.writerow([
                 str(index),
                 article.id,
@@ -136,7 +136,7 @@ def csvExport(request):
                 article.description,
                 article.get_is_public_display(),
                 article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-                article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-                '', 
+                '未発行',
+                '\n'.join([elem.url for elem in article.images.all()]), 
             ])
     return response
