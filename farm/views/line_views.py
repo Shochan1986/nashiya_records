@@ -2,12 +2,17 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbid
 from django.views.decorators.csrf import csrf_exempt
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
+from farm import scrape as sc
 from linebot.models import (
     FollowEvent, 
     UnfollowEvent,
+    MessageEvent,
     TextSendMessage, 
+    TextMessage,
+    LocationMessage,
 )
 from farm.models import LinePush
+import re
 from environs import Env 
 
 env = Env() 
@@ -67,3 +72,38 @@ def handle_unfollow(event):
     user_profile.delete()
 
 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+    text = event.message.text
+    str_m = text.replace("'", "") 
+    str_m = re.sub(r"[!-/:-@[-`{-~’]", "", str_m) 
+    str_m = re.sub(' ', "", str_m)
+    if '天気' == text or '天気予報' == text:
+        line_bot_api.reply_message(
+        event.reply_token,
+        [
+        TextSendMessage(text='位置情報を教えてください。'),
+        TextSendMessage(text='このリンクをクリック！\n https://line.me/R/nv/location/')
+        ]
+    )
+    elif 'ニュース' == text:
+        URL = "https://www.yahoo.co.jp/"
+        news = sc.yahoo_news(URL)
+        line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=news)
+    )
+
+
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_location(event):
+    text = event.message.address
+    result_today = sc.get_weather_from_location_today(text)
+    result_tomorrow = sc.get_weather_from_location_tomorrow(text)
+    line_bot_api.reply_message(
+        event.reply_token,
+        [
+            TextSendMessage(text=result_today),
+            TextSendMessage(text=result_tomorrow),
+        ]
+    )
