@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from farm.models import Comment, Article
-from farm.serializers import CommentSerializer
+from farm.models import Comment, Article, CommentLike
+from farm.serializers import CommentSerializer, CommentLikeSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -121,3 +121,23 @@ def csvExport(request):
             '\n'.join([elem.url for elem in article.images.all()]), 
         ])
     return response
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createCommentLike(request, pk):
+    user = request.user
+    comment = Comment.objects.filter(id=pk)
+    CommentLike.objects.create(
+        user=user,
+        comment=comment.last(),
+    )
+    return Response({'detail': '「いいね」が追加 or 削除されました'})
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getCommentLike(request, pk):
+    like = CommentLike.objects.get(id=pk)
+    serializer = CommentLikeSerializer(like, many=False)
+    return Response(serializer.data)

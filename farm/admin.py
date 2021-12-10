@@ -1,5 +1,14 @@
 from django.contrib import admin
-from farm.models import Article, Fields, Images, Pears, LinePush, Category, Comment
+from farm.models import (
+    Article, 
+    Fields, 
+    Images, 
+    Pears, 
+    LinePush, 
+    Category, 
+    Comment,
+    CommentLike,
+    )
 from django.utils.safestring import mark_safe
 
 ADMIN_ORDERING = {
@@ -108,6 +117,10 @@ class CommentAdmin(admin.ModelAdmin):
         super(CommentAdmin, self).save_model(request, obj, form, change)
 
 
+class CommentLikeAdmin(admin.ModelAdmin):
+    model = CommentLike
+
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Fields, FieldsAdmin)
 admin.site.register(Images, ImagesAdmin)
@@ -115,6 +128,7 @@ admin.site.register(Pears, PearsAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(LinePush, LinePushAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentLike, CommentLikeAdmin)
 
 admin.AdminSite.get_app_list = get_app_list
 

@@ -139,3 +139,17 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class CommentLike(models.Model):
+    users = models.ManyToManyField(User, blank=True, verbose_name='ユーザー')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='いいね')
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('いいね(コメント)')
+        verbose_name_plural = ('いいね(コメント)')
+
+    def __str__(self):
+        return str(self.comment.likes.count())

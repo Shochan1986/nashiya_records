@@ -1,5 +1,13 @@
 from rest_framework import serializers
-from farm.models import Article, Fields, Pears, Images, Category, Comment
+from farm.models import (
+    Article, 
+    Fields, 
+    Pears, 
+    Images, 
+    Category, 
+    Comment, 
+    CommentLike
+    )
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 from django.utils.html import linebreaks, urlize 
@@ -78,13 +86,24 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True) 
+    likes = serializers.SerializerMethodField(read_only=True) 
 
     def get_main_text(self, obj):  
         return urlize(linebreaks(obj.text))
 
+    def get_likes(self, obj):  
+        return obj.likes.count()
+
     class Meta:
         model = Comment
-        fields = ['id', 'article', 'author', 'text', 'created', 'main_text']
+        fields = ['id', 'article', 'author', 'text', 'created', 'main_text', 'likes']
+
+
+class CommentLikeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommentLike
+        fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):
