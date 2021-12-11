@@ -41,6 +41,7 @@ from farm.views.others_view import(
 
     createCommentLike,
     getCommentLike,
+    deleteCommentLike,
 
     pdfExport,
     csvExport,
@@ -68,6 +69,7 @@ urlpatterns = [
 
     path('comments/<str:pk>/likes/', createCommentLike, name="create-comment-like"),
     path('likes/<str:pk>/', getCommentLike),
+    path('likes/delete/<str:pk>/', deleteCommentLike),
 
     path('images/create/', createImage),
     path('images/', getImages),
