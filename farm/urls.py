@@ -66,7 +66,7 @@ urlpatterns = [
     path('comments/update/<str:pk>/', updateComment),
     path('comments/delete/<str:pk>/', deleteComment),
 
-    path('comments/<str:pk>/likes', createCommentLike, name="create-comment-like"),
+    path('comments/<str:pk>/likes/', createCommentLike, name="create-comment-like"),
     path('likes/<str:pk>/', getCommentLike),
 
     path('images/create/', createImage),

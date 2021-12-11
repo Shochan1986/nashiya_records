@@ -147,10 +147,9 @@ def csvExport(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createCommentLike(request, pk):
-    user = request.user
     comment = Comment.objects.filter(id=pk)
     CommentLike.objects.create(
-        user=user,
+        user=request.user.first_name,
         comment=comment.last(),
     )
     return Response({'detail': '「いいね」が追加されました'})

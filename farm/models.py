@@ -142,7 +142,7 @@ class Comment(models.Model):
 
 
 class CommentLike(models.Model):
-    users = models.ManyToManyField(User, blank=True, verbose_name='ユーザー')
+    user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='いいね')
     created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
 
@@ -152,4 +152,4 @@ class CommentLike(models.Model):
         verbose_name_plural = ('いいね(コメント)')
 
     def __str__(self):
-        return str(self.comment.likes.count())
+        return str(self.comment.text) + ' & ' + str(self.comment.likes.count()) + '「いいね」'
