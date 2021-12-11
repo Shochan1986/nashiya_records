@@ -169,3 +169,11 @@ def getCommentLike(request, pk):
     like = CommentLike.objects.get(id=pk)
     serializer = CommentLikeSerializer(like, many=False)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteCommentLike(request, pk):
+    like = CommentLike.objects.get(id=pk)
+    like.delete()  
+    return Response('「いいね」は削除されました')

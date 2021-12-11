@@ -7,7 +7,7 @@ from linebot.models import (
 )
 from django.db.models.signals import pre_save
 from django.contrib.auth.models import User
-from farm.models import LinePush, Article, Comment, Images
+from farm.models import LinePush, Article, Comment, Images, CommentLike
 from django.utils import timezone
 from environs import Env 
 
@@ -72,6 +72,20 @@ def comment_create_notification(sender, instance, created, **kwargs):
                 'text': instance.text,
             }
             message = render_to_string('comment_message.txt', context)
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(post_save, sender=CommentLike)
+def like_create_notification(sender, instance, created, **kwargs):
+    if not getattr(instance, 'from_admin_site', False):
+        if created:
+            context = {
+                'author': instance.comment.author,
+                'article': instance.comment.article,
+                'user': instance.user,
+            }
+            message = render_to_string('like_message.txt', context)
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 

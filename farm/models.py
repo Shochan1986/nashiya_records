@@ -152,4 +152,4 @@ class CommentLike(models.Model):
         verbose_name_plural = ('いいね(コメント)')
 
     def __str__(self):
-        return str(self.comment.text) + ' & ' + str(self.comment.likes.count()) + '「いいね」'
+        return self.comment.text + ' by ' + self.comment.author
