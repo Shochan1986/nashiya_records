@@ -1,4 +1,6 @@
-「{{ user }}」さんが「{{ author }}」さんのコメントに「いいね！」しました。
+「{{ user }}」さんが「{{ comment.author }}」さんのコメントに「いいね！」しました。
+
+コメント: {{ comment.text|truncatechars:30 }}
 日報：「{{ article.title }}」 
 
 詳しくは、以下のURLからご確認ください。

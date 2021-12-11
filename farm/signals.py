@@ -81,7 +81,7 @@ def like_create_notification(sender, instance, created, **kwargs):
     if not getattr(instance, 'from_admin_site', False):
         if created:
             context = {
-                'author': instance.comment.author,
+                'comment': instance.comment,
                 'article': instance.comment.article,
                 'user': instance.user,
             }
