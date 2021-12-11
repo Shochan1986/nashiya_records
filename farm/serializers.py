@@ -87,6 +87,7 @@ class ImagesSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True) 
     likes = serializers.SerializerMethodField(read_only=True) 
+    likes_users = serializers.SerializerMethodField(read_only=True) 
 
     def get_main_text(self, obj):  
         return urlize(linebreaks(obj.text))
@@ -94,9 +95,13 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_likes(self, obj):  
         return obj.likes.count()
 
+    def get_likes_users(self, obj):
+        users = obj.likes.values_list('user', flat=True)
+        return users
+
     class Meta:
         model = Comment
-        fields = ['id', 'article', 'author', 'text', 'created', 'main_text', 'likes']
+        fields = ['id', 'article', 'author', 'text', 'created', 'main_text', 'likes', 'likes_users']
 
 
 class CommentLikeSerializer(serializers.ModelSerializer):

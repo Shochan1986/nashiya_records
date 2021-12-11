@@ -6,6 +6,7 @@ from rest_framework.permissions import (
     # IsAuthenticated, 
     IsAdminUser
     )
+from rest_framework import status
 from rest_framework.response import Response
 from xhtml2pdf import pisa
 from django.http import HttpResponse
@@ -31,7 +32,7 @@ def createArticleComment(request, pk):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def getComment(request, pk):
     comment = Comment.objects.get(id=pk)
     serializer = CommentSerializer(comment, many=False)
@@ -147,12 +148,19 @@ def csvExport(request):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createCommentLike(request, pk):
-    comment = Comment.objects.filter(id=pk)
-    CommentLike.objects.create(
-        user=request.user.first_name,
-        comment=comment.last(),
-    )
-    return Response({'detail': '「いいね」が追加されました'})
+    user = request.user
+    comment_id = Comment.objects.get(id=pk)
+    alreadyExists = comment_id.likes.filter(user=user.first_name).exists()
+    if alreadyExists:
+        content = {'detail': 'あなたはすでにこのコメントに「いいね」しています'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        comment = Comment.objects.filter(id=pk)
+        CommentLike.objects.create(
+            user=user.first_name,
+            comment=comment.last(),
+        )
+        return Response({'detail': '「いいね」が追加されました'})
 
 
 @api_view(['GET'])
