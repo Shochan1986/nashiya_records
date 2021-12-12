@@ -16,6 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from rest_framework import status
 from django.db.models import Q
 from django.utils import timezone
+from django.utils.timezone import localtime
 from django.contrib.auth.models import User
 
 
@@ -113,7 +114,7 @@ def createArticle(request):
     article = Article.objects.create(
         user=user,
         title='作成中',
-        date=timezone.now().date(),
+        date=localtime(timezone.now()).date(),
         category=cat,
         description='詳細を記入しましょう。。。',
     )

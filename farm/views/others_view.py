@@ -14,6 +14,7 @@ from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.html import linebreaks, urlize
 from django.utils import timezone
+from django.utils.timezone import localtime 
 import urllib, csv
 
 
@@ -87,7 +88,7 @@ def pdfExport(request, pk):
 @staff_member_required
 def csvExport(request):
     articles = Article.objects.all().order_by('-created')
-    date = timezone.now().date()
+    date = localtime(timezone.now()).date()
     response = HttpResponse(content_type='text/csv;charset=CP932')
     filename = urllib.parse.quote((f'梨屋さん日報 {date}.csv').encode("utf8"))
     response['Content-Disposition'] = 'filename*=UTF-8\'\'{}'.format(filename)
