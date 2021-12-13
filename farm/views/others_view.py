@@ -14,7 +14,7 @@ from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.html import linebreaks, urlize
 from django.utils import timezone
-from django.utils.timezone import localtime 
+from django.utils.timezone import localtime, localdate 
 import urllib, csv
 
 
@@ -116,15 +116,15 @@ def csvExport(request):
                 str(index),
                 article.id,
                 article.title,
-                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                localdate(article.date).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 article.user.first_name,
                 article.category.name,
                 '、 '.join([elem.name for elem in article.fields.all()]), 
                 '、 '.join([elem.name for elem in article.pears.all()]), 
                 article.description,
                 article.get_is_public_display(),
-                article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
-                article.published_at.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                localtime(article.created).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                localtime(article.published_at).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 '\n'.join([elem.url for elem in article.images.all()]), 
             ])
         else:
@@ -132,14 +132,14 @@ def csvExport(request):
                 str(index),
                 article.id,
                 article.title,
-                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                localdate(article.date).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 article.user.first_name,
                 article.category.name,
                 '、 '.join([elem.name for elem in article.fields.all()]), 
                 '、 '.join([elem.name for elem in article.pears.all()]), 
                 article.description,
                 article.get_is_public_display(),
-                article.created.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                localtime(article.created).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 '未発行',
                 '\n'.join([elem.url for elem in article.images.all()]), 
             ])
