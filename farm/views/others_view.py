@@ -14,7 +14,7 @@ from django.template.loader import get_template
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.html import linebreaks, urlize
 from django.utils import timezone
-from django.utils.timezone import localtime, localdate 
+from django.utils.timezone import localtime 
 import urllib, csv
 
 
@@ -116,7 +116,7 @@ def csvExport(request):
                 str(index),
                 article.id,
                 article.title,
-                localtime(article.date).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 article.user.first_name,
                 article.category.name,
                 '、 '.join([elem.name for elem in article.fields.all()]), 
@@ -132,7 +132,7 @@ def csvExport(request):
                 str(index),
                 article.id,
                 article.title,
-                localtime(article.date).strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
+                article.date.strftime('%Y{0}%m{1}%d{2}').format(*'年月日'),
                 article.user.first_name,
                 article.category.name,
                 '、 '.join([elem.name for elem in article.fields.all()]), 
