@@ -93,8 +93,8 @@ def pdfExport(request, pk):
 def csvExport(request):
     articles = Article.objects.all().order_by('-created')
     date = localtime(timezone.now()).date()
-    response = HttpResponse(content_type='text/csv;charset=CP932')
-    filename = urllib.parse.quote((f'梨屋さん日報 {date}.csv'), encoding='utf8', errors='ignore')
+    response = HttpResponse(content_type='text/csv;charset=UTF-8')
+    filename = urllib.parse.quote((f'梨屋さん日報 {date}.csv').encode("utf8"))
     response['Content-Disposition'] = 'filename*=UTF-8\'\'{}'.format(filename)
     writer = csv.writer(response)
     writer.writerow([
