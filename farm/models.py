@@ -1,5 +1,4 @@
 from django.db import models
-#from django.utils import timezone
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 
@@ -100,10 +99,19 @@ class Article(models.Model):
         verbose_name = '日報'
         verbose_name_plural = '日報'
 
-    # def save(self, *args, **kwargs):
-    #     if self.is_public and not self.published_at:
-    #         self.published_at = timezone.now()
-    #     super().save(*args, **kwargs)
+
+class ArticleLike(models.Model):
+    user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='日報')
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('いいね(日報)')
+        verbose_name_plural = ('いいね(日報)')
+
+    def __str__(self):
+        return self.article.title + ' by ' + self.user
 
 
 class LinePush(models.Model):
@@ -143,7 +151,7 @@ class Comment(models.Model):
 
 class CommentLike(models.Model):
     user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='いいね')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='コメント')
     created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
 
     class Meta:
@@ -152,4 +160,4 @@ class CommentLike(models.Model):
         verbose_name_plural = ('いいね(コメント)')
 
     def __str__(self):
-        return self.comment.text + ' by ' + self.comment.author
+        return self.comment.text + f'({self.comment.author})' + ' by ' + self.user

@@ -1,6 +1,10 @@
 # from django.shortcuts import render
-from farm.models import Comment, Article, CommentLike
-from farm.serializers import CommentSerializer, CommentLikeSerializer
+from farm.models import Comment, Article, CommentLike, ArticleLike
+from farm.serializers import (
+    CommentSerializer, 
+    CommentLikeSerializer,
+    ArticleLikeSerializer,
+    )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
     # IsAuthenticated, 
@@ -161,15 +165,7 @@ def createCommentLike(request, pk):
             user=user.first_name,
             comment=comment.last(),
         )
-        return Response({'detail': '「いいね」が追加されました'})
-
-
-@api_view(['GET'])
-@permission_classes([IsAdminUser])
-def getCommentLike(request, pk):
-    like = CommentLike.objects.get(id=pk)
-    serializer = CommentLikeSerializer(like, many=False)
-    return Response(serializer.data)
+        return Response({'detail': 'コメントに「いいね」が追加されました'})
 
 
 @api_view(['DELETE'])
@@ -177,4 +173,30 @@ def getCommentLike(request, pk):
 def deleteCommentLike(request, pk):
     like = CommentLike.objects.get(id=pk)
     like.delete()  
-    return Response('「いいね」は削除されました')
+    return Response('コメントの「いいね」は削除されました')
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createArticleLike(request, pk):
+    user = request.user
+    article_id = Article.objects.get(id=pk)
+    alreadyExists = article_id.likes.filter(user=user.first_name).exists()
+    if alreadyExists:
+        content = {'detail': 'あなたはすでにこの日報に「いいね」しています'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        article = Article.objects.filter(id=pk)
+        ArticleLike.objects.create(
+            user=user.first_name,
+            article=article.last(),
+        )
+        return Response({'detail': '日報に「いいね」が追加されました'})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteArticleLike(request, pk):
+    like = ArticleLike.objects.get(id=pk)
+    like.delete()  
+    return Response('日報の「いいね」は削除されました')

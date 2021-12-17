@@ -1,0 +1,4 @@
+「{{ user }}」さんが日報「{{ article.title }}」に「いいね！」しました。
+
+詳しくは、以下のURLからご確認ください。
+https://nashiya-reports.netlify.app/article/{{article.id}}

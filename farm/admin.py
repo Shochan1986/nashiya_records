@@ -1,6 +1,7 @@
 from django.contrib import admin
 from farm.models import (
-    Article, 
+    Article,
+    ArticleLike, 
     Fields, 
     Images, 
     Pears, 
@@ -126,6 +127,15 @@ class CommentLikeAdmin(admin.ModelAdmin):
         super(CommentLikeAdmin, self).save_model(request, obj, form, change)
 
 
+class ArticleLikeAdmin(admin.ModelAdmin):
+    model = ArticleLike
+
+    def save_model(self, request, obj, form, change):
+        obj.from_admin_site = True 
+        obj.save()
+        super(ArticleLikeAdmin, self).save_model(request, obj, form, change)
+
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Fields, FieldsAdmin)
 admin.site.register(Images, ImagesAdmin)
@@ -134,6 +144,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(LinePush, LinePushAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(CommentLike, CommentLikeAdmin)
+admin.site.register(ArticleLike, ArticleLikeAdmin)
 
 admin.AdminSite.get_app_list = get_app_list
 

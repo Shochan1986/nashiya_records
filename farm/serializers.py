@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from farm.models import (
     Article, 
+    ArticleLike,
     Fields, 
     Pears, 
     Images, 
@@ -110,6 +111,13 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'article', 'author', 'text', 'created', 'main_text', 'likes', 'likes_users', 'likes_data']
 
 
+class ArticleLikeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ArticleLike
+        fields = ['id', 'user', 'created']
+
+
 class CommentLikeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -135,6 +143,8 @@ class ArticleSerializer(serializers.ModelSerializer):
     images_comments = serializers.SerializerMethodField(read_only=True)
     images_data = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    likes_count = serializers.SerializerMethodField(read_only=True) 
+    likes = serializers.SerializerMethodField(read_only=True) 
 
     def get_main_text(self, obj):  
         return urlize(linebreaks(obj.description))
@@ -199,9 +209,17 @@ class ArticleSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_likes_count(self, obj):  
+        return obj.likes.count()
+
+    def get_likes(self, obj):
+        likes = obj.likes.all()
+        serializer = ArticleLikeSerializer(likes, many=True)
+        return serializer.data
+
     class Meta:
         model = Article
         fields = ['id', 'user', 'title', 'category', 'category_id', 'category_name', 'fields', 'date', 'description', 'main_text', 
                 'created', 'updated', 'is_public', 
                 'published_at', 'images', 'pears', 'pears_ids', 'pears_names', 'fields', 'fields_ids', 'fields_names', 'images_ids', 
-                'images_urls', 'images_comments', 'images_data', 'comments', 'user__id', 'user_first_name']
+                'images_urls', 'images_comments', 'images_data', 'comments', 'user__id', 'user_first_name', 'likes', 'likes_count']
