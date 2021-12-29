@@ -49,8 +49,13 @@ from farm.views.others_view import(
     csvExport,
     )
 
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('users/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('users/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 	path('users/register/', registerUser, name="register"),
     path('users/', getUsers, name="users"),
     path('users/<str:pk>/', getUserById, name="user"),
