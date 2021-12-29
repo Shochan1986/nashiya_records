@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'farm.apps.FarmConfig',
+    'drawings.apps.DrawingsConfig',
+
     'rest_framework', # new
     "corsheaders", # new
     'cloudinary_storage', # new

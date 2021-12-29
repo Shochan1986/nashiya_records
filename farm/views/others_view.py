@@ -2,8 +2,6 @@
 from farm.models import Comment, Article, CommentLike, ArticleLike
 from farm.serializers import (
     CommentSerializer, 
-    CommentLikeSerializer,
-    ArticleLikeSerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (

@@ -21,6 +21,9 @@ ADMIN_ORDERING = {
         "Fields",
         "Comment",
         "LinePush",
+    ],
+    'Drawings' : [
+        "Drawing"
     ]
 }
 
