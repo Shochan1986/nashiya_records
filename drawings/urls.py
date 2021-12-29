@@ -6,6 +6,6 @@ from drawings.views import (
 
 
 urlpatterns = [
-    path('drawings/', getDrawings,),
-    path('drawings/<str:pk>/', getDrawing,),
+    path('', getDrawings,),
+    path('<str:pk>/', getDrawing,),
 ]
