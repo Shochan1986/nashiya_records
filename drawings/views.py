@@ -21,7 +21,7 @@ def getDrawings(request):
                 Q(title__icontains=query) |
                 Q(comment__icontains=query) 
             )
-    drawings = Drawing.objects.filter(queryset).distinct().order_by('-created')
+    drawings = Drawing.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
     paginator = Paginator(drawings, 6, orphans=1)
     try:

@@ -4,7 +4,7 @@ from cloudinary.models import CloudinaryField
 class Drawing(models.Model):
 
     title = models.CharField('タイトル' , max_length=300, null=True, )
-    date = models.DateField('作成日', blank=True, null=True, )
+    date = models.DateField('作成日', null=True, )
     comment = models.CharField('コメント', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
