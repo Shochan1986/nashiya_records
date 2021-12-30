@@ -63,10 +63,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ImagesSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField(read_only=True)
     thumbnail = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Images
         fields = '__all__'
+
+    def get_image(self, obj):
+        return obj.image.url
 
     def get_thumbnail(self, obj):
         return obj.image.url
@@ -74,7 +78,15 @@ class ImagesSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super(ImagesSerializer, self).to_representation(instance)
         if instance.image:
-            thumbnailUrl = cloudinary.utils.cloudinary_url(instance.image.build_url(transformation=[
+            imagelUrl = cloudinary.utils.cloudinary_url(
+                instance.image.build_url(
+                secure=True))
+            representation['image'] = imagelUrl[0]
+        if instance.image:
+            thumbnailUrl = cloudinary.utils.cloudinary_url(
+                instance.image.build_url(
+                secure=True,
+                transformation=[
                 {'width': 450 },
                 {'fetch_format': "auto"},
                 {'quality': 'auto:eco'},

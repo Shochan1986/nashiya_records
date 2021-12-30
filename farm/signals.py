@@ -30,7 +30,7 @@ pre_save.connect(updateUser ,sender=User)
 def images_url_save(sender, instance, created, **kwargs):
     if created:
         if instance.image:
-            instance.url = instance.image.url
+            instance.url = instance.image.build_url(secure=True)
             instance.save()
 
 
