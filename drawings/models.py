@@ -54,7 +54,7 @@ class Drawing(models.Model):
         verbose_name_plural = '作品'
 
     def line_push(self, request):
-        message = f'Nina作 {self.title} \n サイト: https://daughter-blog-berraquera.vercel.app/{self.id}'
+        message = f'Nina作 「{self.title}」 \n URL: https://daughter-blog-berraquera.vercel.app/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(
