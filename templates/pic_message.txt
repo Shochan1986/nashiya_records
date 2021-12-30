@@ -1,6 +1,0 @@
-仁菜の新しい絵のお知らせです。
-
-タイトル：「{{ pic.title }}」
-
-詳しくは、以下のURLからご確認ください。
-https://daughter-blog-berraquera.vercel.app/{{pic.id}}
