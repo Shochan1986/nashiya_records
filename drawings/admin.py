@@ -4,8 +4,8 @@ from django.utils.safestring import mark_safe
 
 
 def notify(modeladmin, request, queryset):
-    for post in queryset:
-        post.line_push(request)
+    for pic in queryset:
+        pic.line_push(request)
 
 
 class DrawingAdmin(admin.ModelAdmin):

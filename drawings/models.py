@@ -14,7 +14,6 @@ env.read_env()
 
 
 class Drawing(models.Model):
-
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('作成日', null=True, )
     comment = models.CharField('コメント', max_length=500, blank=True, null=True, )
@@ -55,12 +54,8 @@ class Drawing(models.Model):
         verbose_name_plural = '作品'
 
     def line_push(self, request):
-        """絵画をラインで通知"""
-        context = {
-            'pic': self,
-        }
-        message = render_to_string('pic_message.txt', context, request)
-        line_bot_api = LineBotApi(channel_access_token=env("LINE_CHANNEL_ACCESS_TOKEN"))
+        message = f'Nina新作 {self.title} \n https://daughter-blog-berraquera.vercel.app/{self.id}'
+        line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(
                 push.line_id, 
