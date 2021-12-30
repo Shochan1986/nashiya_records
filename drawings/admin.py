@@ -28,4 +28,4 @@ class DrawingAdmin(admin.ModelAdmin):
 
 admin.site.register(Drawing, DrawingAdmin)
 
-notify.short_description = '通知を送信する'
+notify.short_description = 'LINEに転載する'
