@@ -1,5 +1,17 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from farm.models import LinePush
+from django.template.loader import render_to_string
+from linebot.models import (
+    TextSendMessage, 
+    ImageSendMessage,
+    )
+from linebot import LineBotApi
+from environs import Env 
+
+env = Env() 
+env.read_env()
+
 
 class Drawing(models.Model):
 
@@ -41,3 +53,20 @@ class Drawing(models.Model):
         ordering = ['-created']
         verbose_name = '作品'
         verbose_name_plural = '作品'
+
+    def line_push(self, request):
+        """絵画をラインで通知"""
+        context = {
+            'pic': self,
+        }
+        message = render_to_string('pic_message.txt', context, request)
+        line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(
+                push.line_id, 
+                messages=[
+                    TextSendMessage(text=message), 
+                    ImageSendMessage(
+                        original_content_url=self.url_one, 
+                        preview_image_url=self.url_one)
+                    ])

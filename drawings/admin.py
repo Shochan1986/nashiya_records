@@ -2,10 +2,18 @@ from django.contrib import admin
 from drawings.models import Drawing
 from django.utils.safestring import mark_safe
 
+
+def notify(modeladmin, request, queryset):
+    for post in queryset:
+        post.line_push(request)
+
+
 class DrawingAdmin(admin.ModelAdmin):
     model = Drawing
     list_display = ('show_image', 'title', 'date', 'comment',)
+    search_fields = ('title', 'comment', )
     list_editable = ('title', 'date', 'comment',)
+    actions = [notify]
 
     def save_model(self, request, obj, form, change):
         obj.from_admin_site = True 
@@ -19,3 +27,5 @@ class DrawingAdmin(admin.ModelAdmin):
     
 
 admin.site.register(Drawing, DrawingAdmin)
+
+notify.short_description = '通知を送信する'
