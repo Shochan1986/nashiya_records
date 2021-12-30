@@ -60,7 +60,7 @@ class Drawing(models.Model):
             'pic': self,
         }
         message = render_to_string('pic_message.txt', context, request)
-        line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+        line_bot_api = LineBotApi(channel_access_token=env("LINE_CHANNEL_ACCESS_TOKEN"))
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(
                 push.line_id, 
