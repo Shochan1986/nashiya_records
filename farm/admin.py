@@ -68,6 +68,8 @@ class ImagesAdmin(admin.ModelAdmin):
 
     def show_image(self, obj):
         return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image.url))
+    show_image.admin_order_field = 'サムネイル'
+    show_image.short_description = 'サムネイル'
 
 
 class PearsAdmin(admin.ModelAdmin):

@@ -10,9 +10,9 @@ def notify(modeladmin, request, queryset):
 
 class DrawingAdmin(admin.ModelAdmin):
     model = Drawing
-    list_display = ('show_image', 'title', 'date', 'url_one',)
+    list_display = ('show_image', 'title', 'date', 'comment',)
     search_fields = ('title', 'comment', )
-    list_editable = ('title', 'date', 'url_one',)
+    list_editable = ('title', 'date', 'comment',)
     actions = [notify]
 
     def save_model(self, request, obj, form, change):
