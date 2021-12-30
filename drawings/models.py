@@ -22,12 +22,12 @@ class Drawing(models.Model):
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
-         transformation={ 
+        transformation={ 
             "quality": "auto", 
             'dpr': "auto", 
             "fetch_format":"auto", 
             "angle":"exif", 
-            "effect":"auto_contrast" 
+            "effect":"auto_contrast",
             }, 
         )
     image_two = CloudinaryField(
@@ -39,7 +39,7 @@ class Drawing(models.Model):
             'dpr': "auto", 
             "fetch_format":"auto", 
             "angle":"exif", 
-            "effect":"auto_contrast" 
+            "effect":"auto_contrast",
             }, 
         )
     url_one = models.URLField('URL①', blank=True, null=True)
