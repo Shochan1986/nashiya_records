@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
 
-    'farm.apps.FarmConfig',
-    'drawings.apps.DrawingsConfig',
+    'farm.apps.FarmConfig', # new
+    'drawings.apps.DrawingsConfig', # new
+    'photos.apps.PhotosConfig', # new
 
     'rest_framework', # new
     "corsheaders", # new
