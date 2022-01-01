@@ -62,6 +62,6 @@ class Image(models.Model):
                 messages=[
                     TextSendMessage(text=message), 
                     ImageSendMessage(
-                        original_content_url=self.url_one, 
-                        preview_image_url=self.url_one)
+                        original_content_url=self.image_one.build_url(secure=True), 
+                        preview_image_url=self.image_one.build_url(secure=True))
                     ])
