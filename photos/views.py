@@ -38,7 +38,7 @@ def getChildrenImages(request):
     serializer = ChildrenImageSerializer(images, many=True)
     return Response(
         {
-            'drawings': serializer.data, 
+            'images': serializer.data, 
             'page': page, 
             'pages': paginator.num_pages,
             'count': paginator.count,
