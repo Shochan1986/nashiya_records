@@ -202,6 +202,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'https://nashiya-reports.netlify.app',
     'https://daughter-blog-berraquera.vercel.app',
+    'https://children-reactjs.netlify.app',
     'https://nashiya-django.herokuapp.com',
 ]
 
