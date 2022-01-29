@@ -42,8 +42,6 @@ class Drawing(models.Model):
             "effect":"auto_contrast",
             }, 
         )
-    url_one = models.URLField('URL①', blank=True, null=True)
-    url_two = models.URLField('URL②', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -68,7 +66,7 @@ class Drawing(models.Model):
 
 
 class Comment(models.Model):
-    pic = models.ForeignKey(
+    drawing = models.ForeignKey(
         Drawing, on_delete=models.CASCADE, related_name='comments', verbose_name="作品"
     )
     author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)

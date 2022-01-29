@@ -1,5 +1,5 @@
-from drawings.models import Drawing
-from drawings.serializers import DrawingSerializer
+from drawings.models import Drawing, Comment, CommentLike
+from drawings.serializers import DrawingSerializer, CommentSerializer, CommentLikeSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
     # IsAuthenticated, 
@@ -7,7 +7,7 @@ from rest_framework.permissions import (
     )
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-# from rest_framework import status
+from rest_framework import status
 from django.db.models import Q
 
 
@@ -54,3 +54,70 @@ def getDrawing(request, pk):
     drawing = Drawing.objects.get(id=pk)
     serializer = DrawingSerializer(drawing, many=False)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createDrawingComment(request, pk):
+    user = request.user
+    data = request.data
+    drawing = Drawing.objects.get(id=pk)
+    Comment.objects.create(
+        drawing=drawing,
+        author=user.first_name,
+        text=data['text']
+    )
+    return Response({'detail': 'コメントが追加されました'})
+
+
+@api_view(['GET'])
+#@permission_classes([IsAdminUser])
+def getComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    serializer = CommentSerializer(comment, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateComment(request, pk):
+    data = request.data
+    comment = Comment.objects.get(id=pk)
+    comment.text = data['text']
+    comment.save()
+    serializer = CommentSerializer(comment, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    comment.delete()  
+    return Response('コメントは削除されました')
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createCommentLike(request, pk):
+    user = request.user
+    comment_id = Comment.objects.get(id=pk)
+    alreadyExists = comment_id.likes.filter(user=user.first_name).exists()
+    if alreadyExists:
+        content = {'detail': 'あなたはすでにこのコメントに「いいね」しています'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        comment = Comment.objects.filter(id=pk)
+        CommentLike.objects.create(
+            user=user.first_name,
+            comment=comment.last(),
+        )
+        return Response({'detail': 'コメントに「いいね」が追加されました'})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteCommentLike(request, pk):
+    like = CommentLike.objects.get(id=pk)
+    like.delete()  
+    return Response('コメントの「いいね」は削除されました')
