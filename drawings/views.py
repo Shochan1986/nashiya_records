@@ -71,7 +71,7 @@ def createDrawingComment(request, pk):
 
 
 @api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getComment(request, pk):
     comment = Comment.objects.get(id=pk)
     serializer = CommentSerializer(comment, many=False)
