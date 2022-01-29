@@ -19,7 +19,7 @@ def getDrawings(request):
         query = ''
     queryset = (
                 Q(title__icontains=query) |
-                Q(comment__icontains=query) 
+                Q(description__icontains=query) 
             )
     drawings = Drawing.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
