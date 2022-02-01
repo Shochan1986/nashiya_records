@@ -25,7 +25,7 @@ class DrawingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drawing
-        fields = ['id', 'title', 'description', 'created', 'image_one', 'image_two', 'comments']
+        fields = ['id', 'title', 'date', 'description', 'created', 'image_one', 'image_two', 'comments']
 
 
 class CommentSerializer(serializers.ModelSerializer):
