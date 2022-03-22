@@ -6,4 +6,4 @@
 {% endif %}
 
 詳しくは、以下のURLからご確認ください。
-https://nashiya-reports.netlify.app/image/{{image.id}}
+https://children-reactjs.netlify.app/photo/{{image.id}}
