@@ -28,17 +28,3 @@ def comment_create_notification(sender, instance, created, **kwargs):
             message = render_to_string('photos/image_comment_message.txt', context)
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
-
-
-@receiver(post_save, sender=CommentLike)
-def comment_like_create_notification(sender, instance, created, **kwargs):
-    if not getattr(instance, 'from_admin_site', False):
-        if created:
-            context = {
-                'comment': instance.comment,
-                'image': instance.comment.image,
-                'user': instance.user,
-            }
-            message = render_to_string('photos/image_comment_like_message.txt', context)
-            for push in LinePush.objects.filter(unfollow=False):
-                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
