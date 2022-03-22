@@ -1,0 +1,9 @@
+写真「{{ image.title }}」 にコメントが投稿されました。
+{% if author %}投稿者：{{ author }}{% endif %}
+{% if text %}
+内容：
+{{ text|truncatechars:70 }}
+{% endif %}
+
+詳しくは、以下のURLからご確認ください。
+https://nashiya-reports.netlify.app/image/{{image.id}}

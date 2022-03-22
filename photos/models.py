@@ -54,15 +54,29 @@ class Image(models.Model):
     def line_push(self, request):
         message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
-        for push in LinePush.objects.filter(unfollow=False):
-            line_bot_api.push_message(
-                push.line_id, 
-                messages=[
-                    TextSendMessage(text=message), 
-                    ImageSendMessage(
-                        original_content_url=self.image_one.build_url(secure=True), 
-                        preview_image_url=self.image_one.build_url(secure=True))
-                    ])
+        if not self.image_two:
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=self.image_one.build_url(secure=True), 
+                            preview_image_url=self.image_one.build_url(secure=True)) 
+                        ])
+        else:
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=self.image_one.build_url(secure=True), 
+                            preview_image_url=self.image_one.build_url(secure=True)),
+                        ImageSendMessage(
+                            original_content_url=self.image_two.build_url(secure=True), 
+                            preview_image_url=self.image_two.build_url(secure=True)),
+                        ])
 
 
 class Comment(models.Model):

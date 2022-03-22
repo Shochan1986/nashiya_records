@@ -1,5 +1,5 @@
 from django.contrib import admin
-from photos.models import Image
+from photos.models import Image, Comment, CommentLike
 from django.utils.safestring import mark_safe
 
 
@@ -24,8 +24,29 @@ class ImageAdmin(admin.ModelAdmin):
         return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image_one.build_url(secure=True)))
     show_image.admin_order_field = 'サムネイル'
     show_image.short_description = 'サムネイル'
+
+
+class CommentAdmin(admin.ModelAdmin):
+    model = Comment
+    list_display = ('image', 'author', 'text')
+
+    def save_model(self, request, obj, form, change):
+        obj.from_admin_site = True 
+        obj.save()
+        super(CommentAdmin, self).save_model(request, obj, form, change)
+
+
+class CommentLikeAdmin(admin.ModelAdmin):
+    model = CommentLike
+
+    def save_model(self, request, obj, form, change):
+        obj.from_admin_site = True 
+        obj.save()
+        super(CommentLikeAdmin, self).save_model(request, obj, form, change)
     
 
 admin.site.register(Image, ImageAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentLike, CommentLikeAdmin)
 
 notify.short_description = 'LINEに転載する'

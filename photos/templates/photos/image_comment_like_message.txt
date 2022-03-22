@@ -1,0 +1,7 @@
+「{{ user }}」さんが「{{ comment.author }}」さんのコメントに「いいね！」しました。
+
+コメント: {{ comment.text|truncatechars:30 }}
+日報：「{{ image.title }}」 
+
+詳しくは、以下のURLからご確認ください。
+https://nashiya-reports.netlify.app/image/{{image.id}}
