@@ -21,7 +21,7 @@ class ImageAdmin(admin.ModelAdmin):
         super(ImageAdmin, self).save_model(request, obj, form, change)
     
     def show_image(self, obj):
-        return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.url_one))
+        return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image_one.build_url(secure=True)))
     show_image.admin_order_field = 'サムネイル'
     show_image.short_description = 'サムネイル'
     

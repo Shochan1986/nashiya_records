@@ -7,5 +7,3 @@ class PhotosConfig(AppConfig):
     verbose_name = 'アルバム'
     verbose_name_plural = 'アルバム'
 
-    def ready(self):
-        import photos.signals

@@ -16,7 +16,7 @@ env.read_env()
 class Image(models.Model):
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('作成日', null=True, )
-    comment = models.CharField('コメント', max_length=500, blank=True, null=True, )
+    comment = models.CharField('詳細', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     image_one = CloudinaryField(
@@ -42,8 +42,6 @@ class Image(models.Model):
             "effect":"auto_contrast",
             }, 
         )
-    url_one = models.URLField('URL①', blank=True, null=True)
-    url_two = models.URLField('URL②', blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -65,3 +63,35 @@ class Image(models.Model):
                         original_content_url=self.image_one.build_url(secure=True), 
                         preview_image_url=self.image_one.build_url(secure=True))
                     ])
+
+
+class Comment(models.Model):
+    image = models.ForeignKey(
+        Image, on_delete=models.CASCADE, related_name='comments', verbose_name="作品"
+    )
+    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
+    text = models.TextField(verbose_name=('本文'), null=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+    updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('コメント')
+        verbose_name_plural = ('コメント')
+
+    def __str__(self):
+        return self.text
+
+
+class CommentLike(models.Model):
+    user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='コメント')
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('いいね(コメント)')
+        verbose_name_plural = ('いいね(コメント)')
+
+    def __str__(self):
+        return self.comment.text + f'({self.comment.author})' + ' by ' + self.user
