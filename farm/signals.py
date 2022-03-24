@@ -62,6 +62,11 @@ def article_published_notification(sender, instance, created, **kwargs):
             message = render_to_string('notify_message.txt', context)
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+                for photo in instance.images.all():
+                    line_bot_api.push_message(push.line_id, messages=ImageSendMessage(
+                        original_content_url=photo.url,
+                        preview_image_url=photo.url,
+                    ))
            
 
 @receiver(post_save, sender=Comment)
