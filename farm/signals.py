@@ -71,7 +71,7 @@ def article_published_notification(sender, instance, created, **kwargs):
             else:
                 for push in LinePush.objects.filter(unfollow=False):
                     line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
-
+           
 
 @receiver(post_save, sender=Comment)
 def comment_create_notification(sender, instance, created, **kwargs):
