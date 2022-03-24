@@ -68,7 +68,7 @@ def article_published_notification(sender, instance, created, **kwargs):
                             original_content_url=instance.photo.image.build_url(secure=True), 
                             preview_image_url=instance.photo.image.build_url(secure=True)
                         )
-            else:
+            elif not instance.images:
                 for push in LinePush.objects.filter(unfollow=False):
                     line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
            
