@@ -60,18 +60,17 @@ def article_published_notification(sender, instance, created, **kwargs):
                 'article': instance,
             }
             message = render_to_string('notify_message.txt', context)
-            if not instance.images:
+            if instance.images:
                 for push in LinePush.objects.filter(unfollow=False):
                     line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+                    for photo in instance.images:
+                        line_bot_api.push_message(push.line_id, messages=ImageSendMessage(
+                            original_content_url=instance.photo.image.build_url(secure=True), 
+                            preview_image_url=instance.photo.image.build_url(secure=True)
+                        )
             else:
                 for push in LinePush.objects.filter(unfollow=False):
-                    for photo in instance.images:
-                        line_bot_api.push_message(push.line_id, messages=[
-                            TextSendMessage(text=message),
-                            ImageSendMessage(
-                                original_content_url=instance.photo.image.build_url(secure=True), 
-                                preview_image_url=instance.photo.image.build_url(secure=True))
-                            ])
+                    line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
 
 
 @receiver(post_save, sender=Comment)
