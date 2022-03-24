@@ -81,7 +81,7 @@ def getPublicArticles(request):
             )
     articles = Article.objects.filter(is_public=True).filter(queryset).distinct().order_by('-published_at')
     page = request.query_params.get('page')
-    paginator = Paginator(articles, 6, orphans=1)
+    paginator = Paginator(articles, 9, orphans=2)
     try:
         articles = paginator.page(page)
     except PageNotAnInteger:
