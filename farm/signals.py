@@ -61,15 +61,14 @@ def article_published_notification(sender, instance, created, **kwargs):
             }
             message = render_to_string('notify_message.txt', context)
             if instance.images:
-                for photo in instance.images:
-                    for push in LinePush.objects.filter(unfollow=False):
-                        line_bot_api.push_message(push.line_id, 
-                                                  messages=[
-                                                      TextSendMessage(text=message),
-                                                      ImageSendMessage(
-                            original_content_url=photo.image.build_url(secure=True), 
-                            preview_image_url=photo.image.build_url(secure=True),
-                        ),])
+                for push in LinePush.objects.filter(unfollow=False):
+                    line_bot_api.push_message(push.line_id, messages=[
+                        TextSendMessage(text=message),
+                        ImageSendMessage(
+                            original_content_url=instance.images[0].image.build_url(secure=True), 
+                            preview_image_url=instance.images[0].image.build_url(secure=True),
+                        ),
+                    ])
             else:
                 for push in LinePush.objects.filter(unfollow=False):
                     line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
