@@ -70,7 +70,7 @@ def article_published_notification(sender, instance, created, **kwargs):
                             TextSendMessage(text=message),
                             ImageSendMessage(
                                 original_content_url=instance.photo.image.build_url(secure=True), 
-                                preview_image_url=instance.photo.image.build_url(secure=True)
+                                preview_image_url=instance.photo.image.build_url(secure=True))
                             ])
 
 
