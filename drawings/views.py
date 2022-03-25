@@ -23,7 +23,7 @@ def getDrawings(request):
             )
     drawings = Drawing.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(drawings, 6, orphans=1)
+    paginator = Paginator(drawings, 12, orphans=3)
     try:
         drawings = paginator.page(page)
     except PageNotAnInteger:
