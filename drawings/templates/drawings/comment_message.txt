@@ -6,4 +6,4 @@
 {% endif %}
 
 詳しくは、以下のURLからご確認ください。
-https://children-reactjs.netlify.app/photo/{{drawing.id}}
+https://daughter-blog-berraquera.vercel.app/{{drawing.id}}

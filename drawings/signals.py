@@ -6,7 +6,7 @@ from linebot.models import (
     TextSendMessage, 
 )
 from farm.models import LinePush
-from drawings.models import Comment, CommentLike
+from drawings.models import Comment
 from environs import Env 
 
 env = Env() 
