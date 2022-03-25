@@ -1,5 +1,5 @@
 from drawings.models import Drawing, Comment, CommentLike
-from drawings.serializers import DrawingSerializer, CommentSerializer, CommentLikeSerializer
+from drawings.serializers import DrawingSerializer, CommentSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
     # IsAuthenticated, 
