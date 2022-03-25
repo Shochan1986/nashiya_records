@@ -8,17 +8,20 @@ def notify(modeladmin, request, queryset):
         pic.line_push(request)
 
 
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 1
+
+
 class ImageAdmin(admin.ModelAdmin):
     model = Image
+    inlines = [
+        CommentInline,
+    ]
     list_display = ('show_image', 'title', 'date', 'comment',)
     search_fields = ('title', 'comment', )
     list_editable = ('title', 'date', 'comment',)
     actions = [notify]
-
-    def save_model(self, request, obj, form, change):
-        obj.from_admin_site = True 
-        obj.save()
-        super(ImageAdmin, self).save_model(request, obj, form, change)
     
     def show_image(self, obj):
         return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image_one.build_url(secure=True)))
@@ -29,11 +32,6 @@ class ImageAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('image', 'author', 'text')
-
-    def save_model(self, request, obj, form, change):
-        obj.from_admin_site = True 
-        obj.save()
-        super(CommentAdmin, self).save_model(request, obj, form, change)
     
 
 admin.site.register(Image, ImageAdmin)
