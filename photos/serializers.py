@@ -7,6 +7,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     note = serializers.SerializerMethodField(read_only=True)
     image_one = serializers.SerializerMethodField(read_only=True)
     image_two = serializers.SerializerMethodField(read_only=True)
+    comments = serializers.SerializerMethodField(read_only=True)
 
     def get_note(self, obj):
         return obj.comment
