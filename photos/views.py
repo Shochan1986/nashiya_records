@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q
+from django.views.generic.base import View
 
 
 @api_view(['GET'])
@@ -121,3 +122,26 @@ def deleteCommentLike(request, pk):
     like = CommentLike.objects.get(id=pk)
     like.delete()  
     return Response('コメントの「いいね」は削除されました')
+
+# 追記
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from django.conf import settings
+from django.http.response import JsonResponse
+
+class UploadView(View):
+    def post(self,request, *args,**kwargs):
+        file = request.FILES['image']
+
+        cloudinary.config( 
+            cloud_name = settings.CLOUDINARY_STORAGE['CLOUD_NAME'], 
+            api_key = settings.CLOUDINARY_STORAGE['API_KEY'], 
+            api_secret = settings.CLOUDINARY_STORAGE['API_SECRET']
+        )
+        res = cloudinary.uploader.upload(
+            file = file,
+            folder = settings.MARKDOWNX_MEDIA_PATH,
+        )
+
+        return JsonResponse({"image_code": f"![]({res['url']})"})
