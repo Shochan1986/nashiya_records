@@ -1,7 +1,6 @@
 from django.contrib import admin
 from photos.models import Image, Comment, ContentImage
 from django.utils.safestring import mark_safe
-from markdownx.admin import MarkdownxModelAdmin
 
 
 def notify(modeladmin, request, queryset):
@@ -19,7 +18,7 @@ class ContentImageInline(admin.TabularInline):
     extra = 1
 
 
-class ImageAdmin(MarkdownxModelAdmin):
+class ImageAdmin(admin.ModelAdmin):
     model = Image
     inlines = [
         CommentInline,
