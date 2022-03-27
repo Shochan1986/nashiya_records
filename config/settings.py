@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     "corsheaders", # new
     'cloudinary_storage', # new
     'cloudinary', # new
-    'markdownx', # new
 ]
 
 MIDDLEWARE = [
@@ -212,8 +211,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': env("CLOUDINARY_API_KEY"),
     'API_SECRET': env("CLOUDINARY_API_SECRET"),
 }   
-
-MARKDOWNX_UPLOAD_URLS_PATH = '/upload'
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
