@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "corsheaders", # new
     'cloudinary_storage', # new
     'cloudinary', # new
+    'markdownx', # new
 ]
 
 MIDDLEWARE = [

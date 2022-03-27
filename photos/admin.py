@@ -1,6 +1,7 @@
 from django.contrib import admin
-from photos.models import Image, Comment
+from photos.models import Image, Comment, ContentImage
 from django.utils.safestring import mark_safe
+from markdownx.admin import MarkdownxModelAdmin
 
 
 def notify(modeladmin, request, queryset):
@@ -13,10 +14,16 @@ class CommentInline(admin.TabularInline):
     extra = 1
 
 
-class ImageAdmin(admin.ModelAdmin):
+class ContentImageInline(admin.TabularInline):
+    model = ContentImage
+    extra = 1
+
+
+class ImageAdmin(MarkdownxModelAdmin):
     model = Image
     inlines = [
         CommentInline,
+        ContentImageInline,
     ]
     list_display = ('show_image', 'title', 'date', 'comment',)
     search_fields = ('title', 'comment', )

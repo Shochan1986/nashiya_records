@@ -1,7 +1,7 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 from farm.models import LinePush
-from django.template.loader import render_to_string
+from markdownx.models import MarkdownxField
 from linebot.models import (
     TextSendMessage, 
     ImageSendMessage,
@@ -19,6 +19,7 @@ class Image(models.Model):
     comment = models.CharField('詳細', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+    content = MarkdownxField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
@@ -28,6 +29,7 @@ class Image(models.Model):
             "fetch_format":"auto", 
             "angle":"exif", 
             "effect":"auto_contrast",
+            "width": 1250, 
             }, 
         )
     image_two = CloudinaryField(
@@ -40,6 +42,7 @@ class Image(models.Model):
             "fetch_format":"auto", 
             "angle":"exif", 
             "effect":"auto_contrast",
+            "width": 1250, 
             }, 
         )
 
@@ -52,7 +55,10 @@ class Image(models.Model):
         verbose_name_plural = '写真'
 
     def line_push(self, request):
-        message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
+        if self.content:
+            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id} \n ブログ記事あります！ぜひチェック！'
+        else:
+            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
         if not self.image_two:
             for push in LinePush.objects.filter(unfollow=False):
@@ -109,3 +115,26 @@ class CommentLike(models.Model):
 
     def __str__(self):
         return self.comment.text + f'({self.comment.author})' + ' by ' + self.user
+
+
+class ContentImage(models.Model):
+    image = models.ForeignKey(Image, on_delete=models.PROTECT)
+    content_image = CloudinaryField(
+        blank=True, 
+        null=True, 
+        transformation={
+            "quality": "auto:best", 
+            'dpr': "auto", 
+            "fetch_format":"auto",
+            "radius":25, 
+            "angle":"exif", 
+            "effect":"auto_contrast",
+            "crop": "fit",
+            "width": 1250, 
+            }, 
+        verbose_name='画像'
+        )
+
+    class Meta:
+        verbose_name = ('挿入画像')
+        verbose_name_plural = ('挿入画像')
