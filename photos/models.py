@@ -121,6 +121,7 @@ class ContentImage(models.Model):
     content_image = CloudinaryField(
         blank=True, 
         null=True, 
+        secure=True,
         transformation={
             "quality": "auto:best", 
             'dpr': "auto", 
