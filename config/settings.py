@@ -152,7 +152,8 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder", # new
     "django.contrib.staticfiles.finders.AppDirectoriesFinder", # new
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" # new
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" # new
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage' # new
 
 MEDIA_URL = '/media/' # new 
 MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new 
