@@ -24,9 +24,10 @@ class ImageAdmin(admin.ModelAdmin):
         CommentInline,
         ContentImageInline,
     ]
-    list_display = ('show_image', 'title', 'date', 'comment',)
+    list_display = ('show_image', 'title', 'date', 'ct_is_public', 'comment',)
     search_fields = ('title', 'comment', )
-    list_editable = ('title', 'date', 'comment',)
+    list_editable = ('title', 'date', 'comment', 'ct_is_public')
+    list_per_page = 30
     actions = [notify]
     
     def show_image(self, obj):

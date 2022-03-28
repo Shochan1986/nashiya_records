@@ -7,6 +7,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     note = serializers.SerializerMethodField(read_only=True)
     image_one = serializers.SerializerMethodField(read_only=True)
     image_two = serializers.SerializerMethodField(read_only=True)
+    ctIsPublic = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
 
     def get_note(self, obj):
@@ -20,6 +21,9 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
             return obj.image_two.build_url(secure=True)
         else:
             return None
+    
+    def get_ctIsPublic(self, obj):
+        return obj.ct_is_public
 
     def get_comments(self, obj):
         comments = obj.comments.all()
@@ -28,7 +32,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 'content', 'comments']
+        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 'content', 'ctIsPublic', 'comments']
     
 
 class CommentSerializer(serializers.ModelSerializer):

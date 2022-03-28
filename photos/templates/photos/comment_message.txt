@@ -1,6 +1,6 @@
 写真「{{ image.title }}」 にコメントが投稿されました。
 {% if author %}投稿者：{{ author }}{% endif %}
-{% if text %}
+{% if text and public %}
 内容：
 {{ text|truncatechars:70 }}
 {% endif %}
