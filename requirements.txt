@@ -16,6 +16,7 @@ Django==3.2.9
 django-cache-url==3.2.3
 django-cloudinary-storage==0.3.0
 django-cors-headers==3.10.0
+django-markdownx==3.0.1
 django-mdeditor==0.1.20
 django-pandas==0.6.6
 djangorestframework==3.12.4
