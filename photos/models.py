@@ -56,8 +56,8 @@ class Image(models.Model):
         verbose_name_plural = '記事'
 
     def line_push(self, request):
-        if self.content:
-            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id} \n ブログ記事あります！ぜひチェック！'
+        if self.content and self.ct_is_public:
+            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id} \n ブログ記事あり！チェック！'
         else:
             message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))

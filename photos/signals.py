@@ -23,7 +23,6 @@ def comment_create_notification(sender, instance, created, **kwargs):
             'author': instance.author,
             'image': instance.image,
             'text': instance.text,
-            'public': instance.ct_is_public,
         }
         message = render_to_string('photos/comment_message.txt', context)
         for push in LinePush.objects.filter(unfollow=False):
