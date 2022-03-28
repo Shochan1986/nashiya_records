@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "corsheaders", # new
     'cloudinary_storage', # new
     'cloudinary', # new
+    'mdeditor', # new
 ]
 
 MIDDLEWARE = [
@@ -211,6 +212,8 @@ CLOUDINARY_STORAGE = {
     'API_KEY': env("CLOUDINARY_API_KEY"),
     'API_SECRET': env("CLOUDINARY_API_SECRET"),
 }   
+
+X_FRAME_OPTIONS = 'SAMEORIGIN' 
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -1,5 +1,6 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
+from mdeditor.fields import MDTextField
 from farm.models import LinePush
 from linebot.models import (
     TextSendMessage, 
@@ -18,7 +19,7 @@ class Image(models.Model):
     comment = models.CharField('詳細', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
-    content = models.TextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
+    content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
