@@ -224,7 +224,7 @@ MDEDITOR_CONFIGS = {
                     "h1", "h2", "h3", "h5", "h6", "|",
                     "list-ul", "list-ol", "hr", "|",
                     "||", "preview", "watch", "fullscreen"],
-        'lineWrapping': True
+        'lineWrapping': True,
     }
 }
 

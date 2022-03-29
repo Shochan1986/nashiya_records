@@ -20,7 +20,7 @@ class Image(models.Model):
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
-    ct_is_public = models.BooleanField('本文公開ステータス', default=False, null=True)
+    ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
