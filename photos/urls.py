@@ -2,6 +2,7 @@ from django.urls import path
 from photos.views import (
     getChildrenImages,
     getChildrenImage,
+    getBlogImages,
 
     createImageComment, 
     updateComment,
@@ -14,6 +15,7 @@ from photos.views import (
 
 urlpatterns = [
     path('', getChildrenImages),
+    path('blog/', getBlogImages),
     path('<str:pk>/', getChildrenImage),
 
     path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
