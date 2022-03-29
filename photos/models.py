@@ -127,10 +127,8 @@ class ContentImage(models.Model):
             "quality": "auto:best", 
             'dpr': "auto", 
             "fetch_format":"auto",
-            "radius":25, 
             "angle":"exif", 
             "effect":"auto_contrast",
-            "crop": "fit",
             "width": 1250, 
             }, 
         verbose_name='画像'
