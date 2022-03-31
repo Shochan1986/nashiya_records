@@ -52,8 +52,8 @@ class Image(models.Model):
 
     class Meta:
         ordering = ['-created']
-        verbose_name = '記事'
-        verbose_name_plural = '記事'
+        verbose_name = '投稿'
+        verbose_name_plural = '投稿'
 
     def line_push(self, request):
         if self.content and self.ct_is_public:
@@ -88,7 +88,7 @@ class Image(models.Model):
 
 class Comment(models.Model):
     image = models.ForeignKey(
-        Image, on_delete=models.CASCADE, related_name='comments', verbose_name="作品"
+        Image, on_delete=models.CASCADE, related_name='comments', verbose_name="投稿"
     )
     author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
     text = models.TextField(verbose_name=('本文'), null=True)
