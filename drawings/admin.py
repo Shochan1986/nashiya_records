@@ -32,6 +32,7 @@ class DrawingAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('drawing', 'author', 'text')
+    search_fields = ('drawing__title', 'author', 'text')
 
     
 admin.site.register(Drawing, DrawingAdmin)

@@ -39,6 +39,7 @@ class ImageAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('image', 'author', 'text')
+    search_fields = ('image__title', 'author', 'text')
     
 
 admin.site.register(Image, ImageAdmin)
