@@ -20,7 +20,10 @@ def getChildrenImages(request):
         query = ''
     queryset = (
                 Q(title__icontains=query) |
-                Q(comment__icontains=query) 
+                Q(comment__icontains=query) |
+                Q(content__icontains=query) |
+                Q(comments__author__icontains=query) |
+                Q(comments__text__icontains=query)
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -56,7 +59,10 @@ def getBlogImages(request):
         query = ''
     queryset = (
                 Q(title__icontains=query) |
-                Q(comment__icontains=query) 
+                Q(comment__icontains=query) |
+                Q(content__icontains=query) |
+                Q(comments__author__icontains=query) |
+                Q(comments__text__icontains=query)
             )
     images = Image.objects.filter(ct_is_public=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
