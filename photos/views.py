@@ -102,13 +102,14 @@ def getChildrenImage(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createImageComment(request, pk):
-    user = request.user
+    # user = request.user
     data = request.data
     image = Image.objects.get(id=pk)
     Comment.objects.create(
         image=image,
-        author=user.first_name,
-        text=data['text']
+        # author=user.first_name,
+        author=data['user'],
+        text=data['text'],
     )
     return Response({'detail': 'コメントが追加されました'})
 

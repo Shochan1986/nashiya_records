@@ -16,7 +16,7 @@ env.read_env()
 class Drawing(models.Model):
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('作成日', null=True, )
-    description = models.CharField('詳細', max_length=500, blank=True, null=True, )
+    description = models.CharField('一言', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     image_one = CloudinaryField(
