@@ -59,13 +59,14 @@ def getDrawing(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createDrawingComment(request, pk):
-    user = request.user
+    # user = request.user
     data = request.data
     drawing = Drawing.objects.get(id=pk)
     Comment.objects.create(
         drawing=drawing,
-        author=user.first_name,
-        text=data['text']
+        # author=user.first_name,
+        author=data['user'],
+        text=data['text'],
     )
     return Response({'detail': 'コメントが追加されました'})
 
