@@ -72,7 +72,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 'thumb_one', 'thumb_two', 'content', 'ctIsPublic', 'comments']
+        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'comments']
     
 
 class CommentSerializer(serializers.ModelSerializer):

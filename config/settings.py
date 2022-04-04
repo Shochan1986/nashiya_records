@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'cloudinary_storage', # new
     'cloudinary', # new
     'mdeditor', # new
+    'ckeditor', # new
+    'ckeditor_uploader', # new
 ]
 
 MIDDLEWARE = [
@@ -159,6 +161,8 @@ MEDIA_URL = '/media/' # new
 MEDIA_ROOT = str(BASE_DIR.joinpath('media')) # new 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage' # new 
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -227,6 +231,7 @@ MDEDITOR_CONFIGS = {
         'lineWrapping': True,
     }
 }
+
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

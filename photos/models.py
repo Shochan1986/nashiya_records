@@ -1,6 +1,7 @@
 from django.db import models
 from cloudinary.models import CloudinaryField
 from mdeditor.fields import MDTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from farm.models import LinePush
 from linebot.models import (
     TextSendMessage, 
@@ -20,6 +21,7 @@ class Image(models.Model):
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
+    content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
     ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
     image_one = CloudinaryField(
         null=True, 
