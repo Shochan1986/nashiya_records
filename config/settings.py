@@ -232,6 +232,17 @@ MDEDITOR_CONFIGS = {
     }
 }
 
+CKEDITOR_CONFIGS = {
+'default': {
+    'toolbar': [["Format", "Bold", "Italic", "Underline", "Strike", "SpellChecker"],
+                ['NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft', 'JustifyCenter',
+                 'JustifyRight', 'JustifyBlock'],
+                ["Image", "Table", "Link", "Unlink", "Anchor", "SectionLink", "Subscript", "Superscript", "Iframe"], ['Undo', 'Redo'], ["Source"],
+                ["Maximize"]],
+    'width': 'auto',
+    },
+}
+
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
