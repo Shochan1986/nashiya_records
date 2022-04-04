@@ -22,6 +22,7 @@ def getChildrenImages(request):
                 Q(title__icontains=query) |
                 Q(comment__icontains=query) |
                 Q(content__icontains=query) |
+                Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
                 Q(comments__text__icontains=query)
             )
@@ -61,6 +62,7 @@ def getBlogImages(request):
                 Q(title__icontains=query) |
                 Q(comment__icontains=query) |
                 Q(content__icontains=query) |
+                Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
                 Q(comments__text__icontains=query)
             )
