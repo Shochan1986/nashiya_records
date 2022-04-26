@@ -27,7 +27,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ('show_image', 'title', 'date', 'ct_is_public', 'comment',)
     search_fields = ('title', 'comment', )
     list_editable = ('title', 'date', 'comment', 'ct_is_public')
-    list_per_page = 30
+    list_per_page = 20
     actions = [notify]
     
     def show_image(self, obj):
