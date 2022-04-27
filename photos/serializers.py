@@ -49,7 +49,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
                 instance.image_one.build_url(
                 secure=True,
                 transformation=[
-                {'width': 450 },
+                {'width': 750 },
                 {'fetch_format': "auto"},
                 {'quality': 'auto:eco'},
                 {'dpr': 'auto'},
@@ -61,7 +61,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
                 instance.image_two.build_url(
                 secure=True,
                 transformation=[
-                {'width': 450 },
+                {'width': 750 },
                 {'fetch_format': "auto"},
                 {'quality': 'auto:eco'},
                 {'dpr': 'auto'},
