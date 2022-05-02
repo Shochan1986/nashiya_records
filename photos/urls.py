@@ -3,6 +3,7 @@ from photos.views import (
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
+    getSpecialImages,
 
     createImageComment, 
     updateComment,
@@ -16,6 +17,7 @@ from photos.views import (
 urlpatterns = [
     path('', getChildrenImages),
     path('blog/', getBlogImages),
+    path('special/', getSpecialImages),
     path('<str:pk>/', getChildrenImage),
 
     path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
