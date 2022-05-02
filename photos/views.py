@@ -109,7 +109,7 @@ def getSpecialImages(request):
             )
     images = Image.objects.filter(special=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 6, orphans=1)
+    paginator = Paginator(images, 12, orphans=2)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
