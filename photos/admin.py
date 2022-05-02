@@ -24,9 +24,9 @@ class ImageAdmin(admin.ModelAdmin):
         CommentInline,
         ContentImageInline,
     ]
-    list_display = ('show_image', 'title', 'date', 'ct_is_public', 'comment',)
+    list_display = ('show_image', 'title', 'date', 'ct_is_public', 'special', 'comment',)
     search_fields = ('title', 'comment', )
-    list_editable = ('title', 'date', 'comment', 'ct_is_public')
+    list_editable = ('title', 'date', 'comment', 'ct_is_public', 'special')
     list_per_page = 20
     actions = [notify]
     
