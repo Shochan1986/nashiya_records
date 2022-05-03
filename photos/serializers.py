@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from photos.models import Image, Comment
 from django.utils.html import linebreaks, urlize
-import cloudinary
 from drf_recaptcha.fields import ReCaptchaV3Field
+import cloudinary
 
 
 class ChildrenImageSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     thumb_two = serializers.SerializerMethodField(read_only=True)
     ctIsPublic = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
-    recaptcha = ReCaptchaV3Field(action="example")
+    recaptcha = ReCaptchaV3Field(action="children-images")
 
     def get_note(self, obj):
         return obj.comment
@@ -83,10 +83,15 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True) 
+    recaptcha = ReCaptchaV3Field(action="comment")
 
     def get_main_text(self, obj):  
         return urlize(linebreaks(obj.text))
 
     class Meta:
         model = Comment
-        fields = ['id', 'image', 'author', 'text', 'created', 'main_text']
+        fields = ['id', 'image', 'author', 'text', 'created', 'main_text', 'recaptcha']
+
+    def validate(self, attrs):
+        attrs.pop("recaptcha")
+        return attrs

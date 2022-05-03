@@ -12,6 +12,7 @@ from farm.models import (
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken 
 from django.utils.html import linebreaks, urlize 
+from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,13 +36,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
+    recaptcha = ReCaptchaV3Field(action="auth")
     class Meta:
         model = User
-        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', 'token', ]
+        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', 'token', 'recaptcha' ]
     
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token.access_token)
+    
+    def validate(self, attrs):
+        attrs.pop("recaptcha")
+        return attrs
 
 
 class FieldsSerializer(serializers.ModelSerializer):
