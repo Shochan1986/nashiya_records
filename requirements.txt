@@ -17,12 +17,14 @@ django-cache-url==3.2.3
 django-ckeditor==6.2.0
 django-cloudinary-storage==0.3.0
 django-cors-headers==3.10.0
+django-ipware==4.0.2
 django-js-asset==2.0.0
 django-markdownx==3.0.1
 django-mdeditor==0.1.20
 django-pandas==0.6.6
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
+drf-recaptcha==2.0.7
 environs==9.3.5
 et-xmlfile==1.1.0
 frozenlist==1.2.0
