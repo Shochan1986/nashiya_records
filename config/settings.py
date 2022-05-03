@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'mdeditor', # new
     'ckeditor', # new
     'ckeditor_uploader', # new
+    "drf_recaptcha", # new
 ]
 
 MIDDLEWARE = [
@@ -243,6 +244,9 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+DRF_RECAPTCHA_SECRET_KEY = env.str("GOOGLE_RECAPTCHA_SECRET_KEY")
+
+# DRF_RECAPTCHA_TESTING=True
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
