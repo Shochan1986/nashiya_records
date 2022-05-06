@@ -18,9 +18,9 @@ class DrawingAdmin(admin.ModelAdmin):
     inlines = [
         CommentInline,
     ]
-    list_display = ('show_image', 'title', 'date', 'description',)
+    list_display = ('show_image', 'title', 'date', 'creator', 'description',)
     search_fields = ('title', 'description', )
-    list_editable = ('title', 'date', 'description',)
+    list_editable = ('title', 'date', 'creator', 'description',)
     list_per_page = 20
     actions = [notify]
     
