@@ -7,6 +7,7 @@ from django.utils.html import linebreaks, urlize
 class DrawingSerializer(serializers.ModelSerializer):
     image_one = serializers.SerializerMethodField(read_only=True)
     image_two = serializers.SerializerMethodField(read_only=True)
+    creator = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
 
     def get_image_one(self, obj):
@@ -18,6 +19,9 @@ class DrawingSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_creator(self, obj):
+        return obj.get_creator_display()
+
     def get_comments(self, obj):
         comments = obj.comments.all()
         serializer = CommentSerializer(comments, many=True)
@@ -25,7 +29,7 @@ class DrawingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Drawing
-        fields = ['id', 'title', 'date', 'description', 'created', 'image_one', 'image_two', 'comments']
+        fields = ['id', 'title', 'date', 'description', 'creator', 'created', 'image_one', 'image_two', 'comments']
 
 
 class CommentSerializer(serializers.ModelSerializer):

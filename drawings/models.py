@@ -1,3 +1,4 @@
+from calendar import c
 from django.db import models
 from cloudinary.models import CloudinaryField
 from farm.models import LinePush
@@ -14,11 +15,19 @@ env.read_env()
 
 
 class Drawing(models.Model):
+    
+    class CreatorChoices(models.TextChoices):
+        NINA = 1, ('仁菜')
+        TAKUMI = 2, ('拓海') 
+        SAORI = 3, ('沙織')
+        SHOTARO = 4, ('祥太朗')
+
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('作成日', null=True, )
-    description = models.CharField('一言', max_length=500, blank=True, null=True, )
+    description = models.CharField('メモ', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+    creator = models.CharField('作者', max_length=300, null=True, choices=CreatorChoices.choices, default=CreatorChoices.NINA)
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
