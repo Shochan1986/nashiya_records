@@ -61,26 +61,18 @@ class Drawing(models.Model):
         verbose_name_plural = '作品'
 
     def line_push(self, request):
-        creator = self.get_creator_display()
-        if creator == '仁菜':
-            message = f'絵画工作 by 仁菜「{self.title}」 \n URL: https://daughter-blog-berraquera.vercel.app/{self.id}'
-            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
-        elif creator == '拓海':
-            message = f'絵画工作 by 拓海「{self.title}」 \n URL: https://daughter-blog-berraquera.vercel.app/{self.id}'
-            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
-        else:
-            message = f'絵画工作「{self.title}」 \n URL: https://daughter-blog-berraquera.vercel.app/{self.id}'
-            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
-            # if not self.image_two:
-            for push in LinePush.objects.filter(unfollow=False):
-                line_bot_api.push_message(
-                    push.line_id, 
-                    messages=[
-                    TextSendMessage(text=message), 
-                    ImageSendMessage(
-                        original_content_url=self.image_one.build_url(secure=True), 
-                        preview_image_url=self.image_one.build_url(secure=True))
-                    ])
+        message = f'絵画工作「{self.title}」 \n URL: https://daughter-blog-berraquera.vercel.app/{self.id}'
+        line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+        # if not self.image_two:
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(
+                push.line_id, 
+                messages=[
+                TextSendMessage(text=message), 
+                ImageSendMessage(
+                    original_content_url=self.image_one.build_url(secure=True), 
+                    preview_image_url=self.image_one.build_url(secure=True))
+                ])
         # else:
         #     for push in LinePush.objects.filter(unfollow=False):
         #         line_bot_api.push_message(
