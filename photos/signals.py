@@ -6,7 +6,7 @@ from linebot.models import (
     TextSendMessage, 
 )
 from farm.models import LinePush
-from photos.models import Comment, CommentLike
+from photos.models import Comment, AlbumLike
 from environs import Env 
 
 env = Env() 
@@ -25,5 +25,17 @@ def comment_create_notification(sender, instance, created, **kwargs):
             'text': instance.text,
         }
         message = render_to_string('photos/comment_message.txt', context)
+        for push in LinePush.objects.filter(unfollow=False):
+            line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+
+
+@receiver(post_save, sender=AlbumLike)
+def album_like_create_notification(sender, instance, created, **kwargs):
+    if created:
+        context = {
+            'album': instance.album,
+            'user': instance.user,
+        }
+        message = render_to_string('photos/album_like_message.txt', context)
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))

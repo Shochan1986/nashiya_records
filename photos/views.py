@@ -1,4 +1,4 @@
-from photos.models import Image, Comment, CommentLike
+from photos.models import Image, Comment, AlbumLike
 from photos.serializers import ChildrenImageSerializer, CommentSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q
-from django.views.generic.base import View
 
 
 @api_view(['GET'])
@@ -186,25 +185,17 @@ def deleteComment(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-def createCommentLike(request, pk):
+def createAlbumLike(request, pk):
     user = request.user
-    comment_id = Comment.objects.get(id=pk)
-    alreadyExists = comment_id.likes.filter(user=user.first_name).exists()
+    album_id = Image.objects.get(id=pk)
+    alreadyExists = album_id.likes.filter(user=user.first_name).exists()
     if alreadyExists:
-        content = {'detail': 'あなたはすでにこのコメントに「いいね」しています'}
+        content = {'detail': 'あなたはすでにこのアルバムに「いいね」しています'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     else:
-        comment = Comment.objects.filter(id=pk)
-        CommentLike.objects.create(
+        album = Image.objects.filter(id=pk)
+        AlbumLike.objects.create(
             user=user.first_name,
-            comment=comment.last(),
+            album=album.last(),
         )
-        return Response({'detail': 'コメントに「いいね」が追加されました'})
-
-
-@api_view(['DELETE'])
-@permission_classes([IsAdminUser])
-def deleteCommentLike(request, pk):
-    like = CommentLike.objects.get(id=pk)
-    like.delete()  
-    return Response('コメントの「いいね」は削除されました')
+        return Response({'detail': 'アルバムに「いいね」が追加されました'})

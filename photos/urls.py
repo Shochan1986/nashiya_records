@@ -10,8 +10,7 @@ from photos.views import (
     getComment,
     deleteComment,
 
-    createCommentLike,
-    deleteCommentLike,
+    createAlbumLike,
 )
 
 urlpatterns = [
@@ -25,6 +24,5 @@ urlpatterns = [
     path('comments/update/<str:pk>/', updateComment),
     path('comments/delete/<str:pk>/', deleteComment),
 
-    path('comments/<str:pk>/comment-likes/', createCommentLike, name="create-comment-like"),
-    path('comment-likes/delete/<str:pk>/', deleteCommentLike),
+    path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
 ]

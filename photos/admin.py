@@ -1,5 +1,5 @@
 from django.contrib import admin
-from photos.models import Image, Comment, ContentImage
+from photos.models import Image, Comment, ContentImage, AlbumLike
 from django.utils.safestring import mark_safe
 
 
@@ -40,9 +40,10 @@ class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('image', 'author', 'text')
     search_fields = ('image__title', 'author', 'text')
-    
+
 
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(AlbumLike)
 
 notify.short_description = 'LINEに転載する'

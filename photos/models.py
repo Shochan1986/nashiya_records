@@ -107,18 +107,18 @@ class Comment(models.Model):
         return self.text
 
 
-class CommentLike(models.Model):
+class AlbumLike(models.Model):
     user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='コメント')
+    album = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='アルバム')
     created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
 
     class Meta:
         ordering = ['-created']
-        verbose_name = ('いいね(コメント)')
-        verbose_name_plural = ('いいね(コメント)')
+        verbose_name = ('いいね(アルバム)')
+        verbose_name_plural = ('いいね(アルバム)')
 
     def __str__(self):
-        return self.comment.text + f'({self.comment.author})' + ' by ' + self.user
+        return self.album.title + ' by ' + self.user
 
 
 class ContentImage(models.Model):

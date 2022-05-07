@@ -1,9 +1,15 @@
 from rest_framework import serializers
-from photos.models import Image, Comment
+from photos.models import Image, Comment, AlbumLike
 from django.utils.html import linebreaks, urlize
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
 
+
+class AlbumLikeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AlbumLike
+        fields = ['id', 'user', 'created']
 
 class ChildrenImageSerializer(serializers.ModelSerializer):
     note = serializers.SerializerMethodField(read_only=True)
@@ -13,6 +19,8 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     thumb_two = serializers.SerializerMethodField(read_only=True)
     ctIsPublic = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    likes_count = serializers.SerializerMethodField(read_only=True) 
+    likes = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="children-images")
 
     def get_note(self, obj):
@@ -42,6 +50,14 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         comments = obj.comments.all()
         serializer = CommentSerializer(comments, many=True)
+        return serializer.data
+
+    def get_likes_count(self, obj):  
+        return obj.likes.count()
+
+    def get_likes(self, obj):
+        likes = obj.likes.all()
+        serializer = AlbumLikeSerializer(likes, many=True)
         return serializer.data
 
     def to_representation(self, instance):
@@ -74,7 +90,8 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'special', 'comments', 'recaptcha']
+        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 
+            'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'special', 'comments', 'likes', 'likes_count', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
