@@ -17,12 +17,17 @@ class ContentImageInline(admin.TabularInline):
     model = ContentImage
     extra = 1
 
+class AlbumLikesInline(admin.TabularInline):
+    model = AlbumLike
+    extra = 1
+
 
 class ImageAdmin(admin.ModelAdmin):
     model = Image
     inlines = [
         CommentInline,
         ContentImageInline,
+        AlbumLikesInline,
     ]
     list_display = ('show_image', 'title', 'date', 'ct_is_public', 'special', 'comment',)
     search_fields = ('title', 'comment', )
