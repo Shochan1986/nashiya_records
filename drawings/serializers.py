@@ -9,6 +9,7 @@ class DrawingSerializer(serializers.ModelSerializer):
     image_two = serializers.SerializerMethodField(read_only=True)
     creator = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    comments_count = serializers.SerializerMethodField(read_only=True)
 
     def get_image_one(self, obj):
         return obj.image_one.build_url(secure=True)
@@ -27,9 +28,13 @@ class DrawingSerializer(serializers.ModelSerializer):
         serializer = CommentSerializer(comments, many=True)
         return serializer.data
 
+    def get_comments_count(self, obj):
+        return obj.comments.count()
+
     class Meta:
         model = Drawing
-        fields = ['id', 'title', 'date', 'description', 'creator', 'created', 'image_one', 'image_two', 'comments']
+        fields = ['id', 'title', 'date', 'description', 'creator', 
+            'created', 'image_one', 'image_two', 'comments', 'comments_count']
 
 
 class CommentSerializer(serializers.ModelSerializer):
