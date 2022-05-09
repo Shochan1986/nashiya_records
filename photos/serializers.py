@@ -19,6 +19,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     thumb_two = serializers.SerializerMethodField(read_only=True)
     ctIsPublic = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    comments_count = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True) 
     likes = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="children-images")
@@ -51,6 +52,9 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         comments = obj.comments.all()
         serializer = CommentSerializer(comments, many=True)
         return serializer.data
+
+    def get_comments_count(self, obj):  
+        return obj.comments.count()
 
     def get_likes_count(self, obj):  
         return obj.likes.count()
@@ -91,7 +95,8 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 
-            'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'special', 'comments', 'likes', 'likes_count', 'recaptcha']
+            'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'special', 
+            'comments', 'comments_count', 'likes', 'likes_count', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
