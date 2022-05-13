@@ -27,7 +27,7 @@ def getChildrenImages(request):
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 12, orphans=2)
+    paginator = Paginator(images, 24, orphans=4)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
