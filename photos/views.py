@@ -135,6 +135,14 @@ def getSpecialImages(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
+def getListImages(request):
+    images = Image.objects.all().order_by('-date')
+    serializer = ChildrenImageSerializer(images, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getChildrenImage(request, pk):
     image = Image.objects.get(id=pk)
     serializer = ChildrenImageSerializer(image, many=False)
