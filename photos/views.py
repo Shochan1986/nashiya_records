@@ -27,7 +27,7 @@ def getChildrenImages(request):
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 24, orphans=4)
+    paginator = Paginator(images, 24, orphans=3)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -136,9 +136,42 @@ def getSpecialImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getListImages(request):
-    images = Image.objects.all().order_by('-date')
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+                Q(title__icontains=query) |
+                Q(comment__icontains=query) |
+                Q(content__icontains=query) |
+                Q(content_rt__icontains=query) |
+                Q(comments__author__icontains=query) |
+                Q(comments__text__icontains=query)
+            )
+    images = Image.objects.filter(queryset).distinct().order_by('-date')
+    page = request.query_params.get('page')
+    paginator = Paginator(images, 50, orphans=5)
+    try:
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        images = paginator.page(1)
+    except EmptyPage:
+        images = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = images.start_index()
+    end_index = images.end_index()
     serializer = ChildrenImageSerializer(images, many=True)
-    return Response(serializer.data)
+    return Response(
+        {
+            'images': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
 
 
 @api_view(['GET'])
