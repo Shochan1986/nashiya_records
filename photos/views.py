@@ -67,7 +67,7 @@ def getBlogImages(request):
             )
     images = Image.objects.filter(ct_is_public=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 36, orphans=4)
+    paginator = Paginator(images, 50, orphans=5)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -108,7 +108,7 @@ def getSpecialImages(request):
             )
     images = Image.objects.filter(special=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 36, orphans=4)
+    paginator = Paginator(images, 50, orphans=5)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
