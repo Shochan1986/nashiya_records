@@ -141,14 +141,25 @@ def getSpecialImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getListImages(request):
-    tag = request.query_params.get('tag')
-    if tag == None:
-        tag = ''
-    queryset = Q(tags__name__icontains=tag) 
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+                Q(title__icontains=query) |
+                Q(comment__icontains=query) |
+                Q(content__icontains=query) |
+                Q(content_rt__icontains=query) |
+                Q(comments__author__icontains=query) |
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
+            )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
 
     page = request.query_params.get('page')
-    paginator = Paginator(images, 1)
+    if query == None:
+        paginator = Paginator(images, 50, orphans=5)
+    else:
+        paginator = Paginator(images, 30, orphans=3)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -187,7 +198,7 @@ def getTagsList(request):
             )
     tags = Tags.objects.filter(queryset).distinct().order_by('number')
     page = request.query_params.get('page')
-    paginator = Paginator(tags, 50, orphans=5)
+    paginator = Paginator(tags, 30, orphans=3)
     try:
         tags = paginator.page(page)
     except PageNotAnInteger:
