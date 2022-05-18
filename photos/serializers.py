@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from photos.models import Image, Comment, AlbumLike
+from photos.models import Image, Comment, AlbumLike, Tags
 from django.utils.html import linebreaks, urlize
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
+
+
+class TagsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tags
+        fields = '__all__'
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):
@@ -22,6 +28,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     comments_count = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True) 
     likes = serializers.SerializerMethodField(read_only=True) 
+    tags = serializers.SerializerMethodField(read_only=True)
     recaptcha = ReCaptchaV3Field(action="children-images")
 
     def get_note(self, obj):
@@ -64,6 +71,11 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         serializer = AlbumLikeSerializer(likes, many=True)
         return serializer.data
 
+    def get_tags(self, obj):
+        tags = obj.tags.all()
+        serializer = TagsSerializer(tags, many=True)
+        return serializer.data
+
     def to_representation(self, instance):
         representation = super(ChildrenImageSerializer, self).to_representation(instance)
         if instance.image_one:
@@ -96,7 +108,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 
             'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'special', 
-            'comments', 'comments_count', 'likes', 'likes_count', 'recaptcha']
+            'comments', 'comments_count', 'likes', 'likes_count', 'tags', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")

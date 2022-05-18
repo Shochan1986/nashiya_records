@@ -14,6 +14,20 @@ env = Env()
 env.read_env()
 
 
+class Tags(models.Model):
+    name = models.CharField('名称', null=True, max_length=200)
+    created = models.DateTimeField('追加日', auto_now_add=True, null=True)
+    number = models.PositiveIntegerField('番号', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['number']
+        verbose_name = 'タグ'
+        verbose_name_plural = 'タグ'
+
+
 class Image(models.Model):
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('日付', null=True, )
@@ -24,6 +38,7 @@ class Image(models.Model):
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
     special = models.BooleanField('特別編', default=False, null=True)
+    tags = models.ManyToManyField(Tags, blank=True, verbose_name='タグ', related_name='images')
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),

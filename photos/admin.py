@@ -1,11 +1,17 @@
 from django.contrib import admin
-from photos.models import Image, Comment, ContentImage, AlbumLike
+from photos.models import Image, Comment, ContentImage, AlbumLike, Tags
 from django.utils.safestring import mark_safe
 
 
 def notify(modeladmin, request, queryset):
     for pic in queryset:
         pic.line_push(request)
+
+
+class TagsAdmin(admin.ModelAdmin):
+    model = Tags
+    list_display = ('name', 'number')
+    list_editable = ('number',)
 
 
 class CommentInline(admin.TabularInline):
@@ -50,5 +56,6 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
+admin.site.register(Tags, TagsAdmin)
 
 notify.short_description = 'LINEに転載する'
