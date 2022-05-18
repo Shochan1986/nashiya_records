@@ -7,6 +7,7 @@ from photos.views import (
     getListImages,
 
     getTagsList,
+    getTagsPosts,
 
     createImageComment, 
     updateComment,
@@ -24,6 +25,7 @@ urlpatterns = [
     path('list/', getListImages),
 
     path('tags/', getTagsList),
+    path('posts/', getTagsPosts),
 
     path('<str:pk>/', getChildrenImage),
 
