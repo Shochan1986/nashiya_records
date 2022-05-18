@@ -156,16 +156,15 @@ def getListImages(request):
     images = Image.objects.filter(queryset).distinct().order_by('-date')
 
     page = request.query_params.get('page')
-    if query == None:
-        paginator = Paginator(images, 50, orphans=5)
-    else:
-        paginator = Paginator(images, 30, orphans=3)
+    paginator = Paginator(images, 50, orphans=5)
+
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
         images = paginator.page(1)
     except EmptyPage:
         images = paginator.page(paginator.num_pages)
+        
     if page == None:
         page = 1
     page = int(page)
