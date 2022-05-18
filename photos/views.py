@@ -1,5 +1,5 @@
-from photos.models import Image, Comment, AlbumLike
-from photos.serializers import ChildrenImageSerializer, CommentSerializer
+from photos.models import Image, Comment, AlbumLike, Tags
+from photos.serializers import ChildrenImageSerializer, CommentSerializer, TagsSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
     # IsAuthenticated, 
@@ -141,19 +141,12 @@ def getSpecialImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getListImages(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    queryset = (
-                Q(title__icontains=query) |
-                Q(comment__icontains=query) |
-                Q(content__icontains=query) |
-                Q(content_rt__icontains=query) |
-                Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query) |
-                Q(tags__name__icontains=query) 
-            )
-    images = Image.objects.filter(queryset).distinct().order_by('-date')
+    tag = request.query_params.get('tag')
+    if tag == None:
+        images = Image.objects.order_by('-date')
+    else:
+        images = Image.objects.filter(tags__name=tag).order_by('-date')
+
     page = request.query_params.get('page')
     paginator = Paginator(images, 50, orphans=5)
     try:
@@ -214,6 +207,45 @@ def getLastYearImages(request):
     return Response(
         {
             'images': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getTagsList(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+                Q(name__icontains=query) |
+                Q(images__comment__icontains=query) |
+                Q(images__content__icontains=query) |
+                Q(images__content_rt__icontains=query) 
+            )
+    tags = Tags.objects.filter(queryset).distinct().order_by('number')
+    page = request.query_params.get('page')
+    paginator = Paginator(tags, 50, orphans=5)
+    try:
+        tags = paginator.page(page)
+    except PageNotAnInteger:
+        tags = paginator.page(1)
+    except EmptyPage:
+        tags = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = tags.start_index()
+    end_index = tags.end_index()
+    serializer = TagsSerializer(tags, many=True)
+    return Response(
+        {
+            'tags': serializer.data, 
             'page': page, 
             'pages': paginator.num_pages,
             'count': paginator.count,

@@ -6,9 +6,14 @@ import cloudinary
 
 
 class TagsSerializer(serializers.ModelSerializer):
+    images_count = serializers.SerializerMethodField(read_only=True)
+
+    def get_images_count(self, obj):  
+        return obj.images.count()
+
     class Meta:
         model = Tags
-        fields = '__all__'
+        fields = ['id', 'name', 'created', 'images_count']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):
