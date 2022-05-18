@@ -25,7 +25,8 @@ def getChildrenImages(request):
                 Q(content__icontains=query) |
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -65,7 +66,8 @@ def getBlogImages(request):
                 Q(content__icontains=query) |
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
             )
     images = Image.objects.filter(ct_is_public=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -106,7 +108,8 @@ def getSpecialImages(request):
                 Q(content__icontains=query) |
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
             )
     images = Image.objects.filter(special=True).filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -147,7 +150,8 @@ def getListImages(request):
                 Q(content__icontains=query) |
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -189,7 +193,8 @@ def getLastYearImages(request):
                 Q(content__icontains=query) |
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
-                Q(comments__text__icontains=query)
+                Q(comments__text__icontains=query) |
+                Q(tags__name__icontains=query) 
             )
     images = Image.objects.filter(queryset).filter(date__gte=one_year_ago).distinct().order_by('-date')
     page = request.query_params.get('page')

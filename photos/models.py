@@ -31,7 +31,7 @@ class Tags(models.Model):
 class Image(models.Model):
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('日付', null=True, )
-    comment = models.CharField('詳細', max_length=500, blank=True, null=True, )
+    comment = models.CharField('メモ', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
