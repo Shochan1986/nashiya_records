@@ -8,9 +8,7 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
-from django.db.models import Q
-import datetime
-from django.utils import timezone
+from django.db.models import Q, Count
 
 
 @api_view(['GET'])
@@ -164,7 +162,7 @@ def getListImages(request):
         images = paginator.page(1)
     except EmptyPage:
         images = paginator.page(paginator.num_pages)
-        
+
     if page == None:
         page = 1
     page = int(page)
@@ -189,13 +187,10 @@ def getTagsPosts(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-    queryset = (
-                Q(tags__name__icontains=query) 
-            )
-    images = Image.objects.filter(queryset).distinct().order_by('-date')
+    images = Image.objects.filter(tags__name=query).order_by('-date')
 
     page = request.query_params.get('page')
-    paginator = Paginator(images, 50, orphans=5)
+    paginator = Paginator(images, 30, orphans=3)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -226,15 +221,9 @@ def getTagsList(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-    queryset = (
-                Q(name__icontains=query) |
-                Q(images__comment__icontains=query) |
-                Q(images__content__icontains=query) |
-                Q(images__content_rt__icontains=query) 
-            )
-    tags = Tags.objects.filter(queryset).distinct().order_by('number')
+    tags = Tags.objects.all().annotate(posts=Count('images')).order_by('-posts')
     page = request.query_params.get('page')
-    paginator = Paginator(tags, 30, orphans=3)
+    paginator = Paginator(tags, 50, orphans=5)
     try:
         tags = paginator.page(page)
     except PageNotAnInteger:
