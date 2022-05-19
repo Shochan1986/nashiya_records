@@ -10,8 +10,17 @@ def notify(modeladmin, request, queryset):
 
 class TagsAdmin(admin.ModelAdmin):
     model = Tags
-    list_display = ('name', 'number')
-    list_editable = ('number',)
+    list_display = ('name', 'number', 'edit')
+    search_fields = ('name', )
+    list_editable = ('name', 'number',)
+    list_display_links = ('edit', )
+    list_per_page = 25
+
+    def edit(self, obj):
+        return "EDIT"
+
+    edit.admin_order_field = '編集'
+    edit.short_description = '編集'
 
 
 class CommentInline(admin.TabularInline):
