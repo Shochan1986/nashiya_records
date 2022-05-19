@@ -34,7 +34,7 @@ class Image(models.Model):
     comment = models.CharField('メモ', max_length=500, blank=True, null=True, )
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
-    content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
+    # content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
     special = models.BooleanField('特別編', default=False, null=True)
