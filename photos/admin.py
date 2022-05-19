@@ -38,6 +38,7 @@ class ImageAdmin(admin.ModelAdmin):
     list_display = ('show_image', 'title', 'date', 'ct_is_public', 'special', 'comment',)
     search_fields = ('title', 'comment', )
     list_editable = ('title', 'date', 'comment', 'ct_is_public', 'special')
+    exclude = ('content_rt',)
     list_per_page = 20
     actions = [notify]
     
