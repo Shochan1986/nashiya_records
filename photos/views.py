@@ -223,7 +223,7 @@ def getTagsList(request):
         query = ''
     tags = Tags.objects.all().annotate(posts=Count('images')).order_by('-posts')
     page = request.query_params.get('page')
-    paginator = Paginator(tags, 25, orphans=2)
+    paginator = Paginator(tags, 15, orphans=2)
     try:
         tags = paginator.page(page)
     except PageNotAnInteger:
