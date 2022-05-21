@@ -52,7 +52,7 @@ class ImageAdmin(admin.ModelAdmin):
     actions = [notify]
     
     def show_image(self, obj):
-        return mark_safe('<img src="{}" style="width:100px;height:auto;">'.format(obj.image_one.build_url(secure=True)))
+        return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format(obj.image_one.build_url(secure=True)))
     show_image.admin_order_field = 'サムネイル'
     show_image.short_description = 'サムネイル'
 
