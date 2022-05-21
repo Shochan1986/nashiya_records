@@ -45,7 +45,7 @@ class ImageAdmin(admin.ModelAdmin):
         AlbumLikesInline,
     ]
     list_display = ('show_image', 'title', 'date', 'ct_is_public', 'special', 'comment',)
-    search_fields = ('title', 'comment', 'content', 'content_rt', 'tags__name')
+    search_fields = ('title', 'comment', 'content', 'content_rt', 'tags__name', 'comments__author', 'comments__text')
     list_editable = ('title', 'date', 'comment', 'ct_is_public', 'special')
     exclude = ('content_rt',)
     list_per_page = 20
