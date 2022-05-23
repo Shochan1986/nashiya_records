@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'ckeditor', # new
     'ckeditor_uploader', # new
     "drf_recaptcha", # new
+    'crispy_forms', # new
 ]
 
 MIDDLEWARE = [
@@ -252,6 +253,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+
+CRISPY_TEMPLATE_PACK = 'uni_form'
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
