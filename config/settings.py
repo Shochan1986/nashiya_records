@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
+    'django.contrib.sites', # new
 
     'farm.apps.FarmConfig', # new
     'drawings.apps.DrawingsConfig', # new
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader', # new
     "drf_recaptcha", # new
     'crispy_forms', # new
+    "crispy_bootstrap5", # new
 ]
 
 MIDDLEWARE = [
@@ -254,7 +256,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
 
-CRISPY_TEMPLATE_PACK = 'uni_form'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 if os.getcwd() == '/app':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

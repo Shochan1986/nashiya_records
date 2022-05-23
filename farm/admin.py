@@ -153,6 +153,6 @@ admin.site.register(ArticleLike, ArticleLikeAdmin)
 
 admin.AdminSite.get_app_list = get_app_list
 
-admin.site.site_header = "梨屋さん 日報アプリ"
+admin.site.site_header = "梨屋さん 管理サイト"
 admin.site.index_title = '編集画面'                
-admin.site.site_title = '梨屋さん 日報アプリ：管理サイト' 
+admin.site.site_title = '梨屋さん 管理サイト' 
