@@ -5,8 +5,11 @@ from django.utils.safestring import mark_safe
 
 def notify(modeladmin, request, queryset):
     for pic in queryset:
-        pic.line_push(request)
-        pic.email_push(request)        
+        try:
+            pic.line_push(request)
+            pic.email_push(request)   
+        except:
+            pic.email_push(request)     
 
 
 class TagsAdmin(admin.ModelAdmin):
@@ -69,4 +72,4 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
 
-notify.short_description = 'LINE・EMAILに転載する'
+notify.short_description = 'Line・Emailに転載する'

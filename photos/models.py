@@ -99,7 +99,7 @@ class Image(models.Model):
             <img src={self.image_one.build_url(secure=True)} alt={self.title} \
             style='width: 250px; height: 250px;object-fit: cover' />"
         from_email = settings.DEFAULT_FROM_EMAIL
-        bcc = ['s-shotaro@berraquera-jp.com']
+        bcc = []
         for user in User.objects.all():
             bcc.append(user.email)
         email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
