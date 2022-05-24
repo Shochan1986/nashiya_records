@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -17,7 +20,7 @@ handler = WebhookHandler(channel_secret=env("LINE_CHANNEL_SECRET"))
 
 
 @receiver(post_save, sender=Comment)
-def comment_create_notification(sender, instance, created, **kwargs):
+def comment_create_line_notification(sender, instance, created, **kwargs):
     try:
         if created:
             context = {
@@ -30,10 +33,31 @@ def comment_create_notification(sender, instance, created, **kwargs):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
     except:
         pass
+    
+                
+@receiver(post_save, sender=Comment)
+def comment_create_email_notification(sender, instance, created, **kwargs):
+    try:
+        if created:
+            context = {
+                'author': instance.author,
+                'image': instance.image,
+                'text': instance.text,
+            }
+            subject =  f'コメント＠{instance.image.title}'
+            message = render_to_string('photos/comment_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.all():
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
+    except:
+        pass
 
 
 @receiver(post_save, sender=AlbumLike)
-def album_like_create_notification(sender, instance, created, **kwargs):
+def album_like_create_line_notification(sender, instance, created, **kwargs):
     try:
         if created:
             context = {
@@ -43,5 +67,25 @@ def album_like_create_notification(sender, instance, created, **kwargs):
             message = render_to_string('photos/album_like_message.txt', context)
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    except:
+        pass
+
+
+@receiver(post_save, sender=AlbumLike)
+def album_like_create_email_notification(sender, instance, created, **kwargs):
+    try:
+        if created:
+            context = {
+                'album': instance.album,
+                'user': instance.user,
+            }
+            subject =  f'いいね！＠{instance.album.title}'
+            message = render_to_string('photos/album_like_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.all():
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
     except:
         pass

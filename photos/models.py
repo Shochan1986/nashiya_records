@@ -1,4 +1,7 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.mail import EmailMultiAlternatives
 from cloudinary.models import CloudinaryField
 from mdeditor.fields import MDTextField
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -79,7 +82,6 @@ class Image(models.Model):
         else:
             message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
-        # if not self.image_two:
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(
                 push.line_id, 
@@ -89,19 +91,20 @@ class Image(models.Model):
                         original_content_url=self.image_one.build_url(secure=True), 
                         preview_image_url=self.image_one.build_url(secure=True)) 
                     ])
-        # else:
-        #     for push in LinePush.objects.filter(unfollow=False):
-        #         line_bot_api.push_message(
-        #             push.line_id, 
-        #             messages=[
-        #                 TextSendMessage(text=message), 
-        #                 ImageSendMessage(
-        #                     original_content_url=self.image_one.build_url(secure=True), 
-        #                     preview_image_url=self.image_one.build_url(secure=True)),
-        #                 ImageSendMessage(
-        #                     original_content_url=self.image_two.build_url(secure=True), 
-        #                     preview_image_url=self.image_two.build_url(secure=True)),
-        #                 ])
+
+    def email_push(self, request):
+        subject = f'「{self.title}」| になたくアルバム'
+        message = f'「{self.title}」'
+        image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/photo/{self.id} <br /><br /> \
+            <img src={self.image_one.build_url(secure=True)} alt={self.title} \
+            style='width: 250px; height: 250px;object-fit: cover' />"
+        from_email = settings.DEFAULT_FROM_EMAIL
+        bcc = ['s-shotaro@berraquera-jp.com']
+        for user in User.objects.all():
+            bcc.append(user.email)
+        email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
+        email.attach_alternative(image_html, "text/html")
+        email.send()
 
 
 class Comment(models.Model):
