@@ -95,7 +95,7 @@ class Image(models.Model):
     def email_push(self, request):
         subject = f'「{self.title}」| になたくアルバム'
         message = f'「{self.title}」'
-        image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/photo/{self.id} <br /><br /> \
+        image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{self.id} <br /><br /> \
             <img src={self.image_one.build_url(secure=True)} alt={self.title} \
             style='width: 250px; height: 250px;object-fit: cover' />"
         from_email = settings.DEFAULT_FROM_EMAIL
