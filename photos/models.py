@@ -97,10 +97,10 @@ class Image(models.Model):
         message = f'「{self.title}」'
         image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{self.id} <br /><br /> \
             <img src={self.image_one.build_url(secure=True)} alt={self.title} \
-            style='width: 250px; height: 250px;object-fit: cover' />"
+            style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
         from_email = settings.DEFAULT_FROM_EMAIL
         bcc = []
-        for user in User.objects.all():
+        for user in User.objects.filter(is_staff=True):
             bcc.append(user.email)
         email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
         email.attach_alternative(image_html, "text/html")

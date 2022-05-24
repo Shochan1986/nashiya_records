@@ -48,7 +48,7 @@ def comment_create_email_notification(sender, instance, created, **kwargs):
             message = render_to_string('photos/comment_message.txt', context)
             from_email = settings.DEFAULT_FROM_EMAIL
             bcc = []
-            for user in User.objects.all():
+            for user in User.objects.filter(is_staff=True):
                 bcc.append(user.email)
             email = EmailMessage(subject, message, from_email, [], bcc)
             email.send()
@@ -83,7 +83,7 @@ def album_like_create_email_notification(sender, instance, created, **kwargs):
             message = render_to_string('photos/album_like_message.txt', context)
             from_email = settings.DEFAULT_FROM_EMAIL
             bcc = []
-            for user in User.objects.all():
+            for user in User.objects.filter(is_staff=True):
                 bcc.append(user.email)
             email = EmailMessage(subject, message, from_email, [], bcc)
             email.send()
