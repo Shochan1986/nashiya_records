@@ -40,6 +40,7 @@ class Image(models.Model):
     content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
+    cimg_is_public = models.BooleanField('ギャラリーを公開する', default=False, null=True)
     special = models.BooleanField('特別編', default=False, null=True)
     tags = models.ManyToManyField(Tags, blank=True, verbose_name='タグ', related_name='images')
     image_one = CloudinaryField(
@@ -140,7 +141,7 @@ class AlbumLike(models.Model):
 
 
 class ContentImage(models.Model):
-    image = models.ForeignKey(Image, on_delete=models.PROTECT)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='content_images')
     content_image = CloudinaryField(
         blank=True, 
         null=True, 
