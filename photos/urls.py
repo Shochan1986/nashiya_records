@@ -6,6 +6,8 @@ from photos.views import (
     getSpecialImages,
     getListImages,
 
+    getContentImages,
+
     getTagsList,
     getTagsPosts,
 
@@ -26,6 +28,8 @@ urlpatterns = [
 
     path('tags/', getTagsList),
     path('posts/', getTagsPosts),
+
+    path('content-images/', getContentImages),
 
     path('<str:pk>/', getChildrenImage),
 

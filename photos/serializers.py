@@ -17,7 +17,15 @@ class TagsSerializer(serializers.ModelSerializer):
 
 
 class ContentImageSerializer(serializers.ModelSerializer):
+    album_id = serializers.SerializerMethodField(read_only=True)
+    album_title = serializers.SerializerMethodField(read_only=True)
     content_image = serializers.SerializerMethodField(read_only=True)
+
+    def get_album_id(self, obj):
+        return obj.image.id
+
+    def get_album_title(self, obj):
+        return obj.image.title
 
     def get_content_image(self, obj):
         if obj.content_image:
@@ -27,7 +35,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'content_image']
+        fields = ['id', 'image', 'content_image', 'album_id', 'album_title']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):

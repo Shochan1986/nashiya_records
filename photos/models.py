@@ -39,9 +39,9 @@ class Image(models.Model):
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
     content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
-    ct_is_public = models.BooleanField('本文を公開する', default=False, null=True)
-    cimg_is_public = models.BooleanField('ギャラリーを公開する', default=False, null=True)
-    special = models.BooleanField('特別編', default=False, null=True)
+    ct_is_public = models.BooleanField('本文の公開', default=False, null=True)
+    cimg_is_public = models.BooleanField('ギャラリーの公開', default=False, null=True)
+    special = models.BooleanField('父ちゃん', default=False, null=True)
     tags = models.ManyToManyField(Tags, blank=True, verbose_name='タグ', related_name='images')
     image_one = CloudinaryField(
         null=True, 

@@ -1,5 +1,10 @@
-from photos.models import Image, Comment, AlbumLike, Tags
-from photos.serializers import ChildrenImageSerializer, CommentSerializer, TagsSerializer
+from photos.models import Image, Comment, AlbumLike, Tags, ContentImage
+from photos.serializers import (
+    ChildrenImageSerializer, 
+    CommentSerializer, 
+    TagsSerializer,
+    ContentImageSerializer,
+    )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
     # IsAuthenticated, 
@@ -247,6 +252,14 @@ def getTagsList(request):
             'end': end_index,
         }
     )
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getContentImages(request):
+    c_images = ContentImage.objects.all().order_by('-image__date')
+    serializer = ContentImageSerializer(c_images, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
