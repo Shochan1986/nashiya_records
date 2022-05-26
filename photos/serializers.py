@@ -20,6 +20,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
     album_id = serializers.SerializerMethodField(read_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
     content_image = serializers.SerializerMethodField(read_only=True)
+    thumbnail = serializers.SerializerMethodField(read_only=True)
 
     def get_album_id(self, obj):
         return obj.image.id
@@ -28,14 +29,28 @@ class ContentImageSerializer(serializers.ModelSerializer):
         return obj.image.title
 
     def get_content_image(self, obj):
-        if obj.content_image:
-            return obj.content_image.build_url(secure=True)
-        else:
-            return None
+        return obj.content_image.build_url(secure=True)
+
+    def get_thumbnail(self, obj):
+        return obj.content_image.build_url(secure=True)
+
+    def to_representation(self, instance):
+        representation = super(ContentImageSerializer, self).to_representation(instance)
+        thumbnailUrl = cloudinary.utils.cloudinary_url(
+            instance.content_image.build_url(
+            secure=True,
+            transformation=[
+            {'width': 625 },
+            {'fetch_format': "auto"},
+            {'quality': 'auto:eco'},
+            {'dpr': 'auto'},
+            {'effect': 'auto_contrast'},
+            ]))
+        representation['thumbnail'] = thumbnailUrl[0]
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'content_image', 'album_id', 'album_title']
+        fields = ['id', 'image', 'content_image', 'thumbnail' ,'album_id', 'album_title']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):
