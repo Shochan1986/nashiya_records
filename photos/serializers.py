@@ -47,6 +47,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
             {'effect': 'auto_contrast'},
             ]))
         representation['thumbnail'] = thumbnailUrl[0]
+        return representation
 
     class Meta:
         model = ContentImage
