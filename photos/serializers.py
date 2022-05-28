@@ -58,11 +58,10 @@ class ContentImageSerializer(serializers.ModelSerializer):
             instance.content_image.build_url(
             secure=True,
             transformation=[
-            {'width': 25 },
+            {'width': 50},
             {'fetch_format': "auto"},
             {'quality': 'auto:eco'},
             {'dpr': 'auto'},
-            {'effect': 'auto_contrast'},
             ]))
         representation['blur'] = thumbnailUrl[0]
         return representation
@@ -82,6 +81,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     note = serializers.SerializerMethodField(read_only=True)
     image_one = serializers.SerializerMethodField(read_only=True)
     thumb_one = serializers.SerializerMethodField(read_only=True)
+    blur = serializers.SerializerMethodField(read_only=True)
     image_two = serializers.SerializerMethodField(read_only=True)
     thumb_two = serializers.SerializerMethodField(read_only=True)
     ctIsPublic = serializers.SerializerMethodField(read_only=True)
@@ -106,6 +106,9 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
             return None
 
     def get_thumb_one(self, obj):
+        return obj.image_one.build_url(secure=True)
+
+    def get_blur(self, obj):
         return obj.image_one.build_url(secure=True)
 
     def get_thumb_two(self, obj):
@@ -157,6 +160,17 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
                 {'effect': 'auto_contrast'},
                 ]))
             representation['thumb_one'] = thumbnailUrl[0]
+        if instance.image_one:
+            thumbnailUrl = cloudinary.utils.cloudinary_url(
+                instance.image_one.build_url(
+                secure=True,
+                transformation=[
+                {'width': 50 },
+                {'fetch_format': "auto"},
+                {'quality': 'auto:eco'},
+                {'dpr': 'auto'},
+                ]))
+            representation['blur'] = thumbnailUrl[0]
         if instance.image_two:
             thumbnailUrl = cloudinary.utils.cloudinary_url(
                 instance.image_two.build_url(
@@ -174,8 +188,10 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 
-            'thumb_one', 'thumb_two', 'content', 'content_rt', 'ctIsPublic', 'cimg_is_public' ,'special', 
-            'comments', 'comments_count', 'likes', 'likes_count', 'tags', 'content_images', 'recaptcha']
+            'thumb_one', 'thumb_two', 'content', 'content_rt', 
+            'ctIsPublic', 'cimg_is_public' ,'special', 'blur',
+            'comments', 'comments_count', 'likes', 'likes_count', 
+            'tags', 'content_images', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
