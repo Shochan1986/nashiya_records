@@ -141,7 +141,14 @@ class AlbumLike(models.Model):
 
 
 class ContentImage(models.Model):
-    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='content_images')
+    image = models.ForeignKey(
+        Image, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='content_images',
+        verbose_name='アルバム'
+    )
     content_image = CloudinaryField(
         blank=True, 
         null=True, 

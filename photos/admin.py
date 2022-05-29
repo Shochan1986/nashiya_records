@@ -67,9 +67,21 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('image__title', 'author', 'text')
 
 
+class ContentImageAdmin(admin.ModelAdmin):
+    model = ContentImage
+    list_display = ('show_image', 'image')
+    list_editable = ('image',)
+
+    def show_image(self, obj):
+        return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format(obj.content_image.build_url(secure=True)))
+    show_image.admin_order_field = 'サムネイル'
+    show_image.short_description = 'サムネイル'
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
+admin.site.register(ContentImage, ContentImageAdmin)
 
 notify.short_description = 'Line・Emailに転載する'
