@@ -370,3 +370,14 @@ def createAlbumLike(request, pk):
             album=album.last(),
         )
         return Response({'detail': 'アルバムに「いいね」が追加されました'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createContentImages(request):
+    images = request.FILES.getlist('images')
+    for image in images:
+        instance = ContentImage()
+        instance.content_image = image
+        instance.save()
+    return Response('挿入画像がアップロードされました')

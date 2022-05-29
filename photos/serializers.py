@@ -24,10 +24,16 @@ class ContentImageSerializer(serializers.ModelSerializer):
     blur = serializers.SerializerMethodField(read_only=True)
 
     def get_album_id(self, obj):
-        return obj.image.id
+        if obj.image:
+            return obj.image.id
+        else:
+            return None
 
     def get_album_title(self, obj):
-        return obj.image.title
+        if obj.image:
+            return obj.image.title
+        else:
+            return None
 
     def get_content_image(self, obj):
         return obj.content_image.build_url(secure=True)
