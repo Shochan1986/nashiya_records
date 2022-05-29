@@ -73,7 +73,7 @@ class Image(models.Model):
         return self.title
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['-date']
         verbose_name = '投稿'
         verbose_name_plural = '投稿'
 

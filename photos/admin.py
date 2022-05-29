@@ -44,14 +44,15 @@ class AlbumLikesInline(admin.TabularInline):
 class ImageAdmin(admin.ModelAdmin):
     model = Image
     inlines = [
-        CommentInline,
         ContentImageInline,
+        CommentInline,
         AlbumLikesInline,
     ]
     list_display = ('show_image', 'title', 'date', 'ct_is_public', 'cimg_is_public', 'special', 'comment',)
     search_fields = ('title', 'comment', 'content', 'content_rt', 'tags__name', 'comments__author', 'comments__text')
     list_editable = ('title', 'date', 'comment', 'ct_is_public', 'cimg_is_public', 'special')
     exclude = ('content_rt',)
+    ordering = ('-created',)
     list_per_page = 20
     actions = [notify]
     
@@ -71,6 +72,8 @@ class ContentImageAdmin(admin.ModelAdmin):
     model = ContentImage
     list_display = ('show_image', 'image')
     list_editable = ('image',)
+    search_fields = ('image__title',)
+    list_per_page = 25
 
     def show_image(self, obj):
         return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format(obj.content_image.build_url(secure=True)))
@@ -79,9 +82,9 @@ class ContentImageAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Image, ImageAdmin)
+admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
-admin.site.register(ContentImage, ContentImageAdmin)
 
 notify.short_description = 'Line・Emailに転載する'
