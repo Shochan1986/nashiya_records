@@ -166,3 +166,9 @@ class ContentImage(models.Model):
     class Meta:
         verbose_name = ('挿入画像')
         verbose_name_plural = ('挿入画像')
+
+    def __str__(self):
+        if self.image:
+            return str(self.id) + ' ' + f'[{self.image.title}]'
+        else:
+            return str(self.id)
