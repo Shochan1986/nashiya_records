@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q, Count
+from datetime import date, timedelta, datetime
 
 
 @api_view(['GET'])
@@ -299,7 +300,7 @@ def getTagsList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentImages(request):
-    c_images = ContentImage.objects.all().order_by('-image__date')
+    c_images = ContentImage.objects.filter(image__date__gt=datetime.today()-timedelta(days=90)).order_by('-image__date')
     serializer = ContentImageSerializer(c_images, many=True)
     return Response(serializer.data)
 
