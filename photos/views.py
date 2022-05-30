@@ -14,7 +14,9 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q, Count
-from datetime import date, timedelta, datetime
+from django.utils import timezone
+from django.utils.timezone import localtime
+from datetime import timedelta, datetime
 
 
 @api_view(['GET'])
@@ -336,25 +338,6 @@ def getComment(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
-@permission_classes([IsAdminUser])
-def updateComment(request, pk):
-    data = request.data
-    comment = Comment.objects.get(id=pk)
-    comment.text = data['text']
-    comment.save()
-    serializer = CommentSerializer(comment, many=False)
-    return Response(serializer.data)
-
-
-@api_view(['DELETE'])
-@permission_classes([IsAdminUser])
-def deleteComment(request, pk):
-    comment = Comment.objects.get(id=pk)
-    comment.delete()  
-    return Response('コメントは削除されました')
-
-
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createAlbumLike(request, pk):
@@ -382,3 +365,75 @@ def createContentImages(request):
         instance.content_image = image
         instance.save()
     return Response('挿入画像がアップロードされました')
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createAlbum(request):
+    album = Image.objects.create(
+        title='作成中',
+        date=localtime(timezone.now()).date(),
+    )
+    album.save()
+    serializer = ChildrenImageSerializer(album, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateAlbum(request, pk):
+    data = request.data
+    album = Image.objects.get(id=pk)
+    album.title = data['title']
+    album.date = data['date']
+    album.comment = data['note']
+    album.save()
+    serializer = ChildrenImageSerializer(album, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def uploadAlbumImage(request):
+    data = request.data
+    album_id = data['album_id']
+    album = Image.objects.get(id=album_id)
+    album.image_one = request.FILES.get('image')
+    album.save()
+    return Response('画像がアップロードされました')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getContentListImages(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+                Q(image__title__icontains=query)
+            )
+    images = ContentImage.objects.filter(queryset).distinct()
+    page = request.query_params.get('page')
+    paginator = Paginator(images, 24, orphans=5)
+    try:
+        images = paginator.page(page)
+    except PageNotAnInteger:
+        images = paginator.page(1)
+    except EmptyPage:
+        images = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = images.start_index()
+    end_index = images.end_index()
+    serializer = ChildrenImageSerializer(images, many=True)
+    return Response(
+        {
+            'images': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )

@@ -103,7 +103,10 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         return obj.comment
 
     def get_image_one(self, obj):
-        return obj.image_one.build_url(secure=True)
+        if obj.image_one:
+            return obj.image_one.build_url(secure=True)
+        else:
+            None
 
     def get_image_two(self, obj):
         if obj.image_two:
@@ -112,10 +115,16 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
             return None
 
     def get_thumb_one(self, obj):
-        return obj.image_one.build_url(secure=True)
+        if obj.image_one:
+            return obj.image_one.build_url(secure=True)
+        else:
+            return None
 
     def get_blur(self, obj):
-        return obj.image_one.build_url(secure=True)
+        if obj.image_one:
+            return obj.image_one.build_url(secure=True)
+        else:
+            None
 
     def get_thumb_two(self, obj):
         if obj.image_two:
