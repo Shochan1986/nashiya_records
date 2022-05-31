@@ -406,7 +406,7 @@ def uploadAlbumImage(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentListImages(request):
-    images = ContentImage.objects.all().order_by('-id')
+    images = ContentImage.objects.filter(image__date__gt=datetime.today()-timedelta(days=60)).order_by('-id')
     page = request.query_params.get('page')
     paginator = Paginator(images, 24, orphans=4)
     try:
@@ -436,7 +436,7 @@ def getContentListImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllImages(request):
-    images = Image.objects.all().order_by('-created')
+    images = Image.objects.filter(date__gt=datetime.today()-timedelta(days=60)).order_by('-created')
     serializer = ChildrenImageSerializer(images, many=True)
     return Response(serializer.data)
 
