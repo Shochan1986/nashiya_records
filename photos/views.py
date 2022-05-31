@@ -406,7 +406,7 @@ def uploadAlbumImage(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentListImages(request):
-    images = ContentImage.objects.all().order_by('-id')[:120]
+    images = ContentImage.objects.all().order_by('-id')[:240]
     page = request.query_params.get('page')
     paginator = Paginator(images, 24, orphans=4)
     try:
