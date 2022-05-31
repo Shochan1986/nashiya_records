@@ -436,7 +436,7 @@ def getContentListImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllImages(request):
-    images = Image.objects.filter(date__gt=datetime.today()-timedelta(days=90)).order_by('-created')
+    images = Image.objects.filter(created__gt=datetime.today()-timedelta(days=90)).order_by('-created')
     serializer = ChildrenImageSerializer(images, many=True)
     return Response(serializer.data)
 
