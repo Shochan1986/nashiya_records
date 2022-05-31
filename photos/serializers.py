@@ -103,8 +103,10 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField(read_only=True)
     comments_count = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True) 
-    likes = serializers.SerializerMethodField(read_only=True) 
-    tags = serializers.SerializerMethodField(read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
+    tags = serializers.PrimaryKeyRelatedField(queryset=Tags.objects.all(), write_only=True)
+    tags_ids = serializers.SerializerMethodField(read_only=True)
+    tags_data = serializers.SerializerMethodField(read_only=True)
     content_images = serializers.SerializerMethodField(read_only=True)
     recaptcha = ReCaptchaV3Field(action="children-images")
 
@@ -160,7 +162,12 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         serializer = AlbumLikeSerializer(likes, many=True)
         return serializer.data
 
-    def get_tags(self, obj):
+    def get_tags_ids(self, obj):
+        ids = obj.tags.values_list('id', flat=True)
+        dict = {(ids[i]): True for i in range(0, len(ids))}
+        return dict
+
+    def get_tags_data(self, obj):
         tags = obj.tags.all()
         serializer = TagsSerializer(tags, many=True)
         return serializer.data
@@ -211,11 +218,12 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'note', 'created', 'image_one', 'image_two', 
+        fields = ['id', 'title', 'date', 'note', 'created', 
+            'image_one', 'image_two', 'tags', 'tags_data', 'tags_ids', 
             'thumb_one', 'thumb_two', 'content', 'content_rt', 
             'ctIsPublic', 'cimg_is_public' ,'special', 'blur',
             'comments', 'comments_count', 'likes', 'likes_count', 
-            'tags', 'content_images', 'recaptcha']
+            'content_images', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
@@ -231,7 +239,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'image', 'author', 'text', 'created', 'main_text', 'recaptcha']
+        fields = ['id', 'image', 'author', 
+            'text', 'created', 'main_text', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")

@@ -388,6 +388,13 @@ def updateAlbum(request, pk):
     album.date = data['date']
     album.comment = data['note']
     album.cimg_is_public = data['gallery']
+    tags_list = []
+    tags_ids = data['tags']
+    album.tags.clear()
+    for tag_id in tags_ids:
+        tags_list.append(tag_id)
+    for elem in tags_list:
+        album.tags.add(elem)
     album.save()
     serializer = ChildrenImageSerializer(album, many=False)
     return Response(serializer.data)
@@ -467,4 +474,12 @@ def updateContentImage(request, pk):
     content_image.image = album
     content_image.save()
     serializer = ContentImageSerializer(content_image, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllTags(request):
+    tags = Tags.objects.all().annotate(posts=Count('images')).order_by('-posts')
+    serializer = TagsSerializer(tags, many=True)
     return Response(serializer.data)

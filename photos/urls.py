@@ -21,6 +21,7 @@ from photos.views import (
 
     getTagsList,
     getTagsPosts,
+    getAllTags,
 
     createImageComment, 
     getComment,
@@ -37,6 +38,7 @@ urlpatterns = [
     path('latest/', getLatestImage),
 
     path('tags/', getTagsList),
+    path('all-tags/', getAllTags),
     path('gallery/', getGalleryImages),
     path('posts/', getTagsPosts),
 
