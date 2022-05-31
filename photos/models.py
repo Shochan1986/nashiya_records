@@ -40,7 +40,7 @@ class Image(models.Model):
     content_rt = RichTextUploadingField(verbose_name='本文(リッチテキスト)', blank=True, null=True, help_text='リッチテキスト形式で書いてください。')
     content = MDTextField(verbose_name='本文(markdown)', blank=True, null=True, help_text='Markdown形式で書いてください。')
     ct_is_public = models.BooleanField('本文の公開', default=False, null=True)
-    cimg_is_public = models.BooleanField('ギャラリーの公開', default=False, null=True)
+    cimg_is_public = models.BooleanField('ギャラリーの公開', default=True, null=True)
     special = models.BooleanField('父ちゃん日記', default=False, null=True)
     tags = models.ManyToManyField(Tags, blank=True, verbose_name='タグ', related_name='images')
     image_one = CloudinaryField(

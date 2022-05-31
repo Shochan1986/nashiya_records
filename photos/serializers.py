@@ -17,11 +17,19 @@ class TagsSerializer(serializers.ModelSerializer):
 
 
 class ContentImageSerializer(serializers.ModelSerializer):
-    album_id = serializers.SerializerMethodField(read_only=True)
+    album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
+    album = serializers.SerializerMethodField(read_only=True)
     content_image = serializers.SerializerMethodField(read_only=True)
     thumbnail = serializers.SerializerMethodField(read_only=True)
     blur = serializers.SerializerMethodField(read_only=True)
+
+
+    def get_album(self, obj):
+        if obj.image:
+            return obj.image.id
+        else:
+            return None
 
     def get_album_id(self, obj):
         if obj.image:
@@ -74,7 +82,8 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'content_image', 'thumbnail' ,'album_id', 'album_title', 'blur']
+        fields = ['id', 'image', 'content_image', 
+            'thumbnail' ,'album', 'album_id', 'album_title', 'blur']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):

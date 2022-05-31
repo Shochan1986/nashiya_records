@@ -406,15 +406,9 @@ def uploadAlbumImage(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentListImages(request):
-    query = request.query_params.get('keyword')
-    if query == None:
-        query = ''
-    queryset = (
-                Q(image__title__icontains=query)
-            )
-    images = ContentImage.objects.filter(queryset).distinct()
+    images = ContentImage.objects.all().order_by('-id')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 24, orphans=5)
+    paginator = Paginator(images, 24, orphans=4)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -426,7 +420,7 @@ def getContentListImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = ContentImageSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -437,3 +431,33 @@ def getContentListImages(request):
             'end': end_index,
         }
     )
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getAllImages(request):
+    images = Image.objects.all().order_by('-created')
+    serializer = ChildrenImageSerializer(images, many=True)
+    return Response(serializer.data)
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getContentImage(request, pk):
+    content_image = ContentImage.objects.get(id=pk)
+    serializer = ContentImageSerializer(content_image, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateContentImage(request, pk):
+    data = request.data
+    content_image = ContentImage.objects.get(id=pk)
+    album = Image.objects.get(id=data['album'])
+    content_image.image = album
+    content_image.save()
+    serializer = ContentImageSerializer(content_image, many=False)
+    return Response(serializer.data)

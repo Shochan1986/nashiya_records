@@ -6,6 +6,7 @@ from photos.views import (
     getSpecialImages,
     getGalleryImages,
     getListImages,
+    getAllImages,
 
     createAlbum,
     updateAlbum,
@@ -14,6 +15,8 @@ from photos.views import (
     createContentImages,
     getContentImages,
     getContentListImages,
+    getContentImage,
+    updateContentImage,
 
     getTagsList,
     getTagsPosts,
@@ -35,12 +38,16 @@ urlpatterns = [
     path('gallery/', getGalleryImages),
     path('posts/', getTagsPosts),
 
+    path('upload/', uploadAlbumImage),
+
     path('create-album/', createAlbum),
+    path('all-images/', getAllImages),
     path('create-images/', createContentImages),
     path('content-images/', getContentImages),
     path('content-images-list/', getContentListImages),
+    
+    path('content/<str:pk>/', getContentImage),
     path('update/<str:pk>/', updateAlbum),
-    path('upload/', uploadAlbumImage),
 
     path('<str:pk>/', getChildrenImage),
 
@@ -48,4 +55,6 @@ urlpatterns = [
     path('comments/<str:pk>/', getComment),
 
     path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
+
+    path('content/update/<str:pk>/', updateContentImage),
 ]

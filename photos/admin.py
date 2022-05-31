@@ -57,7 +57,10 @@ class ImageAdmin(admin.ModelAdmin):
     actions = [notify]
     
     def show_image(self, obj):
-        return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format(obj.image_one.build_url(secure=True)))
+        if obj.image_one:
+            return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format(obj.image_one.build_url(secure=True)))
+        else: 
+            return mark_safe('<img src="{}" style="width:100px; height:100px; object-fit:cover">'.format('https://images.pexels.com/photos/7245333/pexels-photo-7245333.jpeg?cs=srgb&dl=pexels-olga-lioncat-7245333.jpg&fm=jpg'))
     show_image.admin_order_field = 'サムネイル'
     show_image.short_description = 'サムネイル'
 
