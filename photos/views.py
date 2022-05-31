@@ -441,6 +441,12 @@ def getAllImages(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getLatestImage(request):
+    image = Image.objects.latest('id')
+    serializer = ChildrenImageSerializer(image, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
