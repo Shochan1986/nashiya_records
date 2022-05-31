@@ -387,6 +387,7 @@ def updateAlbum(request, pk):
     album.title = data['title']
     album.date = data['date']
     album.comment = data['note']
+    album.cimg_is_public = data['gallery']
     album.save()
     serializer = ChildrenImageSerializer(album, many=False)
     return Response(serializer.data)
@@ -436,7 +437,7 @@ def getContentListImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllImages(request):
-    images = Image.objects.all().order_by('-updated')[:25] 
+    images = Image.objects.all().order_by('-date')[:30] 
     serializer = ChildrenImageSerializer(images, many=True)
     return Response(serializer.data)
 
