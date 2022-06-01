@@ -388,6 +388,7 @@ def updateAlbum(request, pk):
     album.date = data['date']
     album.comment = data['note']
     album.cimg_is_public = data['gallery']
+    album.special = data['special']
     tags_list = []
     tags_ids = data['tags']
     album.tags.clear()
@@ -414,7 +415,7 @@ def uploadAlbumImage(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentListImages(request):
-    images = ContentImage.objects.all().order_by('-id')[:120]
+    images = ContentImage.objects.all().order_by('-id')[:240]
     page = request.query_params.get('page')
     paginator = Paginator(images, 24, orphans=4)
     try:
@@ -444,7 +445,7 @@ def getContentListImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllImages(request):
-    images = Image.objects.all().order_by('-date')[:50] 
+    images = Image.objects.all().order_by('-date')[:100] 
     serializer = ChildrenImageSerializer(images, many=True)
     return Response(serializer.data)
 
