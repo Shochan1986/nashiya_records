@@ -389,6 +389,8 @@ def updateAlbum(request, pk):
     album.comment = data['note']
     album.cimg_is_public = data['gallery']
     album.special = data['special']
+    album.content = data['blog']
+    album.ct_is_public = data['ctIsPublic']
     tags_list = []
     tags_ids = data['tags']
     album.tags.clear()
