@@ -16,12 +16,25 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
         'no_active_account': ('Eメールアドレスもしくはパスワードが正しくありません。')
     }
+
     def validate(self, attrs):
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
         for k, v in serializer.items():
             data[k] = v    
         return data
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+        token['name'] = user.first_name
+        token['email'] = user.email
+        token['isAdmin'] = user.is_staff
+        token['isSuper'] = user.is_superuser
+
+        return token
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

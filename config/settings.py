@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'photos.apps.PhotosConfig', # new
 
     'rest_framework', # new
+    'rest_framework_simplejwt.token_blacklist', # new
     "corsheaders", # new
     'cloudinary_storage', # new
     'cloudinary', # new
@@ -183,7 +184,7 @@ from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
