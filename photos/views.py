@@ -242,7 +242,7 @@ def getTagsPosts(request):
     images = Image.objects.filter(tags__name=query).order_by('-date')
 
     page = request.query_params.get('page')
-    paginator = Paginator(images, 30, orphans=3)
+    paginator = Paginator(images, 50, orphans=5)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
