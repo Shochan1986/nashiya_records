@@ -486,3 +486,11 @@ def getAllTags(request):
     tags = Tags.objects.all().annotate(posts=Count('images')).order_by('-posts')
     serializer = TagsSerializer(tags, many=True)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteContentImage(request, pk):
+    image = ContentImage.objects.get(id=pk)
+    image.delete()  
+    return Response('写真は削除されました。')

@@ -18,6 +18,7 @@ from photos.views import (
     getContentListImages,
     getContentImage,
     updateContentImage,
+    deleteContentImage,
 
     getTagsList,
     getTagsPosts,
@@ -49,6 +50,7 @@ urlpatterns = [
     path('create-images/', createContentImages),
     path('content-images/', getContentImages),
     path('content-images-list/', getContentListImages),
+    path('content/<str:pk>/delete/', deleteContentImage),
 
     path('content/<str:pk>/', getContentImage),
     path('update/<str:pk>/', updateAlbum),
