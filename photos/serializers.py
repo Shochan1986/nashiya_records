@@ -247,10 +247,78 @@ class CommentSerializer(serializers.ModelSerializer):
         return 
         
 
-    
-
 class ImageTitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
         fields = ['id', 'title']
+
+
+class AlbumSerializer(serializers.ModelSerializer):
+    thumb_one = serializers.SerializerMethodField(read_only=True)
+    blur = serializers.SerializerMethodField(read_only=True)
+    ctIsPublic = serializers.SerializerMethodField(read_only=True)
+    comments_count = serializers.SerializerMethodField(read_only=True)
+    likes_count = serializers.SerializerMethodField(read_only=True) 
+    tags_data = serializers.SerializerMethodField(read_only=True)
+
+    def get_thumb_one(self, obj):
+        if obj.image_one:
+            return obj.image_one.build_url(secure=True)
+        else:
+            return None
+
+    def get_blur(self, obj):
+        if obj.image_one:
+            return obj.image_one.build_url(secure=True)
+        else:
+            None
+
+    def get_ctIsPublic(self, obj):
+        return obj.ct_is_public
+
+    def get_comments_count(self, obj):  
+        return obj.comments.count()
+
+    def get_likes_count(self, obj):  
+        return obj.likes.count()
+
+    def get_tags_data(self, obj):
+        tags = obj.tags.all()
+        serializer = TagsSerializer(tags, many=True)
+        return serializer.data
+
+    def to_representation(self, instance):
+        representation = super(AlbumSerializer, self).to_representation(instance)
+        if instance.image_one:
+            thumbnailUrl = cloudinary.utils.cloudinary_url(
+                instance.image_one.build_url(
+                secure=True,
+                transformation=[
+                {'width': 625 },
+                {'fetch_format': "auto"},
+                {'quality': 'auto:eco'},
+                {'dpr': 'auto'},
+                {'effect': 'auto_contrast'},
+                ]))
+            representation['thumb_one'] = thumbnailUrl[0]
+        if instance.image_one:
+            thumbnailUrl = cloudinary.utils.cloudinary_url(
+                instance.image_one.build_url(
+                secure=True,
+                transformation=[
+                {'width': 50 },
+                {'fetch_format': "auto"},
+                {'quality': 'auto:eco'},
+                {'dpr': 'auto'},
+                ]))
+            representation['blur'] = thumbnailUrl[0]
+        return representation
+
+    class Meta:
+        model = Image
+        fields = ['id', 'title', 'date', 'created', 
+            'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
+            'special', 'blur',
+            'comments_count', 'likes_count']
+

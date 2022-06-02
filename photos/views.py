@@ -5,6 +5,7 @@ from photos.serializers import (
     TagsSerializer,
     ContentImageSerializer,
     ImageTitleSerializer,
+    AlbumSerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -37,7 +38,7 @@ def getChildrenImages(request):
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 12, orphans=2)
+    paginator = Paginator(images, 24, orphans=2)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
@@ -49,7 +50,7 @@ def getChildrenImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -90,7 +91,7 @@ def getBlogImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -132,7 +133,7 @@ def getSpecialImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -174,7 +175,7 @@ def getGalleryImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -205,7 +206,7 @@ def getListImages(request):
     images = Image.objects.filter(queryset).distinct().order_by('-date')
 
     page = request.query_params.get('page')
-    paginator = Paginator(images, 25, orphans=2)
+    paginator = Paginator(images, 50, orphans=2)
 
     try:
         images = paginator.page(page)
@@ -219,7 +220,7 @@ def getListImages(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -253,7 +254,7 @@ def getTagsPosts(request):
     page = int(page)
     start_index = images.start_index()
     end_index = images.end_index()
-    serializer = ChildrenImageSerializer(images, many=True)
+    serializer = AlbumSerializer(images, many=True)
     return Response(
         {
             'images': serializer.data, 
@@ -418,9 +419,16 @@ def uploadAlbumImage(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentListImages(request):
-    images = ContentImage.objects.all().order_by('-id')
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+        Q(image__title__icontains=query) |
+        Q(content_image__icontains=query) 
+    )
+    images = ContentImage.objects.filter(queryset).distinct().order_by('-id')
     page = request.query_params.get('page')
-    paginator = Paginator(images, 24, orphans=4)
+    paginator = Paginator(images, 48, orphans=4)
     try:
         images = paginator.page(page)
     except PageNotAnInteger:
