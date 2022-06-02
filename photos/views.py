@@ -509,13 +509,21 @@ def deleteContentImage(request, pk):
 @permission_classes([IsAdminUser])
 def email_send(request, pk):
     image = Image.objects.get(id=pk)
-    image.email_push(request) 
-    return Response(f'「{image.title}」がEメールで送信されました。')
+    try:
+        image.email_push(request) 
+        return Response(f'「{image.title}」がEメールで送信されました。')
+    except:
+        content = {'detail': f'「{image.title}」をEメールで送信できませんでした。'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def line_send(request, pk):
     image = Image.objects.get(id=pk)
-    image.line_push(request) 
-    return Response(f'「{image.title}」がLINEで送信されました。')
+    try:
+        image.line_push(request) 
+        return Response(f'「{image.title}」がLINEで送信されました。')
+    except:
+        content = {'detail': f'「{image.title}」をLINEで送信できませんでした。'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)

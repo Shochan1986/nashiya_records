@@ -20,7 +20,7 @@ handler = WebhookHandler(channel_secret=env("LINE_CHANNEL_SECRET"))
 
 
 @receiver(post_save, sender=Comment)
-def comment_create_line_notification(sender, instance, created, **kwargs):
+def comment_create_notification(sender, instance, created, **kwargs):
     try:
         if created:
             context = {
@@ -32,12 +32,6 @@ def comment_create_line_notification(sender, instance, created, **kwargs):
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
     except:
-        pass
-    
-                
-@receiver(post_save, sender=Comment)
-def comment_create_email_notification(sender, instance, created, **kwargs):
-    try:
         if created:
             context = {
                 'author': instance.author,
@@ -52,12 +46,10 @@ def comment_create_email_notification(sender, instance, created, **kwargs):
                 bcc.append(user.email)
             email = EmailMessage(subject, message, from_email, [], bcc)
             email.send()
-    except:
-        pass
 
 
 @receiver(post_save, sender=AlbumLike)
-def album_like_create_line_notification(sender, instance, created, **kwargs):
+def album_like_create_notification(sender, instance, created, **kwargs):
     try:
         if created:
             context = {
@@ -68,12 +60,6 @@ def album_like_create_line_notification(sender, instance, created, **kwargs):
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
     except:
-        pass
-
-
-@receiver(post_save, sender=AlbumLike)
-def album_like_create_email_notification(sender, instance, created, **kwargs):
-    try:
         if created:
             context = {
                 'album': instance.album,
@@ -87,5 +73,3 @@ def album_like_create_email_notification(sender, instance, created, **kwargs):
                 bcc.append(user.email)
             email = EmailMessage(subject, message, from_email, [], bcc)
             email.send()
-    except:
-        pass
