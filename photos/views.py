@@ -4,6 +4,7 @@ from photos.serializers import (
     CommentSerializer, 
     TagsSerializer,
     ContentImageSerializer,
+    ImageTitleSerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -447,8 +448,8 @@ def getContentListImages(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getAllImages(request):
-    images = Image.objects.all().order_by('-date')[:100] 
-    serializer = ChildrenImageSerializer(images, many=True)
+    images = Image.objects.all().order_by('-date')
+    serializer = ImageTitleSerializer(images, many=True)
     return Response(serializer.data)
 
 

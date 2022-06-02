@@ -244,4 +244,13 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
-        return attrs
+        return 
+        
+
+    
+
+class ImageTitleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Image
+        fields = ['id', 'title']
