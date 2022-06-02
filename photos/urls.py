@@ -28,6 +28,9 @@ from photos.views import (
     getComment,
 
     createAlbumLike,
+
+    email_send,
+    line_send,
 )
 
 urlpatterns = [
@@ -63,4 +66,7 @@ urlpatterns = [
     path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
 
     path('content/update/<str:pk>/', updateContentImage),
+
+    path('email/<str:pk>/', email_send),
+    path('line/<str:pk>/', line_send),
 ]

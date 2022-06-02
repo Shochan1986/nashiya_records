@@ -503,3 +503,19 @@ def deleteContentImage(request, pk):
     image = ContentImage.objects.get(id=pk)
     image.delete()  
     return Response('写真は削除されました。')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def email_send(request, pk):
+    image = Image.objects.get(id=pk)
+    image.email_push(request) 
+    return Response(f'「{image.title}」がEメールで送信されました。')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def line_send(request, pk):
+    image = Image.objects.get(id=pk)
+    image.line_push(request) 
+    return Response(f'「{image.title}」がLINEで送信されました。')
