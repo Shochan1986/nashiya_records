@@ -361,11 +361,24 @@ def createAlbumLike(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createContentImages(request):
+    data = request.data
+    try:
+        album = Image.objects.get(id=data['album'])
+    except Image.DoesNotExist:
+        album = None
+        pass
     images = request.FILES.getlist('images')
-    for image in images:
-        instance = ContentImage()
-        instance.content_image = image
-        instance.save()
+    if album:
+        for photo in images:
+            instance = ContentImage()
+            instance.image = album
+            instance.content_image = photo
+            instance.save()
+    else:
+        for photo in images:
+            instance = ContentImage()
+            instance.content_image = photo
+            instance.save()
     return Response('挿入画像がアップロードされました')
 
 
