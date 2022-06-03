@@ -1,4 +1,4 @@
-from photos.models import Image, Comment, AlbumLike, Tags, ContentImage
+from photos.models import Image, Comment, AlbumLike, Tags, ContentImage, Metadata
 from photos.serializers import (
     ChildrenImageSerializer, 
     CommentSerializer, 
@@ -6,6 +6,7 @@ from photos.serializers import (
     ContentImageSerializer,
     ImageTitleSerializer,
     AlbumSerializer,
+    MetadataSerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -19,6 +20,7 @@ from django.db.models import Q, Count
 from django.utils import timezone
 from django.utils.timezone import localtime
 from datetime import timedelta, datetime
+import metadata_parser
 
 
 @api_view(['GET'])
@@ -373,11 +375,13 @@ def createContentImages(request):
             instance = ContentImage()
             instance.image = album
             instance.content_image = photo
+            request = request
             instance.save()
     else:
         for photo in images:
             instance = ContentImage()
             instance.content_image = photo
+            request = request
             instance.save()
     return Response('挿入画像がアップロードされました')
 
@@ -540,3 +544,85 @@ def line_send(request, pk):
     except:
         content = {'detail': f'「{image.title}」をLINEで送信できませんでした。'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createMetadata(request):
+    data = request.data
+    try:
+        album = Image.objects.get(id=data['album'])
+    except Image.DoesNotExist:
+        album = None
+        pass
+    if album:
+            instance = Metadata()
+            instance.album = album
+            instance.site_url = data['site_url']
+            page = metadata_parser.MetadataParser(data['site_url'])
+            instance.title = page.get_metadatas('title')[0]
+            if page.get_metadatas('site_name') is not None:
+                instance.site_name = page.get_metadatas('site_name')[0]
+            else:
+                pass
+            instance.image_url = page.get_metadatas('image')[0]
+            if page.get_metadatas('description') is not None:
+                instance.description = page.get_metadatas('description')[0]
+            else:
+                pass
+            instance.save()
+    else:
+            instance = Metadata()
+            instance.site_url = data['site_url']
+            page = metadata_parser.MetadataParser(data['site_url'])
+            instance.title = page.get_metadatas('title')[0]
+            if page.get_metadatas('site_name') is not None:
+                instance.site_name = page.get_metadatas('site_name')[0]
+            else:
+                pass
+            instance.image_url = page.get_metadatas('image')[0]
+            if page.get_metadatas('description') is not None:
+                instance.description = page.get_metadatas('description')[0]
+            else:
+                pass
+            instance.save()
+    return Response('メタデータがアップロードされました')
+
+
+@api_view(['GET'])
+#@permission_classes([IsAdminUser])
+def getMetadata(request):
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+        Q(site_url__icontains=query) |
+        Q(title__icontains=query) |
+        Q(description__icontains=query) |
+        Q(album__title__icontains=query) 
+    )
+    data = Metadata.objects.filter(queryset).distinct().order_by('-created')
+    page = request.query_params.get('page')
+    paginator = Paginator(data, 24, orphans=2)
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = data.start_index()
+    end_index = data.end_index()
+    serializer = MetadataSerializer(data, many=True)
+    return Response(
+        {
+            'data': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )

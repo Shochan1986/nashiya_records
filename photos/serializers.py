@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from photos.models import Image, Comment, AlbumLike, Tags, ContentImage
+from photos.models import Image, Comment, AlbumLike, Tags, ContentImage, Metadata
 from django.utils.html import linebreaks, urlize
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
@@ -321,4 +321,34 @@ class AlbumSerializer(serializers.ModelSerializer):
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
             'special', 'blur', 'content', 'content_rt', 
             'comments_count', 'likes_count']
+
+
+class MetadataSerializer(serializers.ModelSerializer):
+    album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
+    album_title = serializers.SerializerMethodField(read_only=True)
+    album = serializers.SerializerMethodField(read_only=True)
+
+    def get_album(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_id(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_title(self, obj):
+        if obj.album:
+            return obj.album.title
+        else:
+            return None
+
+    class Meta:
+        model = Metadata
+        fields = ['id', 'site_url', 'title', 'image_url', 
+            'description', 'created', 'updated', 'site_name',
+            'album', 'album_id', 'album_title']
 

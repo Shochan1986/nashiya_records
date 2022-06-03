@@ -1,5 +1,5 @@
 from django.contrib import admin
-from photos.models import Image, Comment, ContentImage, AlbumLike, Tags
+from photos.models import Image, Comment, ContentImage, AlbumLike, Tags, Metadata
 from django.utils.safestring import mark_safe
 
 
@@ -89,5 +89,6 @@ admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
+admin.site.register(Metadata)
 
 notify.short_description = 'Line・Emailに転載する'

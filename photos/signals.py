@@ -8,9 +8,13 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
     TextSendMessage, 
 )
+from requests import request
 from farm.models import LinePush
-from photos.models import Comment, AlbumLike
+from photos.models import Comment, AlbumLike, Metadata
 from environs import Env 
+import metadata_parser
+from rest_framework.response import Response
+from rest_framework import status
 
 env = Env() 
 env.read_env()  

@@ -172,3 +172,25 @@ class ContentImage(models.Model):
             return str(self.id) + ' ' + f'[{self.image.title}]'
         else:
             return str(self.id)
+
+
+class Metadata(models.Model):
+    album = models.ForeignKey(Image, verbose_name='アルバム', related_name='metadata', null=True, blank=True, on_delete=models.SET_NULL)
+    site_url = models.URLField('サイトURL', null=True)
+    site_name = models.CharField('サイト名', null=True, blank=True, max_length=500)
+    title = models.CharField('タイトル', null=True, blank=True, max_length=500)
+    image_url = models.URLField('画像URL', null=True, blank=True)
+    description = models.TextField('詳細', null=True, blank=True)
+    created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
+    updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = ('メタデータ')
+        verbose_name_plural = ('メタデータ')
+
+    def __str__(self):
+        if self.title:
+            return self.title
+        else:
+            return 'メタデータ'

@@ -38,6 +38,7 @@ importlib-metadata==4.11.3
 line-bot-sdk==2.0.1
 Markdown==3.3.6
 marshmallow==3.14.1
+metadata-parser==0.10.5
 multidict==5.2.0
 numpy==1.21.4
 openpyxl==3.0.9
@@ -53,6 +54,7 @@ python-dotenv==0.19.2
 pytz==2021.3
 reportlab==3.6.3
 requests==2.26.0
+requests-toolbelt==0.9.1
 six==1.16.0
 soupsieve==2.3.1
 sqlparse==0.4.2

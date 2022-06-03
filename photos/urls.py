@@ -31,6 +31,9 @@ from photos.views import (
 
     email_send,
     line_send,
+
+    createMetadata,
+    getMetadata,
 )
 
 urlpatterns = [
@@ -48,11 +51,15 @@ urlpatterns = [
 
     path('upload/', uploadAlbumImage),
 
+    path('meta-create/', createMetadata),
+    path('meta/', getMetadata),
+
     path('create-album/', createAlbum),
     path('all-images/', getAllImages),
     path('create-images/', createContentImages),
     path('content-images/', getContentImages),
     path('content-images-list/', getContentListImages),
+
     path('content/<str:pk>/delete/', deleteContentImage),
 
     path('content/<str:pk>/', getContentImage),
