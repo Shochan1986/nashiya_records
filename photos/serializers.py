@@ -319,6 +319,6 @@ class AlbumSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['id', 'title', 'date', 'created', 
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
-            'special', 'blur',
+            'special', 'blur', 'content', 'content_rt', 
             'comments_count', 'likes_count']
 
