@@ -5,6 +5,36 @@ from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
 
 
+class MetadataSerializer(serializers.ModelSerializer):
+    album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
+    album_title = serializers.SerializerMethodField(read_only=True)
+    album = serializers.SerializerMethodField(read_only=True)
+
+    def get_album(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_id(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_title(self, obj):
+        if obj.album:
+            return obj.album.title
+        else:
+            return None
+
+    class Meta:
+        model = Metadata
+        fields = ['id', 'site_url', 'title', 'image_url', 
+            'description', 'created', 'updated', 'site_name',
+            'album', 'album_id', 'album_title']
+
+
 class TagsSerializer(serializers.ModelSerializer):
     images_count = serializers.SerializerMethodField(read_only=True)
 
@@ -108,6 +138,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     tags_ids = serializers.SerializerMethodField(read_only=True)
     tags_data = serializers.SerializerMethodField(read_only=True)
     content_images = serializers.SerializerMethodField(read_only=True)
+    metadata = serializers.SerializerMethodField(read_only=True)
     recaptcha = ReCaptchaV3Field(action="children-images")
 
     def get_note(self, obj):
@@ -177,6 +208,11 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         serializer = ContentImageSerializer(cImages, many=True)
         return serializer.data
 
+    def get_metadata(self, obj):
+        meta = obj.metadata.all()
+        serializer = MetadataSerializer(meta, many=True)
+        return serializer.data
+
     def to_representation(self, instance):
         representation = super(ChildrenImageSerializer, self).to_representation(instance)
         if instance.image_one:
@@ -223,7 +259,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
             'thumb_one', 'thumb_two', 'content', 'content_rt', 
             'ctIsPublic', 'cimg_is_public' ,'special', 'blur',
             'comments', 'comments_count', 'likes', 'likes_count', 
-            'content_images', 'recaptcha']
+            'content_images', 'metadata', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
@@ -321,34 +357,4 @@ class AlbumSerializer(serializers.ModelSerializer):
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
             'special', 'blur', 'content', 'content_rt', 
             'comments_count', 'likes_count']
-
-
-class MetadataSerializer(serializers.ModelSerializer):
-    album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
-    album_title = serializers.SerializerMethodField(read_only=True)
-    album = serializers.SerializerMethodField(read_only=True)
-
-    def get_album(self, obj):
-        if obj.album:
-            return obj.album.id
-        else:
-            return None
-
-    def get_album_id(self, obj):
-        if obj.album:
-            return obj.album.id
-        else:
-            return None
-
-    def get_album_title(self, obj):
-        if obj.album:
-            return obj.album.title
-        else:
-            return None
-
-    class Meta:
-        model = Metadata
-        fields = ['id', 'site_url', 'title', 'image_url', 
-            'description', 'created', 'updated', 'site_name',
-            'album', 'album_id', 'album_title']
 

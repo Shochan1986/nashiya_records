@@ -590,7 +590,7 @@ def createMetadata(request):
 
 
 @api_view(['GET'])
-#@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser])
 def getMetadata(request):
     query = request.query_params.get('keyword')
     if query == None:
@@ -603,7 +603,7 @@ def getMetadata(request):
     )
     data = Metadata.objects.filter(queryset).distinct().order_by('-created')
     page = request.query_params.get('page')
-    paginator = Paginator(data, 24, orphans=2)
+    paginator = Paginator(data, 12, orphans=2)
     try:
         data = paginator.page(page)
     except PageNotAnInteger:
