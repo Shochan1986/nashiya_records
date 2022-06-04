@@ -1,5 +1,6 @@
 from django.urls import path
 from photos.views import (
+    deleteMetadata,
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
@@ -19,6 +20,8 @@ from photos.views import (
     getContentImage,
     updateContentImage,
     deleteContentImage,
+
+    deleteMetadata,
 
     getTagsList,
     getTagsPosts,
@@ -61,6 +64,7 @@ urlpatterns = [
     path('content-images-list/', getContentListImages),
 
     path('content/<str:pk>/delete/', deleteContentImage),
+    path('meta/<str:pk>/delete/', deleteMetadata),
 
     path('content/<str:pk>/', getContentImage),
     path('update/<str:pk>/', updateAlbum),

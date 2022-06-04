@@ -632,3 +632,11 @@ def getMetadata(request):
             'end': end_index,
         }
     )
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteMetadata(request, pk):
+    meta = Metadata.objects.get(id=pk)
+    meta.delete()  
+    return Response('メタデータは削除されました。')
