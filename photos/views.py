@@ -673,15 +673,15 @@ def updateMetadata(request, pk):
         if page.get_metadatas('site_name') is not None:
             meta.site_name = page.get_metadatas('site_name')[0]
         else:
-            pass
+            meta.site_name = ''
         if page.get_metadatas('image') is not None:
             meta.image_url = page.get_metadatas('image')[0]
         else:
-            pass
+           meta.image_url = ''
         if page.get_metadatas('description') is not None:
             meta.description = page.get_metadatas('description')[0]
         else:
-            pass
+            meta.description = ''
         meta.save()
     else:
         meta.note = data['note']
@@ -691,15 +691,15 @@ def updateMetadata(request, pk):
         if page.get_metadatas('site_name') is not None:
             meta.site_name = page.get_metadatas('site_name')[0]
         else:
-            pass
+            meta.site_name = ''
         if page.get_metadatas('image') is not None:
             meta.image_url = page.get_metadatas('image')[0]
         else:
-            pass
+            meta.image_url = ''
         if page.get_metadatas('description') is not None:
             meta.description = page.get_metadatas('description')[0]
         else:
-            pass
+            meta.description = ''
         meta.save()
     serializer = MetadataSerializer(meta, many=False)
     return Response(serializer.data)
