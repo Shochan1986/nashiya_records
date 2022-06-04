@@ -21,6 +21,7 @@ from photos.views import (
     updateContentImage,
     deleteContentImage,
 
+    updateMetadata,
     deleteMetadata,
 
     getTagsList,
@@ -64,6 +65,7 @@ urlpatterns = [
     path('content-images-list/', getContentListImages),
 
     path('content/<str:pk>/delete/', deleteContentImage),
+    path('meta/<str:pk>/update/', updateMetadata),
     path('meta/<str:pk>/delete/', deleteMetadata),
 
     path('content/<str:pk>/', getContentImage),

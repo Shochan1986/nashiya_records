@@ -181,6 +181,7 @@ class Metadata(models.Model):
     title = models.CharField('タイトル', null=True, blank=True, max_length=500)
     image_url = models.URLField('画像URL', null=True, blank=True)
     description = models.TextField('詳細', null=True, blank=True)
+    note = models.TextField('メモ', null=True, blank=True)
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
 

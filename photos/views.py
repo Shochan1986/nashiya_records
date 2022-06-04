@@ -406,7 +406,6 @@ def updateAlbum(request, pk):
     album.title = data['title']
     album.date = data['date']
     album.comment = data['note']
-    album.cimg_is_public = data['gallery']
     album.special = data['special']
     album.content = data['blog']
     album.ct_is_public = data['ctIsPublic']
@@ -558,6 +557,7 @@ def createMetadata(request):
     if album:
             instance = Metadata()
             instance.album = album
+            instance.note = data['note']
             instance.site_url = data['site_url']
             page = metadata_parser.MetadataParser(data['site_url'])
             instance.title = page.get_metadatas('title')[0]
@@ -577,6 +577,7 @@ def createMetadata(request):
     else:
             instance = Metadata()
             instance.site_url = data['site_url']
+            instance.note = data['note']
             page = metadata_parser.MetadataParser(data['site_url'])
             instance.title = page.get_metadatas('title')[0]
             if page.get_metadatas('site_name') is not None:
@@ -640,3 +641,16 @@ def deleteMetadata(request, pk):
     meta = Metadata.objects.get(id=pk)
     meta.delete()  
     return Response('メタデータは削除されました。')
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateMetadata(request, pk):
+    data = request.data
+    meta = Metadata.objects.get(id=pk)
+    album = Image.objects.get(id=data['album'])
+    meta.album = album
+    meta.note = data['note']
+    meta.save()
+    serializer = MetadataSerializer(meta, many=False)
+    return Response(serializer.data)
