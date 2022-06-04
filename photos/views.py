@@ -565,7 +565,10 @@ def createMetadata(request):
                 instance.site_name = page.get_metadatas('site_name')[0]
             else:
                 pass
-            instance.image_url = page.get_metadatas('image')[0]
+            if page.get_metadatas('image') is not None:
+                instance.image_url = page.get_metadatas('image')[0]
+            else:
+                pass
             if page.get_metadatas('description') is not None:
                 instance.description = page.get_metadatas('description')[0]
             else:
@@ -580,7 +583,10 @@ def createMetadata(request):
                 instance.site_name = page.get_metadatas('site_name')[0]
             else:
                 pass
-            instance.image_url = page.get_metadatas('image')[0]
+            if page.get_metadatas('image') is not None:
+                instance.image_url = page.get_metadatas('image')[0]
+            else:
+                pass
             if page.get_metadatas('description') is not None:
                 instance.description = page.get_metadatas('description')[0]
             else:
