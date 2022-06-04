@@ -606,6 +606,7 @@ def getMetadata(request):
         Q(site_url__icontains=query) |
         Q(site_name__icontains=query) |
         Q(title__icontains=query) |
+        Q(note__icontains=query) |
         Q(description__icontains=query) |
         Q(album__title__icontains=query) 
     )
