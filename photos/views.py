@@ -635,6 +635,14 @@ def getMetadata(request):
     )
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSingleMetadata(request, pk):
+    meta = Metadata.objects.get(id=pk)
+    serializer = MetadataSerializer(meta, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteMetadata(request, pk):
@@ -648,9 +656,25 @@ def deleteMetadata(request, pk):
 def updateMetadata(request, pk):
     data = request.data
     meta = Metadata.objects.get(id=pk)
-    album = Image.objects.get(id=data['album'])
-    meta.album = album
-    meta.note = data['note']
-    meta.save()
+    try:
+        album = Image.objects.get(id=data['album'])
+    except Image.DoesNotExist:
+        album = None
+        pass
+    if album:
+        meta.album = album
+        meta.note = data['note']
+        meta.save()
+    else:
+        meta.note = data['note']
+        meta.save()
     serializer = MetadataSerializer(meta, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getLatestMeta(request):
+    image = Metadata.objects.latest('id')
+    serializer = MetadataSerializer(image, many=False)
     return Response(serializer.data)

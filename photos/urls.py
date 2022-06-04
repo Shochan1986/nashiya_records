@@ -4,6 +4,7 @@ from photos.views import (
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
+    getLatestMeta,
     getSpecialImages,
     getGalleryImages,
     getListImages,
@@ -23,6 +24,7 @@ from photos.views import (
 
     updateMetadata,
     deleteMetadata,
+    getSingleMetadata,
 
     getTagsList,
     getTagsPosts,
@@ -38,6 +40,7 @@ from photos.views import (
 
     createMetadata,
     getMetadata,
+    getLatestMeta,  
 )
 
 urlpatterns = [
@@ -47,6 +50,7 @@ urlpatterns = [
     path('special/', getSpecialImages),
     path('list/', getListImages),
     path('latest/', getLatestImage),
+    path('latest-meta/', getLatestMeta),
 
     path('tags/', getTagsList),
     path('all-tags/', getAllTags),
@@ -65,6 +69,7 @@ urlpatterns = [
     path('content-images-list/', getContentListImages),
 
     path('content/<str:pk>/delete/', deleteContentImage),
+    path('meta/<str:pk>/', getSingleMetadata),
     path('meta/<str:pk>/update/', updateMetadata),
     path('meta/<str:pk>/delete/', deleteMetadata),
 
