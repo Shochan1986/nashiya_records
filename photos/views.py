@@ -747,5 +747,5 @@ def updateTag(request, pk):
     tag = Tags.objects.get(id=pk)
     tag.name = data['name']
     tag.save()
-    serializer = MetadataSerializer(tag, many=False)
+    serializer = TagsSerializer(tag, many=False)
     return Response(serializer.data)

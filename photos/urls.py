@@ -83,7 +83,7 @@ urlpatterns = [
     path('content/<str:pk>/delete/', deleteContentImage),
 
     path('tags/<str:pk>/', getSingleTag),
-    path('tags/update/<str:pk>/', updateTag),
+    path('tags/<str:pk>/update/', updateTag),
     path('tags/<str:pk>/delete/', deleteTag),
 
     path('update/<str:pk>/', updateAlbum),
