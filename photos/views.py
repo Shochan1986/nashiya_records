@@ -609,7 +609,7 @@ def getMetadata(request):
     )
     data = Metadata.objects.filter(queryset).distinct().order_by('-created')
     page = request.query_params.get('page')
-    paginator = Paginator(data, 12, orphans=2)
+    paginator = Paginator(data, 24, orphans=4)
     try:
         data = paginator.page(page)
     except PageNotAnInteger:
