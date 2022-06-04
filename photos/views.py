@@ -498,10 +498,17 @@ def getContentImage(request, pk):
 def updateContentImage(request, pk):
     data = request.data
     content_image = ContentImage.objects.get(id=pk)
-    album = Image.objects.get(id=data['album'])
-    content_image.image = album
-    content_image.note = data['note']
-    content_image.save()
+    try:
+        album = Image.objects.get(id=data['album'])
+    except Image.DoesNotExist:
+        album = None
+    if album:
+        content_image.image = album
+        content_image.note = data['note']
+        content_image.save()
+    else:
+        content_image.note = data['note']
+        content_image.save()
     serializer = ContentImageSerializer(content_image, many=False)
     return Response(serializer.data)
 
