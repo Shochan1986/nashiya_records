@@ -297,6 +297,7 @@ class AlbumSerializer(serializers.ModelSerializer):
     comments_count = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True) 
     content_count = serializers.SerializerMethodField(read_only=True) 
+    meta_count = serializers.SerializerMethodField(read_only=True) 
     tags_data = serializers.SerializerMethodField(read_only=True)
 
     def get_thumb_one(self, obj):
@@ -327,6 +328,9 @@ class AlbumSerializer(serializers.ModelSerializer):
     
     def get_content_count(self, obj):  
         return obj.content_images.count()
+    
+    def get_meta_count(self, obj):  
+        return obj.metadata.count()
 
     def to_representation(self, instance):
         representation = super(AlbumSerializer, self).to_representation(instance)
@@ -360,5 +364,5 @@ class AlbumSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'date', 'created', 
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
             'special', 'blur', 'content', 'content_rt', 
-            'comments_count', 'likes_count', 'content_count']
+            'comments_count', 'likes_count', 'content_count', 'meta_count']
 
