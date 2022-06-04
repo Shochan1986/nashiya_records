@@ -673,8 +673,8 @@ def updateMetadata(request, pk):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+#@permission_classes([IsAdminUser])
 def getLatestMeta(request):
-    image = Metadata.objects.latest('id')
-    serializer = MetadataSerializer(image, many=False)
+    meta = Metadata.objects.latest('id')
+    serializer = MetadataSerializer(meta, many=False)
     return Response(serializer.data)
