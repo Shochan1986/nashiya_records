@@ -604,6 +604,7 @@ def getMetadata(request):
         query = ''
     queryset = (
         Q(site_url__icontains=query) |
+        Q(site_name__icontains=query) |
         Q(title__icontains=query) |
         Q(description__icontains=query) |
         Q(album__title__icontains=query) 
@@ -664,17 +665,47 @@ def updateMetadata(request, pk):
     if album:
         meta.album = album
         meta.note = data['note']
+        meta.site_url = data['site_url']
+        page = metadata_parser.MetadataParser(data['site_url'])
+        meta.title = page.get_metadatas('title')[0]
+        if page.get_metadatas('site_name') is not None:
+            meta.site_name = page.get_metadatas('site_name')[0]
+        else:
+            pass
+        if page.get_metadatas('image') is not None:
+            meta.image_url = page.get_metadatas('image')[0]
+        else:
+            pass
+        if page.get_metadatas('description') is not None:
+            meta.description = page.get_metadatas('description')[0]
+        else:
+            pass
         meta.save()
     else:
         meta.note = data['note']
+        meta.site_url = data['site_url']
+        page = metadata_parser.MetadataParser(data['site_url'])
+        meta.title = page.get_metadatas('title')[0]
+        if page.get_metadatas('site_name') is not None:
+            meta.site_name = page.get_metadatas('site_name')[0]
+        else:
+            pass
+        if page.get_metadatas('image') is not None:
+            meta.image_url = page.get_metadatas('image')[0]
+        else:
+            pass
+        if page.get_metadatas('description') is not None:
+            meta.description = page.get_metadatas('description')[0]
+        else:
+            pass
         meta.save()
     serializer = MetadataSerializer(meta, many=False)
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-#@permission_classes([IsAdminUser])
-def getLatestMeta(request):
-    meta = Metadata.objects.latest('id')
-    serializer = MetadataSerializer(meta, many=False)
-    return Response(serializer.data)
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteAlbum(request, pk):
+    album = Image.objects.get(id=pk)
+    album.delete()  
+    return Response('アルバムは削除されました。')

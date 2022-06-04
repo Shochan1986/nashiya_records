@@ -1,15 +1,16 @@
 from django.urls import path
 from photos.views import (
+    deleteAlbum,
     deleteMetadata,
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
-    getLatestMeta,
     getSpecialImages,
     getGalleryImages,
     getListImages,
     getAllImages,
     getLatestImage,
+    deleteAlbum,
 
     createAlbum,
     updateAlbum,
@@ -39,8 +40,7 @@ from photos.views import (
     line_send,
 
     createMetadata,
-    getMetadata,
-    getLatestMeta,  
+    getMetadata,  
 )
 
 urlpatterns = [
@@ -50,7 +50,6 @@ urlpatterns = [
     path('special/', getSpecialImages),
     path('list/', getListImages),
     path('latest/', getLatestImage),
-    path('latest-meta/', getLatestMeta),
 
     path('tags/', getTagsList),
     path('all-tags/', getAllTags),
@@ -75,6 +74,7 @@ urlpatterns = [
 
     path('content/<str:pk>/', getContentImage),
     path('update/<str:pk>/', updateAlbum),
+    path('delete/<str:pk>/', deleteAlbum),
 
     path('<str:pk>/', getChildrenImage),
 

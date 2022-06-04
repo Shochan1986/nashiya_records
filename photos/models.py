@@ -175,7 +175,7 @@ class ContentImage(models.Model):
 
 
 class Metadata(models.Model):
-    album = models.ForeignKey(Image, verbose_name='アルバム', related_name='metadata', null=True, blank=True, on_delete=models.SET_NULL)
+    album = models.ForeignKey(Image, verbose_name='アルバム', related_name='metadata', null=True, blank=True, on_delete=models.CASCADE)
     site_url = models.URLField('サイトURL', null=True)
     site_name = models.CharField('サイト名', null=True, blank=True, max_length=500)
     title = models.CharField('タイトル', null=True, blank=True, max_length=500)
