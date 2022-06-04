@@ -507,6 +507,7 @@ def updateContentImage(request, pk):
         content_image.note = data['note']
         content_image.save()
     else:
+        content_image.image = None
         content_image.note = data['note']
         content_image.save()
     serializer = ContentImageSerializer(content_image, many=False)
@@ -691,6 +692,7 @@ def updateMetadata(request, pk):
             meta.description = ''
         meta.save()
     else:
+        meta.album = None
         meta.note = data['note']
         meta.site_url = data['site_url']
         page = metadata_parser.MetadataParser(data['site_url'])
