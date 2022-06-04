@@ -162,6 +162,9 @@ class ContentImage(models.Model):
             }, 
         verbose_name='画像'
         )
+    note = models.TextField('メモ', null=True, blank=True)
+    created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
+    updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
 
     class Meta:
         verbose_name = ('挿入画像')

@@ -112,7 +112,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'content_image', 
+        fields = ['id', 'image', 'content_image', 'note', 'created', 'updated',
             'thumbnail' ,'album', 'album_id', 'album_title', 'blur']
 
 
