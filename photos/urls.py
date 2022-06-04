@@ -2,6 +2,7 @@ from django.urls import path
 from photos.views import (
     deleteAlbum,
     deleteMetadata,
+    deleteTag,
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
@@ -30,6 +31,10 @@ from photos.views import (
     getTagsList,
     getTagsPosts,
     getAllTags,
+    createTag,
+    getSingleTag,
+    updateTag,
+    deleteTag,
 
     createImageComment, 
     getComment,
@@ -53,6 +58,8 @@ urlpatterns = [
 
     path('tags/', getTagsList),
     path('all-tags/', getAllTags),
+    path('tags-create/', createTag),
+
     path('gallery/', getGalleryImages),
     path('posts/', getTagsPosts),
 
@@ -67,12 +74,18 @@ urlpatterns = [
     path('content-images/', getContentImages),
     path('content-images-list/', getContentListImages),
 
-    path('content/<str:pk>/delete/', deleteContentImage),
     path('meta/<str:pk>/', getSingleMetadata),
     path('meta/<str:pk>/update/', updateMetadata),
     path('meta/<str:pk>/delete/', deleteMetadata),
 
     path('content/<str:pk>/', getContentImage),
+    path('content/update/<str:pk>/', updateContentImage),
+    path('content/<str:pk>/delete/', deleteContentImage),
+
+    path('tags/<str:pk>/', getSingleTag),
+    path('tags/update/<str:pk>/', updateTag),
+    path('tags/<str:pk>/delete/', deleteTag),
+
     path('update/<str:pk>/', updateAlbum),
     path('delete/<str:pk>/', deleteAlbum),
 
@@ -82,8 +95,6 @@ urlpatterns = [
     path('comments/<str:pk>/', getComment),
 
     path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
-
-    path('content/update/<str:pk>/', updateContentImage),
 
     path('email/<str:pk>/', email_send),
     path('line/<str:pk>/', line_send),

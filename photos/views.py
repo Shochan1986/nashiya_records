@@ -711,3 +711,41 @@ def deleteAlbum(request, pk):
     album = Image.objects.get(id=pk)
     album.delete()  
     return Response('アルバムは削除されました。')
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createTag(request):
+    data = request.data
+    tag = Tags()
+    tag.name = data['name']
+    tag.save()
+    serializer = TagsSerializer(tag, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSingleTag(request, pk):
+    tag = Tags.objects.get(id=pk)
+    serializer = TagsSerializer(tag, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteTag(request, pk):
+    tag = Tags.objects.get(id=pk)
+    tag.delete()  
+    return Response('タグが削除されました。')
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateTag(request, pk):
+    data = request.data
+    tag = Tags.objects.get(id=pk)
+    tag.name = data['name']
+    tag.save()
+    serializer = MetadataSerializer(tag, many=False)
+    return Response(serializer.data)
