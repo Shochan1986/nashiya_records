@@ -84,11 +84,19 @@ class ContentImageAdmin(admin.ModelAdmin):
     show_image.short_description = 'サムネイル'
 
 
+class MetadataAdmin(admin.ModelAdmin):
+    model = Metadata
+    list_display = ('title', 'note',)
+    search_fields = ('title', 'description', 'note', 'site_name')
+    list_editable = ('note',)
+    list_per_page = 30
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
-admin.site.register(Metadata)
+admin.site.register(Metadata, MetadataAdmin)
 
 notify.short_description = 'Line・Emailに転載する'
