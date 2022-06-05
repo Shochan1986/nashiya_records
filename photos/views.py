@@ -36,7 +36,13 @@ def getChildrenImages(request):
                 Q(content_rt__icontains=query) |
                 Q(comments__author__icontains=query) |
                 Q(comments__text__icontains=query) |
-                Q(tags__name__icontains=query) 
+                Q(tags__name__icontains=query) |
+                Q(content_images__note__icontains=query) |
+                Q(metadata__title__icontains=query) |
+                Q(metadata__description__icontains=query) |
+                Q(metadata__site_name__icontains=query) |
+                Q(metadata__note__icontains=query) 
+
             )
     images = Image.objects.filter(queryset).distinct().order_by('-date')
     page = request.query_params.get('page')
@@ -773,4 +779,12 @@ def getLatestTag(request):
 def getLatestMetadata(request):
     meta = Metadata.objects.latest('id')
     serializer = MetadataSerializer(meta, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getNewAlbum(request):
+    album = Image.objects.all().order_by('-date')[:3]
+    serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)

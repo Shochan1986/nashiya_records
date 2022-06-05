@@ -12,6 +12,7 @@ from photos.views import (
     getAllImages,
     getLatestImage,
     deleteAlbum,
+    getNewAlbum,
 
     createAlbum,
     updateAlbum,
@@ -60,6 +61,7 @@ urlpatterns = [
     path('latest/', getLatestImage),
     path('tags-latest/', getLatestTag),
     path('meta-latest/', getLatestMetadata),
+    path('new/', getNewAlbum),
 
     path('tags/', getTagsList),
     path('all-tags/', getAllTags),
