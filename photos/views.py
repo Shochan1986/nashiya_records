@@ -785,6 +785,6 @@ def getLatestMetadata(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getNewAlbum(request):
-    album = Image.objects.all().order_by('-date')[:3]
+    album = Image.objects.all().order_by('-date' , '-created')[:3]
     serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)
