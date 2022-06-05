@@ -688,10 +688,13 @@ def updateMetadata(request, pk):
             meta.site_name = page.get_metadatas('site_name')[0]
         else:
             meta.site_name = ''
-        if page.get_metadatas('image') is not None:
-            meta.image_url = page.get_metadatas('image')[0]
+        if meta.image_url:
+            if page.get_metadatas('image') is not None:
+                meta.image_url = page.get_metadatas('image')[0]
+            else:
+                meta.image_url = data['image_url']
         else:
-           meta.image_url = ''
+            meta.image_url = data['image_url']
         if page.get_metadatas('description') is not None:
             meta.description = page.get_metadatas('description')[0]
         else:
@@ -707,10 +710,13 @@ def updateMetadata(request, pk):
             meta.site_name = page.get_metadatas('site_name')[0]
         else:
             meta.site_name = ''
-        if page.get_metadatas('image') is not None:
-            meta.image_url = page.get_metadatas('image')[0]
+        if meta.image_url:
+            if page.get_metadatas('image') is not None:
+                meta.image_url = page.get_metadatas('image')[0]
+            else:
+                meta.image_url = data['image_url']
         else:
-            meta.image_url = ''
+            meta.image_url = data['image_url']
         if page.get_metadatas('description') is not None:
             meta.description = page.get_metadatas('description')[0]
         else:
