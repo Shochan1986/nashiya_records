@@ -758,3 +758,19 @@ def updateTag(request, pk):
     tag.save()
     serializer = TagsSerializer(tag, many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getLatestTag(request):
+    tag = Tags.objects.latest('id')
+    serializer = TagsSerializer(tag, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getLatestMetadata(request):
+    meta = Metadata.objects.latest('id')
+    serializer = MetadataSerializer(meta, many=False)
+    return Response(serializer.data)

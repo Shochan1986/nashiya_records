@@ -35,6 +35,7 @@ from photos.views import (
     getSingleTag,
     updateTag,
     deleteTag,
+    getLatestTag,
 
     createImageComment, 
     getComment,
@@ -45,7 +46,8 @@ from photos.views import (
     line_send,
 
     createMetadata,
-    getMetadata,  
+    getMetadata,
+    getLatestMetadata,  
 )
 
 urlpatterns = [
@@ -54,7 +56,10 @@ urlpatterns = [
     path('blog/', getBlogImages),
     path('special/', getSpecialImages),
     path('list/', getListImages),
+
     path('latest/', getLatestImage),
+    path('tags-latest/', getLatestTag),
+    path('meta-latest/', getLatestMetadata),
 
     path('tags/', getTagsList),
     path('all-tags/', getAllTags),
