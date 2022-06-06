@@ -3,12 +3,10 @@ from photos.views import (
     deleteAlbum,
     deleteMetadata,
     deleteTag,
+    
     getChildrenImages,
     getChildrenImage,
-    getBlogImages,
     getMetaFamily,
-    getSpecialImages,
-    getGalleryImages,
     getListImages,
     getAllImages,
     getLatestImage,
@@ -56,8 +54,6 @@ from photos.views import (
 urlpatterns = [
     path('', getChildrenImages),
     
-    path('blog/', getBlogImages),
-    path('special/', getSpecialImages),
     path('list/', getListImages),
 
     path('latest/', getLatestImage),
@@ -69,7 +65,6 @@ urlpatterns = [
     path('all-tags/', getAllTags),
     path('tags-create/', createTag),
 
-    path('gallery/', getGalleryImages),
     path('posts/', getTagsPosts),
 
     path('upload/', uploadAlbumImage),
