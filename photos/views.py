@@ -44,7 +44,7 @@ def getChildrenImages(request):
                 Q(metadata__note__icontains=query) 
 
             )
-    images = Image.objects.filter(queryset).distinct().order_by('-date')
+    images = Image.objects.filter(queryset).distinct().order_by('-date', '-created')
     page = request.query_params.get('page')
     paginator = Paginator(images, 24, orphans=2)
     try:
