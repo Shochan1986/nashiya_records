@@ -3,7 +3,7 @@ from photos.views import (
     deleteAlbum,
     deleteMetadata,
     deleteTag,
-    
+
     getChildrenImages,
     getChildrenImage,
     getMetaFamily,
@@ -47,8 +47,9 @@ from photos.views import (
 
     createMetadata,
     getMetadata,
-    getLatestMetadata,
     getMetaFamily,  
+
+    getNewComments,
 )
 
 urlpatterns = [
@@ -58,7 +59,8 @@ urlpatterns = [
 
     path('latest/', getLatestImage),
     path('tags-latest/', getLatestTag),
-    path('meta-latest/', getLatestMetadata),
+    
+    path('new-comments/', getNewComments),
     path('new/', getNewAlbum),
 
     path('tags/', getTagsList),

@@ -118,7 +118,7 @@ class Comment(models.Model):
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
 
     class Meta:
-        ordering = ['-created']
+        ordering = ['created']
         verbose_name = ('コメント')
         verbose_name_plural = ('コメント')
 

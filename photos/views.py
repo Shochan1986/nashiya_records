@@ -615,9 +615,11 @@ def getLatestTag(request):
 
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
-def getLatestMetadata(request):
-    meta = Metadata.objects.latest('id')
-    serializer = MetadataSerializer(meta, many=False)
+def getNewComments(request):
+    comments = Comment.objects \
+        .filter(created__gte=datetime.today()-timedelta(days=2)) \
+        .order_by('-created')[:3]
+    serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
 
