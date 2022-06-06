@@ -626,7 +626,8 @@ def getNewComments(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getNewAlbum(request):
-    album = Image.objects.all().order_by('-date' , '-created')[:3]
+    album = Image.objects.filter(created__gte=datetime.today()-timedelta(days=3)) \
+        .order_by('-date' , '-created')[:3]
     serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)
 
