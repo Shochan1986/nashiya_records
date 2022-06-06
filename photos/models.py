@@ -187,6 +187,7 @@ class Metadata(models.Model):
     note = models.TextField('メモ', null=True, blank=True)
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
     updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+    family = models.BooleanField('手作り', default=False, null=True)
 
     class Meta:
         ordering = ['-created']

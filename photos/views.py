@@ -568,46 +568,27 @@ def createMetadata(request):
         album = Image.objects.get(id=data['album'])
     except Image.DoesNotExist:
         album = None
-        pass
-    if album:
-            instance = Metadata()
-            instance.album = album
-            instance.note = data['note']
-            instance.site_url = data['site_url']
-            page = metadata_parser.MetadataParser(data['site_url'])
-            instance.title = page.get_metadatas('title')[0]
-            if page.get_metadatas('site_name') is not None:
-                instance.site_name = page.get_metadatas('site_name')[0]
-            else:
-                pass
-            if page.get_metadatas('image') is not None:
-                instance.image_url = page.get_metadatas('image')[0]
-            else:
-                pass
-            if page.get_metadatas('description') is not None:
-                instance.description = page.get_metadatas('description')[0]
-            else:
-                pass
-            instance.save()
+
+    instance = Metadata()
+    instance.album = album
+    instance.note = data['note']
+    instance.family = data['family']
+    instance.site_url = data['site_url']
+    page = metadata_parser.MetadataParser(data['site_url'])
+    instance.title = page.get_metadatas('title')[0]
+    if page.get_metadatas('site_name') is not None:
+        instance.site_name = page.get_metadatas('site_name')[0]
     else:
-            instance = Metadata()
-            instance.site_url = data['site_url']
-            instance.note = data['note']
-            page = metadata_parser.MetadataParser(data['site_url'])
-            instance.title = page.get_metadatas('title')[0]
-            if page.get_metadatas('site_name') is not None:
-                instance.site_name = page.get_metadatas('site_name')[0]
-            else:
-                pass
-            if page.get_metadatas('image') is not None:
-                instance.image_url = page.get_metadatas('image')[0]
-            else:
-                pass
-            if page.get_metadatas('description') is not None:
-                instance.description = page.get_metadatas('description')[0]
-            else:
-                pass
-            instance.save()
+        pass
+    if page.get_metadatas('image') is not None:
+        instance.image_url = page.get_metadatas('image')[0]
+    else:
+        pass
+    if page.get_metadatas('description') is not None:
+        instance.description = page.get_metadatas('description')[0]
+    else:
+        pass
+    instance.save()
     return Response('メタデータがアップロードされました')
 
 
@@ -677,51 +658,28 @@ def updateMetadata(request, pk):
         album = Image.objects.get(id=data['album'])
     except Image.DoesNotExist:
         album = None
-        pass
-    if album:
-        meta.album = album
-        meta.note = data['note']
-        meta.site_url = data['site_url']
-        page = metadata_parser.MetadataParser(data['site_url'])
-        meta.title = page.get_metadatas('title')[0]
-        if page.get_metadatas('site_name') is not None:
-            meta.site_name = page.get_metadatas('site_name')[0]
-        else:
-            meta.site_name = ''
-        if meta.image_url:
-            if page.get_metadatas('image') is not None:
-                meta.image_url = page.get_metadatas('image')[0]
-            else:
-                meta.image_url = data['image_url']
-        else:
-            meta.image_url = data['image_url']
-        if page.get_metadatas('description') is not None:
-            meta.description = page.get_metadatas('description')[0]
-        else:
-            meta.description = ''
-        meta.save()
+    meta.album = album
+    meta.note = data['note']
+    meta.family = data['family']
+    meta.site_url = data['site_url']
+    page = metadata_parser.MetadataParser(data['site_url'])
+    meta.title = page.get_metadatas('title')[0]
+    if page.get_metadatas('site_name') is not None:
+        meta.site_name = page.get_metadatas('site_name')[0]
     else:
-        meta.album = None
-        meta.note = data['note']
-        meta.site_url = data['site_url']
-        page = metadata_parser.MetadataParser(data['site_url'])
-        meta.title = page.get_metadatas('title')[0]
-        if page.get_metadatas('site_name') is not None:
-            meta.site_name = page.get_metadatas('site_name')[0]
-        else:
-            meta.site_name = ''
-        if meta.image_url:
-            if page.get_metadatas('image') is not None:
-                meta.image_url = page.get_metadatas('image')[0]
-            else:
-                meta.image_url = data['image_url']
+        meta.site_name = ''
+    if meta.image_url:
+        if page.get_metadatas('image') is not None:
+            meta.image_url = page.get_metadatas('image')[0]
         else:
             meta.image_url = data['image_url']
-        if page.get_metadatas('description') is not None:
-            meta.description = page.get_metadatas('description')[0]
-        else:
-            meta.description = ''
-        meta.save()
+    else:
+        meta.image_url = data['image_url']
+    if page.get_metadatas('description') is not None:
+        meta.description = page.get_metadatas('description')[0]
+    else:
+        meta.description = ''
+    meta.save()
     serializer = MetadataSerializer(meta, many=False)
     return Response(serializer.data)
 

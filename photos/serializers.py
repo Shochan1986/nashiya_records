@@ -30,7 +30,7 @@ class MetadataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Metadata
-        fields = ['id', 'site_url', 'title', 'image_url', 'note',
+        fields = ['id', 'site_url', 'title', 'image_url', 'note', 'family',
             'description', 'created', 'updated', 'site_name',
             'album', 'album_id', 'album_title']
 
