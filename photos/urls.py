@@ -6,6 +6,7 @@ from photos.views import (
     getChildrenImages,
     getChildrenImage,
     getBlogImages,
+    getMetaFamily,
     getSpecialImages,
     getGalleryImages,
     getListImages,
@@ -48,7 +49,8 @@ from photos.views import (
 
     createMetadata,
     getMetadata,
-    getLatestMetadata,  
+    getLatestMetadata,
+    getMetaFamily,  
 )
 
 urlpatterns = [
@@ -74,6 +76,7 @@ urlpatterns = [
 
     path('meta-create/', createMetadata),
     path('meta/', getMetadata),
+    path('meta-family/', getMetaFamily),
 
     path('create-album/', createAlbum),
     path('all-images/', getAllImages),

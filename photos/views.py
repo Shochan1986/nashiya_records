@@ -752,3 +752,11 @@ def getNewAlbum(request):
     album = Image.objects.all().order_by('-date' , '-created')[:3]
     serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getMetaFamily(request):
+    data = Metadata.objects.filter(family=True).order_by('-id')
+    serializer = MetadataSerializer(data, many=True)
+    return Response(serializer.data)
