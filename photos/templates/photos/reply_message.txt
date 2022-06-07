@@ -1,0 +1,10 @@
+「{{ writer }}」さんのコメントに「{{replier}}」さんが返信しました。
+アルバム「{{ album.title }}」
+
+{% if text %}
+内容：
+{{ text|truncatechars:70 }}
+{% endif %}
+
+詳しくは、以下のURLからご確認ください。
+https://children-reactjs.netlify.app/?redirect=photo/{{album.id}}
