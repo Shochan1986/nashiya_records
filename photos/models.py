@@ -126,6 +126,24 @@ class Comment(models.Model):
         return self.text
 
 
+class Reply(models.Model):
+    comment = models.ForeignKey(
+        Comment, on_delete=models.CASCADE, related_name='replies', verbose_name="コメント"
+    )
+    author = models.CharField(max_length=200, verbose_name=('投稿者'), null=True)
+    text = models.TextField(verbose_name=('本文'), null=True)
+    created = models.DateTimeField(auto_now_add=True, verbose_name=('作成日時'), null=True)
+    updated = models.DateTimeField('更新日時', auto_now=True, blank=True, null=True, )
+
+    class Meta:
+        ordering = ['created']
+        verbose_name = ('返信')
+        verbose_name_plural = ('返信')
+
+    def __str__(self):
+        return self.text
+
+
 class AlbumLike(models.Model):
     user = models.CharField('ユーザー', null=True, max_length=300, blank=True)
     album = models.ForeignKey(Image, on_delete=models.CASCADE, null=True, related_name='likes', verbose_name='アルバム')

@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from photos.models import Image, Comment, AlbumLike, Tags, ContentImage, Metadata
+from photos.models import (
+    Image, Comment, AlbumLike, Tags, 
+    Reply, ContentImage, Metadata
+    )
 from django.utils.html import linebreaks, urlize
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
@@ -264,9 +267,9 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         attrs.pop("recaptcha")
         return attrs
-    
 
-class CommentSerializer(serializers.ModelSerializer):
+
+class ReplySerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="comment")
 
@@ -274,13 +277,36 @@ class CommentSerializer(serializers.ModelSerializer):
         return urlize(linebreaks(obj.text))
 
     class Meta:
-        model = Comment
-        fields = ['id', 'image', 'author', 
+        model = Reply
+        fields = ['id', 'comment', 'author', 
             'text', 'created', 'main_text', 'recaptcha']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
-        return 
+        return
+    
+
+class CommentSerializer(serializers.ModelSerializer):
+    main_text = serializers.SerializerMethodField(read_only=True)
+    replies = serializers.SerializerMethodField(read_only=True) 
+    recaptcha = ReCaptchaV3Field(action="comment")
+
+    def get_main_text(self, obj):  
+        return urlize(linebreaks(obj.text))
+
+    def get_replies(self, obj):
+        replies = obj.replies.all()
+        serializer = ReplySerializer(replies, many=True)
+        return serializer.data
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'image', 'author', 'replies',
+            'text', 'created', 'main_text', 'recaptcha']
+
+    def validate(self, attrs):
+        attrs.pop("recaptcha")
+        return  
         
 
 class ImageTitleSerializer(serializers.ModelSerializer):

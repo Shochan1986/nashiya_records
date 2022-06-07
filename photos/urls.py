@@ -17,6 +17,9 @@ from photos.views import (
     updateAlbum,
     uploadAlbumImage,
 
+    createCommentReply,
+    getReply,
+
     createContentImages,
     getContentImages,
     getContentListImages,
@@ -99,7 +102,9 @@ urlpatterns = [
     path('<str:pk>/', getChildrenImage),
 
     path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
+    path('cm/<str:pk>/replies/', createCommentReply, name="create-reply"),
     path('comments/<str:pk>/', getComment),
+    path('replies/<str:pk>/', getReply),
 
     path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
 

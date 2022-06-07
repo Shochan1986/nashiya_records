@@ -1,4 +1,5 @@
-from photos.models import Image, Comment, AlbumLike, Tags, ContentImage, Metadata
+from photos.models import (Image, Comment, AlbumLike, 
+    Reply, Tags, ContentImage, Metadata)
 from photos.serializers import (
     ChildrenImageSerializer, 
     CommentSerializer, 
@@ -7,6 +8,7 @@ from photos.serializers import (
     ImageTitleSerializer,
     AlbumSerializer,
     MetadataSerializer,
+    ReplySerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -681,3 +683,24 @@ def getMetaFamily(request):
             'end': end_index,
         }
     )
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createCommentReply(request, pk):
+    data = request.data
+    comment = Comment.objects.get(id=pk)
+    Reply.objects.create(
+        comment=comment,
+        author=data['user'],
+        text=data['text'],
+    )
+    return Response({'detail': '返信が追加されました'})
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getReply(request, pk):
+    reply = Reply.objects.get(id=pk)
+    serializer = ReplySerializer(reply, many=False)
+    return Response(serializer.data)

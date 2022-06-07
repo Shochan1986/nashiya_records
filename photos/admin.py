@@ -1,5 +1,8 @@
 from django.contrib import admin
-from photos.models import Image, Comment, ContentImage, AlbumLike, Tags, Metadata
+from photos.models import (
+    Image, Comment, ContentImage, 
+    AlbumLike, Tags, Metadata, Reply,
+)
 from django.utils.safestring import mark_safe
 
 
@@ -29,6 +32,11 @@ class TagsAdmin(admin.ModelAdmin):
 
 class CommentInline(admin.TabularInline):
     model = Comment
+    extra = 1
+
+
+class ReplyInline(admin.TabularInline):
+    model = Reply
     extra = 1
 
 
@@ -69,6 +77,15 @@ class CommentAdmin(admin.ModelAdmin):
     model = Comment
     list_display = ('image', 'author', 'text')
     search_fields = ('image__title', 'author', 'text')
+    inlines = [
+        ReplyInline
+    ]
+
+
+class ReplyAdmin(admin.ModelAdmin):
+    model = Reply
+    list_display = ('author', 'text')
+    search_fields = ('author', 'text')
 
 
 class ContentImageAdmin(admin.ModelAdmin):
@@ -95,6 +112,7 @@ class MetadataAdmin(admin.ModelAdmin):
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Reply, ReplyAdmin)
 admin.site.register(AlbumLike)
 admin.site.register(Tags, TagsAdmin)
 admin.site.register(Metadata, MetadataAdmin)
