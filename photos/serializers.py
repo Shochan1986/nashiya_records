@@ -86,7 +86,11 @@ class ContentImageSerializer(serializers.ModelSerializer):
         return obj.content_image.build_url(secure=True)
 
     def get_main_text(self, obj):  
-        return urlize(linebreaks(obj.note))
+        if obj.note is not None:
+            return urlize(linebreaks(obj.note))
+        else:
+            return None
+
 
     def to_representation(self, instance):
         representation = super(ContentImageSerializer, self).to_representation(instance)
