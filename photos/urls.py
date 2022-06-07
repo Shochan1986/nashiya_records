@@ -102,7 +102,7 @@ urlpatterns = [
     path('<str:pk>/', getChildrenImage),
 
     path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
-    path('cm/<str:pk>/replies/', createCommentReply, name="create-reply"),
+    path('comments/<str:pk>/replies/', createCommentReply, name="create-reply"),
     path('comments/<str:pk>/', getComment),
     path('replies/<str:pk>/', getReply),
 
