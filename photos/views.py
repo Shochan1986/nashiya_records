@@ -483,7 +483,12 @@ def getMetadata(request):
     )
     data = Metadata.objects.filter(queryset).distinct().order_by('-created')
     page = request.query_params.get('page')
-    paginator = Paginator(data, 24, orphans=4)
+    paginator = Paginator(
+        data,
+        # 2, 
+        24, 
+        orphans=4
+    )
     try:
         data = paginator.page(page)
     except PageNotAnInteger:
@@ -635,6 +640,44 @@ def getNewAlbum(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getMetaFamily(request):
-    data = Metadata.objects.filter(family=True).order_by('-album__date', '-album__created')
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+        Q(site_url__icontains=query) |
+        Q(site_name__icontains=query) |
+        Q(title__icontains=query) |
+        Q(note__icontains=query) |
+        Q(description__icontains=query) |
+        Q(album__title__icontains=query) 
+    )
+    data = Metadata.objects.filter(family=True).filter(queryset).distinct().order_by('-album__date', '-album__created')
+    page = request.query_params.get('page')
+    paginator = Paginator(
+        data, 
+        # 2,
+        24, 
+        orphans=2,
+    )
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = data.start_index()
+    end_index = data.end_index()
     serializer = MetadataSerializer(data, many=True)
-    return Response(serializer.data)
+    return Response(
+        {
+            'data': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
