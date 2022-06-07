@@ -56,7 +56,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
     content_image = serializers.SerializerMethodField(read_only=True)
     thumbnail = serializers.SerializerMethodField(read_only=True)
     blur = serializers.SerializerMethodField(read_only=True)
-
+    main_text = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
         if obj.image:
@@ -84,6 +84,9 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     def get_blur(self, obj):
         return obj.content_image.build_url(secure=True)
+
+    def get_main_text(self, obj):  
+        return urlize(linebreaks(obj.note))
 
     def to_representation(self, instance):
         representation = super(ContentImageSerializer, self).to_representation(instance)
@@ -116,7 +119,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentImage
         fields = ['id', 'image', 'content_image', 'note', 'created', 'updated',
-            'thumbnail' ,'album', 'album_id', 'album_title', 'blur']
+            'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 'main_text']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):
