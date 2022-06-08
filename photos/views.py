@@ -345,7 +345,10 @@ def getContentListImages(request):
         Q(image__title__icontains=query) |
         Q(content_image__icontains=query) 
     )
-    images = ContentImage.objects.filter(queryset).distinct().order_by('-id')
+    images = ContentImage.objects.filter(queryset).distinct() \
+        .annotate(num_comments=Count('comment')) \
+        .filter(num_comments=0) \
+        .order_by('-created', '-id')
     page = request.query_params.get('page')
     paginator = Paginator(images, 48, orphans=4)
     try:
