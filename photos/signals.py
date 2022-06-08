@@ -118,7 +118,7 @@ def album_like_create_notification(sender, instance, created, **kwargs):
 def comment_image_notification(sender, instance, created, **kwargs):
     try:
         if instance.comment and not instance.reply:
-            message = f'「写真」が投稿されました \n \
+            message = f'写真が投稿されました \n \
             @コメント: 「{instance.comment.author}」{instance.comment.text} \n アルバム: {instance.image.title} \n \
             リンク: https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id}'
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
@@ -151,7 +151,7 @@ def comment_image_notification(sender, instance, created, **kwargs):
 def reply_image_notification(sender, instance, created, **kwargs):
     try:
         if instance.reply:
-            message = f'「写真」が投稿されました \n @コメント:「{instance.comment.author}」 {instance.comment.text} \n\
+            message = f'写真が投稿されました \n @コメント:「{instance.comment.author}」 {instance.comment.text} \n\
             @返信: 「{instance.reply.author}」{instance.reply.text} \n アルバム: {instance.image.title} \n \
             リンク: https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id}'
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
