@@ -43,6 +43,7 @@ class Image(models.Model):
     cimg_is_public = models.BooleanField('ギャラリーの公開', default=True, null=True)
     special = models.BooleanField('父ちゃん日記', default=False, null=True)
     tags = models.ManyToManyField(Tags, blank=True, verbose_name='タグ', related_name='images')
+    draft = models.BooleanField('下書き', default=False, null=True)
     image_one = CloudinaryField(
         null=True, 
         verbose_name=('画像①'),
@@ -78,10 +79,7 @@ class Image(models.Model):
         verbose_name_plural = '投稿'
 
     def line_push(self, request):
-        if self.content and self.ct_is_public:
-            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id} \n ブログ記事あり！チェック！'
-        else:
-            message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
+        message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(

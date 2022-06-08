@@ -20,8 +20,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework import status
 from django.db.models import Q, Count
 from django.utils import timezone
-from django.utils.timezone import localtime
-from datetime import timedelta, datetime
+from datetime import timedelta
 import metadata_parser
 
 
@@ -46,7 +45,7 @@ def getChildrenImages(request):
                 Q(metadata__note__icontains=query) 
 
             )
-    images = Image.objects.filter(queryset).distinct().order_by('-date', '-created')
+    images = Image.objects.filter(draft=False).filter(queryset).distinct().order_by('-date', '-created')
     page = request.query_params.get('page')
     paginator = Paginator(images, 24, orphans=2)
     try:
@@ -88,7 +87,7 @@ def getListImages(request):
                 Q(comments__text__icontains=query) |
                 Q(tags__name__icontains=query) 
             )
-    images = Image.objects.filter(queryset).distinct().order_by('-date')
+    images = Image.objects.filter(queryset).distinct().order_by('-date', '-created')
 
     page = request.query_params.get('page')
     paginator = Paginator(images, 50, orphans=2)
@@ -189,7 +188,7 @@ def getTagsList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentImages(request):
-    c_images = ContentImage.objects.filter(image__date__gt=datetime.today()-timedelta(days=120)).order_by('-image__date', '-image__created')
+    c_images = ContentImage.objects.filter(image__date__gt=timezone.now().date()-timedelta(days=120)).order_by('-image__date', '-image__created')
     serializer = ContentImageSerializer(c_images, many=True)
     return Response(serializer.data)
 
@@ -202,15 +201,21 @@ def getChildrenImage(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getIsPublicAlbum(request, pk):
+    image = Image.objects.get(id=pk, draft=False)
+    serializer = ChildrenImageSerializer(image, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createImageComment(request, pk):
-    # user = request.user
     data = request.data
     image = Image.objects.get(id=pk)
     Comment.objects.create(
         image=image,
-        # author=user.first_name,
         author=data['user'],
         text=data['text'],
     )
@@ -274,7 +279,8 @@ def createContentImages(request):
 def createAlbum(request):
     album = Image.objects.create(
         title='作成中',
-        date=localtime(timezone.now()).date(),
+        date=timezone.now().date(),
+        draft=True,
     )
     album.save()
     serializer = ChildrenImageSerializer(album, many=False)
@@ -292,6 +298,7 @@ def updateAlbum(request, pk):
     album.special = data['special']
     album.content = data['blog']
     album.ct_is_public = data['ctIsPublic']
+    album.draft = data['draft']
     tags_list = []
     tags_ids = data['tags']
     album.tags.clear()
@@ -624,7 +631,7 @@ def getLatestTag(request):
 @permission_classes([IsAdminUser])
 def getNewComments(request):
     comments = Comment.objects \
-        .filter(created__gte=datetime.today()-timedelta(days=2)) \
+        .filter(created__gte=timezone.now().date()-timedelta(days=2)) \
         .order_by('-created')[:3]
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
@@ -633,7 +640,7 @@ def getNewComments(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getNewAlbum(request):
-    album = Image.objects.filter(created__gte=datetime.today()-timedelta(days=3)) \
+    album = Image.objects.filter(created__gte=timezone.now().date()-timedelta(days=3)) \
         .order_by('-date' , '-created')[:3]
     serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)

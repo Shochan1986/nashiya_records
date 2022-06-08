@@ -12,6 +12,7 @@ from photos.views import (
     getLatestImage,
     deleteAlbum,
     getNewAlbum,
+    getIsPublicAlbum,
 
     createAlbum,
     updateAlbum,
@@ -100,6 +101,7 @@ urlpatterns = [
     path('delete/<str:pk>/', deleteAlbum),
 
     path('<str:pk>/', getChildrenImage),
+    path('<str:pk>/public/', getIsPublicAlbum),
 
     path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
     path('comments/<str:pk>/replies/', createCommentReply, name="create-reply"),
