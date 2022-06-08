@@ -123,7 +123,8 @@ def getTagsPosts(request):
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
-    images = Image.objects.filter(tags__name=query).order_by('-date')
+    images = Image.objects.filter(draft=False) \
+        .filter(tags__name=query).order_by('-date')
 
     page = request.query_params.get('page')
     paginator = Paginator(images, 50, orphans=5)
@@ -158,7 +159,8 @@ def getTagsList(request):
     if query == None:
         query = ''
     queryset = Q(name__icontains=query)
-    tags = Tags.objects.filter(queryset).distinct().annotate(posts=Count('images')).order_by('-posts')
+    tags = Tags.objects.filter(images__draft=False) \
+        .filter(queryset).distinct().annotate(posts=Count('images')).order_by('-posts')
     page = request.query_params.get('page')
     paginator = Paginator(tags, 25, orphans=2)
     try:
