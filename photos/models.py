@@ -165,6 +165,22 @@ class ContentImage(models.Model):
         related_name='content_images',
         verbose_name='アルバム'
     )
+    comment = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='content_images',
+        verbose_name='コメント'
+    )
+    reply = models.ForeignKey(
+        Reply,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='content_images',
+        verbose_name='返信'
+    )
     content_image = CloudinaryField(
         blank=True, 
         null=True, 

@@ -53,10 +53,12 @@ class ContentImageSerializer(serializers.ModelSerializer):
     album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
-    content_image = serializers.SerializerMethodField(read_only=True)
+    cImage = serializers.SerializerMethodField(read_only=True)
     thumbnail = serializers.SerializerMethodField(read_only=True)
     blur = serializers.SerializerMethodField(read_only=True)
     main_text = serializers.SerializerMethodField(read_only=True)
+    comment_bool = serializers.SerializerMethodField(read_only=True)
+    reply_bool = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
         if obj.image:
@@ -76,7 +78,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
         else:
             return None
 
-    def get_content_image(self, obj):
+    def get_cImage(self, obj):
         return obj.content_image.build_url(secure=True)
 
     def get_thumbnail(self, obj):
@@ -90,6 +92,18 @@ class ContentImageSerializer(serializers.ModelSerializer):
             return urlize(linebreaks(obj.note))
         else:
             return None
+
+    def get_comment_bool(self, obj):  
+        if obj.comment:
+            return True
+        else:
+            return False
+
+    def get_reply_bool(self, obj):  
+        if obj.reply:
+            return True
+        else:
+            return False
 
 
     def to_representation(self, instance):
@@ -122,7 +136,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'content_image', 'note', 'created', 'updated',
+        fields = ['id', 'image', 'cImage', 'note', 'created', 'updated', 'comment_bool', 'reply_bool',
             'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 'main_text']
 
 
@@ -278,14 +292,20 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
 class ReplySerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True) 
-    recaptcha = ReCaptchaV3Field(action="comment")
+    content_images = serializers.SerializerMethodField(read_only=True)
+    recaptcha = ReCaptchaV3Field(action="reply")
 
     def get_main_text(self, obj):  
         return urlize(linebreaks(obj.text))
 
+    def get_content_images(self, obj):
+        cImages = obj.content_images.all()
+        serializer = ContentImageSerializer(cImages, many=True)
+        return serializer.data
+
     class Meta:
         model = Reply
-        fields = ['id', 'comment', 'author', 
+        fields = ['id', 'comment', 'author', 'content_images',
             'text', 'created', 'main_text', 'recaptcha']
 
     def validate(self, attrs):
@@ -296,6 +316,7 @@ class ReplySerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     main_text = serializers.SerializerMethodField(read_only=True)
     replies = serializers.SerializerMethodField(read_only=True) 
+    content_images = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="comment")
 
     def get_main_text(self, obj):  
@@ -306,9 +327,14 @@ class CommentSerializer(serializers.ModelSerializer):
         serializer = ReplySerializer(replies, many=True)
         return serializer.data
 
+    def get_content_images(self, obj):
+        cImages = obj.content_images.all()
+        serializer = ContentImageSerializer(cImages, many=True)
+        return serializer.data
+
     class Meta:
         model = Comment
-        fields = ['id', 'image', 'author', 'replies',
+        fields = ['id', 'image', 'author', 'replies', 'content_images',
             'text', 'created', 'main_text', 'recaptcha']
 
     def validate(self, attrs):

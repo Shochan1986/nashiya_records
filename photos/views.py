@@ -261,20 +261,29 @@ def createContentImages(request):
     except Image.DoesNotExist:
         album = None
         pass
+    try:
+        comment = Comment.objects.get(id=data['comment'])
+    except Comment.DoesNotExist:
+        comment = None
+        pass
+    try:
+        reply = Reply.objects.get(id=data['reply'])
+    except Reply.DoesNotExist:
+        reply = None
+        pass
     images = request.FILES.getlist('images')
-    if album:
-        for photo in images:
-            instance = ContentImage()
+    
+    for photo in images:
+        instance = ContentImage()
+        if album:
             instance.image = album
-            instance.content_image = photo
-            request = request
-            instance.save()
-    else:
-        for photo in images:
-            instance = ContentImage()
-            instance.content_image = photo
-            request = request
-            instance.save()
+        if comment:
+            instance.comment = comment
+        if reply:
+            instance.reply = reply
+        instance.content_image = photo
+        request = request
+        instance.save()
     return Response('挿入画像がアップロードされました')
 
 
