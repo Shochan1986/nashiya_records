@@ -6,10 +6,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from linebot import LineBotApi, WebhookHandler
 from linebot.models import (
-    TextSendMessage, 
+    TextSendMessage,
+    ImageSendMessage, 
 )
+from django.core.mail import EmailMultiAlternatives
 from farm.models import LinePush
-from photos.models import Comment, AlbumLike, Reply
+from photos.models import Comment, AlbumLike, ContentImage, Reply, ContentImage
 from environs import Env 
 
 env = Env() 
@@ -109,4 +111,68 @@ def album_like_create_notification(sender, instance, created, **kwargs):
             for user in User.objects.filter(is_staff=True):
                 bcc.append(user.email)
             email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
+
+
+@receiver(post_save, sender=ContentImage)
+def comment_image_notification(sender, instance, created, **kwargs):
+    try:
+        if instance.comment and not instance.reply:
+            message = f'「写真」が投稿されました \n \
+                @コメント: {instance.comment.text} \n アルバム: {instance.image.title}'
+            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=instance.content_image.build_url(secure=True), 
+                            preview_image_url=instance.content_image.build_url(secure=True)) 
+                        ])
+    except:
+        if instance.comment and not instance.reply:
+            subject =  f'「写真」@コメント アルバム : {instance.image.title}'
+            message = f'「写真」@コメント: {instance.comment.text} \n アルバム: {instance.image.title}'
+            image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
+                <img src={instance.content_image.build_url(secure=True)} alt={instance.content_image} \
+                style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
+            email.attach_alternative(image_html, "text/html")
+            email.send()
+
+
+@receiver(post_save, sender=ContentImage)
+def reply_image_notification(sender, instance, created, **kwargs):
+    try:
+        if instance.reply:
+            message = f'「写真」が投稿されました \n @コメント: {instance.comment.text} \n\
+                @返信: {instance.reply.text} \n アルバム: {instance.image.title}'
+            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=instance.content_image.build_url(secure=True), 
+                            preview_image_url=instance.content_image.build_url(secure=True)) 
+                        ])
+    except:
+        if instance.reply:
+            subject =  f'「写真」@返信 アルバム : {instance.image.title}'
+            message = f'「写真」@返信: {instance.reply.text} \n アルバム: {instance.image.title}'
+            image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
+                <img src={instance.content_image.build_url(secure=True)} alt={instance.content_image} \
+                style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
+            email.attach_alternative(image_html, "text/html")
             email.send()
