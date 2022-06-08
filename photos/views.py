@@ -188,8 +188,9 @@ def getTagsList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentImages(request):
-    c_images = ContentImage.objects\
-        .filter(image__date__gt=timezone.now().date()-timedelta(days=120)).order_by('-image__date', '-image__created')
+    c_images = ContentImage.objects.filter(image__draft=False)\
+        .filter(image__date__gt=timezone.now().date()-timedelta(days=180)) \
+        .order_by('-image__date', '-image__created')
     serializer = ContentImageSerializer(c_images, many=True)
     return Response(serializer.data)
 
