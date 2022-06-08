@@ -188,7 +188,8 @@ def getTagsList(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentImages(request):
-    c_images = ContentImage.objects.filter(image__date__gt=timezone.now().date()-timedelta(days=120)).order_by('-image__date', '-image__created')
+    c_images = ContentImage.objects\
+        .filter(image__date__gt=timezone.now().date()-timedelta(days=120)).order_by('-image__date', '-image__created')
     serializer = ContentImageSerializer(c_images, many=True)
     return Response(serializer.data)
 
@@ -630,7 +631,7 @@ def getLatestTag(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getNewComments(request):
-    comments = Comment.objects \
+    comments = Comment.objects.filter(image__draft=False) \
         .filter(created__gte=timezone.now().date()-timedelta(days=2)) \
         .order_by('-created')[:3]
     serializer = CommentSerializer(comments, many=True)
@@ -640,7 +641,8 @@ def getNewComments(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getNewAlbum(request):
-    album = Image.objects.filter(created__gte=timezone.now().date()-timedelta(days=3)) \
+    album = Image.objects.filter(draft=False) \
+        .filter(created__gte=timezone.now().date()-timedelta(days=3)) \
         .order_by('-date' , '-created')[:3]
     serializer = AlbumSerializer(album, many=True)
     return Response(serializer.data)
