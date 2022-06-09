@@ -120,8 +120,8 @@ def comment_image_notification(sender, instance, created, **kwargs):
         if instance.comment:
             context = {
                 'album_title': instance.image.title,
-                'author': instance.author,
-                'text': instance.text,
+                'author': instance.comment.author,
+                'text': instance.comment.text,
                 'album_id' : instance.image.id,
             }
             message = render_to_string('photos/comment_photo.txt', context)
@@ -157,12 +157,12 @@ def reply_image_notification(sender, instance, created, **kwargs):
     try:
         if instance.reply:
             context = {
-                'album_title': instance.comment.image.title,
+                'album_title': instance.image.title,
                 'comment_author': instance.comment.author,
                 'comment_text': instance.comment.text,
-                'reply_author': instance.author,
-                'reply_text': instance.text,
-                'album_id' : instance.comment.image.id,
+                'reply_author': instance.reply.author,
+                'reply_text': instance.reply.text,
+                'album_id' : instance.image.id,
             }
             message = render_to_string('photos/reply_photo.txt', context)
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
