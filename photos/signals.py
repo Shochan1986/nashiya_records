@@ -117,7 +117,7 @@ def album_like_create_notification(sender, instance, created, **kwargs):
 @receiver(post_save, sender=ContentImage)
 def comment_image_notification(sender, instance, created, **kwargs):
     try:
-        if instance.comment and not instance.reply:
+        if instance.comment:
             context = {
                 'album_title': instance.image.title,
                 'author': instance.comment.author,
@@ -136,7 +136,7 @@ def comment_image_notification(sender, instance, created, **kwargs):
                             preview_image_url=instance.content_image.build_url(secure=True)) 
                         ])
     except:
-        if instance.comment and not instance.reply:
+        if instance.comment:
             subject =  f'「写真」@コメント アルバム: {instance.image.title}'
             message = f'「写真」@コメント: {instance.comment.text} <br /> アルバム: {instance.image.title}'
             image_html = f"{message} <br /><br /> \
