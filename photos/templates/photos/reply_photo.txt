@@ -2,11 +2,11 @@
 
 返信:
     {{ reply_text|truncatechars:35 }}
-投稿者：{{ reply_author }}
+by {{ reply_author }}
 
 コメント:
     {{ comment_text|truncatechars:35 }}
-投稿者：{{ comment_author }}
+by {{ comment_author }}
 
 アルバム「{{ album_title }}」 
 

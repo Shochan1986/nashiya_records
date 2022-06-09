@@ -2,8 +2,8 @@
 
 コメント:
     {{ text|truncatechars:35 }}
+by {{ author }}
 
-投稿者：{{ author }}
 アルバム「{{ album_title }}」 
 
 詳しくは、以下のURLからご確認ください。
