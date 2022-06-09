@@ -2,12 +2,8 @@
 {{ note }}
 
 返信:
-    {{ reply_text|truncatechars:35 }}
-by {{ reply_author }}
-
-コメント:
-    {{ comment_text|truncatechars:20 }}
-by {{ comment_author }}
+    {{ text|truncatechars:35 }}
+by {{ author }}
 
 アルバム「{{ album_title }}」 
 

@@ -159,10 +159,8 @@ def reply_image_notification(sender, instance, created, **kwargs):
         if instance.reply:
             context = {
                 'album_title': instance.image.title,
-                'comment_author': instance.comment.author,
-                'comment_text': instance.comment.text,
-                'reply_author': instance.reply.author,
-                'reply_text': instance.reply.text,
+                'author': instance.reply.author,
+                'text': instance.reply.text,
                 'album_id' : instance.image.id,
                 'note' : instance.note,
             }
