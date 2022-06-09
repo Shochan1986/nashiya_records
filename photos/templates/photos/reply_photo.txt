@@ -1,11 +1,11 @@
-コメントへの「返信」に写真が投稿されました。
+コメントへの返信に【写真】が投稿されました。
 
 返信:
     {{ reply_text|truncatechars:35 }}
 by {{ reply_author }}
 
 コメント:
-    {{ comment_text|truncatechars:35 }}
+    {{ comment_text|truncatechars:20 }}
 by {{ comment_author }}
 
 アルバム「{{ album_title }}」 
