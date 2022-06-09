@@ -46,6 +46,17 @@ def user_registered_notification(sender, instance, created, **kwargs):
         pass
 
 
+@receiver(post_save, sender=User)
+def user_admin_registered_notification(sender, instance, created, **kwargs):
+    try:
+        if instance.is_staff:
+            message = f'「{instance.first_name}」さんのアカウントが承認されました。'
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    except:
+        pass
+
+
 @receiver(post_delete, sender=User)
 def user_deleted_notification(sender, instance, **kwargs):
     try:
