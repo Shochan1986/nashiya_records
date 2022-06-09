@@ -1,12 +1,11 @@
+import imp
 from django.urls import path
-from photos.views import (
+from photos.views.album_views import (
     deleteAlbum,
-    deleteMetadata,
-    deleteTag,
 
     getChildrenImages,
     getChildrenImage,
-    getMetaFamily,
+
     getListImages,
     getAllImages,
     getLatestImage,
@@ -18,22 +17,15 @@ from photos.views import (
     updateAlbum,
     uploadAlbumImage,
 
+    getTagsPosts,
+)
+from photos.views.general_views import (
+    deleteTag,
+
     createCommentReply,
     getReply,
 
-    createContentImages,
-    getContentImages,
-    getContentListImages,
-    getContentImage,
-    updateContentImage,
-    deleteContentImage,
-
-    updateMetadata,
-    deleteMetadata,
-    getSingleMetadata,
-
     getTagsList,
-    getTagsPosts,
     getAllTags,
     createTag,
     getSingleTag,
@@ -41,19 +33,33 @@ from photos.views import (
     deleteTag,
     getLatestTag,
 
-    createImageComment, 
     getComment,
+    getNewComments,
 
     createAlbumLike,
 
     email_send,
-    line_send,
+    line_send, 
+)
+
+from photos.views.content_views import (
+    createContentImages,
+    getContentImages,
+    getContentListImages,
+    getContentImage,
+    updateContentImage,
+    deleteContentImage,
+    createImageComment,
+)
+
+from photos.views.meta_views import (
+    updateMetadata,
+    deleteMetadata,
+    getSingleMetadata,
 
     createMetadata,
     getMetadata,
-    getMetaFamily,  
-
-    getNewComments,
+    getMetaFamily, 
 )
 
 urlpatterns = [
