@@ -118,9 +118,13 @@ def album_like_create_notification(sender, instance, created, **kwargs):
 def comment_image_notification(sender, instance, created, **kwargs):
     try:
         if instance.comment and not instance.reply:
-            message = f'写真が投稿されました \n \
-        @コメント: 「{instance.comment.author}」{instance.comment.text} \n アルバム: {instance.image.title} \n \
-        リンク: https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id}'
+            context = {
+                'album_title': instance.image.title,
+                'author': instance.author,
+                'text': instance.text,
+                'album_id' : instance.image.id,
+            }
+            message = render_to_string('photos/comment_photo.txt', context)
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(
@@ -133,10 +137,11 @@ def comment_image_notification(sender, instance, created, **kwargs):
                         ])
     except:
         if instance.comment and not instance.reply:
-            subject =  f'「写真」@コメント アルバム : {instance.image.title}'
-            message = f'「写真」@コメント: {instance.comment.text} \n アルバム: {instance.image.title}'
-            image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
-                <img src={instance.content_image.build_url(secure=True)} alt={instance.content_image} \
+            subject =  f'「写真」@コメント アルバム: {instance.image.title}'
+            message = f'「写真」@コメント: {instance.comment.text} <br /> アルバム: {instance.image.title}'
+            image_html = f"{message} <br /><br /> \
+                リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
+                <img src={instance.content_image.build_url(secure=True)} alt={instance.author} \
                 style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
             from_email = settings.DEFAULT_FROM_EMAIL
             bcc = []
@@ -151,9 +156,15 @@ def comment_image_notification(sender, instance, created, **kwargs):
 def reply_image_notification(sender, instance, created, **kwargs):
     try:
         if instance.reply:
-            message = f'写真が投稿されました \n @コメント:「{instance.comment.author}」 {instance.comment.text} \n\
-        @返信: 「{instance.reply.author}」{instance.reply.text} \n アルバム: {instance.image.title} \n \
-        リンク: https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id}'
+            context = {
+                'album_title': instance.comment.image.title,
+                'comment_author': instance.comment.author,
+                'comment_text': instance.comment.text,
+                'reply_author': instance.author,
+                'reply_text': instance.text,
+                'album_id' : instance.comment.image.id,
+            }
+            message = render_to_string('photos/reply_photo.txt', context)
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
             for push in LinePush.objects.filter(unfollow=False):
                 line_bot_api.push_message(
@@ -166,9 +177,10 @@ def reply_image_notification(sender, instance, created, **kwargs):
                         ])
     except:
         if instance.reply:
-            subject =  f'「写真」@返信 アルバム : {instance.image.title}'
-            message = f'「写真」@返信: {instance.reply.text} \n アルバム: {instance.image.title}'
-            image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
+            subject =  f'「写真」@返信 アルバム: {instance.image.title}'
+            message = f'「写真」@返信: {instance.reply.text} <br /> アルバム: {instance.image.title}'
+            image_html = f"{message} <br /><br /> \
+                リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
                 <img src={instance.content_image.build_url(secure=True)} alt={instance.content_image} \
                 style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
             from_email = settings.DEFAULT_FROM_EMAIL
