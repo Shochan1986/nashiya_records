@@ -348,6 +348,8 @@ def getContentListImages(request):
     images = ContentImage.objects.filter(queryset).distinct() \
         .annotate(num_comments=Count('comment')) \
         .filter(num_comments=0) \
+        .annotate(num_replies=Count('reply')) \
+        .filter(num_replies=0) \
         .order_by('-created', '-id')
     page = request.query_params.get('page')
     paginator = Paginator(images, 48, orphans=4)

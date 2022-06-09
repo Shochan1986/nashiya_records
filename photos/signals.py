@@ -141,7 +141,7 @@ def comment_image_notification(sender, instance, created, **kwargs):
             message = f'「写真」@コメント: {instance.comment.text} <br /> アルバム: {instance.image.title}'
             image_html = f"{message} <br /><br /> \
                 リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{instance.image.id} <br /><br /> \
-                <img src={instance.content_image.build_url(secure=True)} alt={instance.author} \
+                <img src={instance.content_image.build_url(secure=True)} alt={instance.content_image} \
                 style='width: 250px; height: 250px;object-fit: cover;border-radius: 5%;' />"
             from_email = settings.DEFAULT_FROM_EMAIL
             bcc = []
