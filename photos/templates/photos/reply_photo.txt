@@ -1,4 +1,5 @@
 コメントへの返信に【写真】が投稿されました。
+{{ note }}
 
 返信:
     {{ reply_text|truncatechars:35 }}

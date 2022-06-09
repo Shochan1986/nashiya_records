@@ -281,6 +281,7 @@ def createContentImages(request):
             instance.comment = comment
         if reply:
             instance.reply = reply
+        instance.note = data['note']
         instance.content_image = photo
         request = request
         instance.save()

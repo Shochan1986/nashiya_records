@@ -123,6 +123,7 @@ def comment_image_notification(sender, instance, created, **kwargs):
                 'author': instance.comment.author,
                 'text': instance.comment.text,
                 'album_id' : instance.image.id,
+                'note' : instance.note,
             }
             message = render_to_string('photos/comment_photo.txt', context)
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
@@ -163,6 +164,7 @@ def reply_image_notification(sender, instance, created, **kwargs):
                 'reply_author': instance.reply.author,
                 'reply_text': instance.reply.text,
                 'album_id' : instance.image.id,
+                'note' : instance.note,
             }
             message = render_to_string('photos/reply_photo.txt', context)
             line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
