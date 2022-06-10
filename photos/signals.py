@@ -124,6 +124,35 @@ def comment_like_create_notification(sender, instance, created, **kwargs):
             email.send()
 
 
+@receiver(post_save, sender=ReplyLike)
+def reply_like_create_notification(sender, instance, created, **kwargs):
+    # try:
+    #     if created:
+    #         context = {
+    #             'album': instance.reply.comment.image,
+    #             'reply': instance.reply,
+    #             'user': instance.user,
+    #         }
+    #         message = render_to_string('photos/reply_like_message.txt', context)
+    #         for push in LinePush.objects.filter(unfollow=False):
+    #             line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    # except:
+        if created:
+            context = {
+                'album': instance.reply.comment.image,
+                'reply': instance.reply,
+                'user': instance.user,
+            }
+            subject =  f'いいね！＠{instance.reply.text[:10]}'
+            message = render_to_string('photos/reply_like_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
+
+
 @receiver(post_save, sender=AlbumLike)
 def album_like_create_notification(sender, instance, created, **kwargs):
     try:
