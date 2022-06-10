@@ -24,6 +24,7 @@ from photos.views.general_views import (
 
     createCommentReply,
     getReply,
+    updateReply,
     deleteReply,
 
     getTagsList,
@@ -37,6 +38,7 @@ from photos.views.general_views import (
     createImageComment,
     getComment,
     getNewComments,
+    updateComment,
     deleteComment,
 
     createAlbumLike,
@@ -117,7 +119,9 @@ urlpatterns = [
     path('comments/<str:pk>/replies/', createCommentReply),
     path('comments/<str:pk>/', getComment),
     path('replies/<str:pk>/', getReply),
+    path('comments/<str:pk>/update', updateComment),
     path('comments/<str:pk>/delete', deleteComment),
+    path('replies/<str:pk>/update', updateReply),
     path('replies/<str:pk>/delete', deleteReply),
 
     path('albums/<str:pk>/album-likes/', createAlbumLike),

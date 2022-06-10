@@ -76,6 +76,17 @@ def getComment(request, pk):
     return Response(serializer.data)
 
 
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateComment(request, pk):
+    data = request.data
+    comment = Comment.objects.get(id=pk)
+    comment.text = data['text']
+    comment.save()
+    serializer = CommentSerializer(comment, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteComment(request, pk):
@@ -243,6 +254,18 @@ def createCommentReply(request, pk):
 @permission_classes([IsAdminUser])
 def getReply(request, pk):
     reply = Reply.objects.get(id=pk)
+    serializer = ReplySerializer(reply, many=False)
+    return Response(serializer.data)
+
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateReply(request, pk):
+    data = request.data
+    reply = Reply.objects.get(id=pk)
+    reply.text = data['text']
+    reply.save()
     serializer = ReplySerializer(reply, many=False)
     return Response(serializer.data)
 
