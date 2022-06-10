@@ -21,25 +21,15 @@ from datetime import timedelta
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getContentImages(request):
-    c_images = ContentImage.objects.filter(image__draft=False)\
-        .filter(image__date__gt=timezone.now().date()-timedelta(days=180)) \
+    c_images = ContentImage.objects.filter(image__draft=False) \
+        .filter(image__date__gt=timezone.now().date()-timedelta(days=90)) \
+        .annotate(num_comments=Count('comment')) \
+        .filter(num_comments=0) \
+        .annotate(num_replies=Count('reply')) \
+        .filter(num_replies=0) \
         .order_by('-image__date', '-image__created')
     serializer = ContentImageSerializer(c_images, many=True)
     return Response(serializer.data)
-
-
-@api_view(['POST'])
-@permission_classes([IsAdminUser])
-def createImageComment(request, pk):
-    data = request.data
-    image = Image.objects.get(id=pk)
-    Comment.objects.create(
-        image=image,
-        author=data['user'],
-        text=data['text'],
-    )
-    return Response({'detail': 'コメントが追加されました'})
-
 
 
 @api_view(['POST'])
@@ -88,12 +78,12 @@ def getContentListImages(request):
         Q(image__title__icontains=query) |
         Q(content_image__icontains=query) 
     )
-    images = ContentImage.objects.filter(queryset).distinct() \
-        .annotate(num_comments=Count('comment')) \
-        .filter(num_comments=0) \
-        .annotate(num_replies=Count('reply')) \
-        .filter(num_replies=0) \
-        .order_by('-created', '-id')
+    images = ContentImage.objects.filter(queryset).distinct().order_by('-created', '-id') 
+        # .annotate(num_comments=Count('comment')) \
+        # .filter(num_comments=0) \
+        # .annotate(num_replies=Count('reply')) \
+        # .filter(num_replies=0) \
+        
     page = request.query_params.get('page')
     paginator = Paginator(images, 48, orphans=4)
     try:

@@ -55,12 +55,33 @@ def getTagsList(request):
     )
 
 
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createImageComment(request, pk):
+    data = request.data
+    image = Image.objects.get(id=pk)
+    Comment.objects.create(
+        image=image,
+        author=data['user'],
+        text=data['text'],
+    )
+    return Response({'detail': 'コメントが追加されました'})
+
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getComment(request, pk):
     comment = Comment.objects.get(id=pk)
     serializer = CommentSerializer(comment, many=False)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    comment.delete()  
+    return Response('コメントが削除されました。')
 
 
 @api_view(['POST'])
@@ -188,3 +209,11 @@ def getReply(request, pk):
     reply = Reply.objects.get(id=pk)
     serializer = ReplySerializer(reply, many=False)
     return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteReply(request, pk):
+    reply = Reply.objects.get(id=pk)
+    reply.delete()  
+    return Response('返信が削除されました。')
