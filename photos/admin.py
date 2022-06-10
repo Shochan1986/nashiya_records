@@ -1,7 +1,7 @@
 from django.contrib import admin
 from photos.models import (
-    Image, Comment, ContentImage, 
-    AlbumLike, Tags, Metadata, Reply,
+    Image, Comment, ContentImage, CommentLike, 
+    AlbumLike, Tags, Metadata, Reply, ReplyLike,
 )
 from django.utils.safestring import mark_safe
 
@@ -44,8 +44,19 @@ class ContentImageInline(admin.TabularInline):
     model = ContentImage
     extra = 1
 
+
 class AlbumLikesInline(admin.TabularInline):
     model = AlbumLike
+    extra = 1
+
+
+class CommentLikesInline(admin.TabularInline):
+    model = CommentLike
+    extra = 1
+
+
+class ReplyLikesInline(admin.TabularInline):
+    model = ReplyLike
     extra = 1
 
 
@@ -78,7 +89,8 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('image', 'author', 'text')
     search_fields = ('image__title', 'author', 'text')
     inlines = [
-        ReplyInline
+        ReplyInline,
+        CommentLikesInline,
     ]
 
 
@@ -86,6 +98,9 @@ class ReplyAdmin(admin.ModelAdmin):
     model = Reply
     list_display = ('author', 'text')
     search_fields = ('author', 'text')
+    inlines = [
+        ReplyLikesInline,
+    ]
 
 
 class ContentImageAdmin(admin.ModelAdmin):
@@ -114,6 +129,8 @@ admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Reply, ReplyAdmin)
 admin.site.register(AlbumLike)
+admin.site.register(CommentLike)
+admin.site.register(ReplyLike)
 admin.site.register(Tags, TagsAdmin)
 admin.site.register(Metadata, MetadataAdmin)
 

@@ -1,6 +1,6 @@
 from photos.models import (
     Image, Comment, AlbumLike, 
-    Reply, Tags
+    Reply, Tags, CommentLike, ReplyLike,
     )
 from photos.serializers import (
     CommentSerializer, 
@@ -100,6 +100,42 @@ def createAlbumLike(request, pk):
             album=album.last(),
         )
         return Response({'detail': 'アルバムに「いいね」が追加されました'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createCommentLike(request, pk):
+    user = request.user
+    comment_id = Comment.objects.get(id=pk)
+    alreadyExists = comment_id.likes.filter(user=user.first_name).exists()
+    if alreadyExists:
+        content = {'detail': 'あなたはすでにこのコメントに「いいね」しています'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        comment = Image.objects.filter(id=pk)
+        CommentLike.objects.create(
+            user=user.first_name,
+            comment=comment.last(),
+        )
+        return Response({'detail': 'コメントに「いいね」が追加されました'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createReplyLike(request, pk):
+    user = request.user
+    reply_id = Reply.objects.get(id=pk)
+    alreadyExists = reply_id.likes.filter(user=user.first_name).exists()
+    if alreadyExists:
+        content = {'detail': 'あなたはすでにこの返信に「いいね」しています'}
+        return Response(content, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        reply = Image.objects.filter(id=pk)
+        ReplyLike.objects.create(
+            user=user.first_name,
+            reply=reply.last(),
+        )
+        return Response({'detail': '返信に「いいね」が追加されました'})
 
 
 @api_view(['GET'])

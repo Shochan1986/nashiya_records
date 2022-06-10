@@ -40,6 +40,8 @@ from photos.views.general_views import (
     deleteComment,
 
     createAlbumLike,
+    createCommentLike,
+    createReplyLike,
 
     email_send,
     line_send, 
@@ -111,14 +113,16 @@ urlpatterns = [
     path('<str:pk>/', getChildrenImage),
     path('<str:pk>/public/', getIsPublicAlbum),
 
-    path('images/<str:pk>/comments/', createImageComment, name="create-comment"),
-    path('comments/<str:pk>/replies/', createCommentReply, name="create-reply"),
+    path('images/<str:pk>/comments/', createImageComment),
+    path('comments/<str:pk>/replies/', createCommentReply),
     path('comments/<str:pk>/', getComment),
     path('replies/<str:pk>/', getReply),
     path('comments/<str:pk>/delete', deleteComment),
     path('replies/<str:pk>/delete', deleteReply),
 
-    path('albums/<str:pk>/album-likes/', createAlbumLike, name="create-album-like"),
+    path('albums/<str:pk>/album-likes/', createAlbumLike),
+    path('albums/<str:pk>/comment-likes/', createCommentLike),
+    path('albums/<str:pk>/reply-likes/', createReplyLike),
 
     path('email/<str:pk>/', email_send),
     path('line/<str:pk>/', line_send),
