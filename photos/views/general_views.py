@@ -112,7 +112,7 @@ def createCommentLike(request, pk):
         content = {'detail': 'あなたはすでにこのコメントに「いいね」しています'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     else:
-        comment = Image.objects.filter(id=pk)
+        comment = Comment.objects.filter(id=pk)
         CommentLike.objects.create(
             user=user.first_name,
             comment=comment.last(),
@@ -130,7 +130,7 @@ def createReplyLike(request, pk):
         content = {'detail': 'あなたはすでにこの返信に「いいね」しています'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
     else:
-        reply = Image.objects.filter(id=pk)
+        reply = Reply.objects.filter(id=pk)
         ReplyLike.objects.create(
             user=user.first_name,
             reply=reply.last(),

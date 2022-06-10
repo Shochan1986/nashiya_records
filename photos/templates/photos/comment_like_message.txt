@@ -1,0 +1,7 @@
+「{{ user }}」さんが「{{comment.author}}」さんの
+コメント「{{ comment.text|truncatechars:50 }}」に「いいね！」しました。
+
+アルバム：{{ album.title }}
+
+詳しくは、以下のURLからご確認ください。
+https://children-reactjs.netlify.app/?redirect=photo/{{album.id}}

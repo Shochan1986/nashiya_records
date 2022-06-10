@@ -11,7 +11,15 @@ from linebot.models import (
 )
 from django.core.mail import EmailMultiAlternatives
 from farm.models import LinePush
-from photos.models import Comment, AlbumLike, ContentImage, Reply, ContentImage
+from photos.models import (
+    Comment, 
+    AlbumLike, 
+    ContentImage, 
+    Reply, 
+    ContentImage,
+    CommentLike,
+    ReplyLike,
+)
 from environs import Env 
 
 env = Env() 
@@ -79,6 +87,35 @@ def reply_create_notification(sender, instance, created, **kwargs):
             }
             subject =  f'「{instance.author}」さんから「{writer}」さんへの返信　@アルバム「{album}」'
             message = render_to_string('photos/reply_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
+
+
+@receiver(post_save, sender=CommentLike)
+def comment_like_create_notification(sender, instance, created, **kwargs):
+    try:
+        if created:
+            context = {
+                'album': instance.comment.image,
+                'comment': instance.comment,
+                'user': instance.user,
+            }
+            message = render_to_string('photos/comment_like_message.txt', context)
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(push.line_id, messages=TextSendMessage(text=message))
+    except:
+        if created:
+            context = {
+                'album': instance.comment.image,
+                'comment': instance.comment,
+                'user': instance.user,
+            }
+            subject =  f'いいね！＠{instance.comment.text[:10]}'
+            message = render_to_string('photos/comment_like_message.txt', context)
             from_email = settings.DEFAULT_FROM_EMAIL
             bcc = []
             for user in User.objects.filter(is_staff=True):
