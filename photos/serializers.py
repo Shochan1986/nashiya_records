@@ -12,6 +12,10 @@ class MetadataSerializer(serializers.ModelSerializer):
     album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
+    comment_id = serializers.SerializerMethodField(read_only=True)
+    reply_id = serializers.SerializerMethodField(read_only=True)
+    comment_bool = serializers.SerializerMethodField(read_only=True)
+    reply_bool = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
         if obj.album:
@@ -31,11 +35,35 @@ class MetadataSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_comment_id(self, obj):  
+        if obj.comment:
+            return obj.comment.id
+        else:
+            return None
+
+    def get_reply_id(self, obj):  
+        if obj.reply:
+            return obj.reply.id
+        else:
+            return None
+
+    def get_comment_bool(self, obj):  
+        if obj.comment:
+            return True
+        else:
+            return False
+
+    def get_reply_bool(self, obj):  
+        if obj.reply:
+            return True
+        else:
+            return False
+
     class Meta:
         model = Metadata
         fields = ['id', 'site_url', 'title', 'image_url', 'note', 'family',
-            'description', 'created', 'updated', 'site_name',
-            'album', 'album_id', 'album_title']
+            'description', 'created', 'updated', 'site_name', 'comment_bool', 'reply_bool',
+            'album', 'album_id', 'album_title', 'comment_id', 'reply_id']
 
 
 class TagsSerializer(serializers.ModelSerializer):
@@ -309,6 +337,7 @@ class ReplySerializer(serializers.ModelSerializer):
     content_images = serializers.SerializerMethodField(read_only=True)
     likes_count = serializers.SerializerMethodField(read_only=True) 
     likes = serializers.SerializerMethodField(read_only=True) 
+    metadata = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="reply")
 
     def get_main_text(self, obj):  
@@ -326,11 +355,16 @@ class ReplySerializer(serializers.ModelSerializer):
         likes = obj.likes.all()
         serializer = ReplyLikeSerializer(likes, many=True)
         return serializer.data
+    
+    def get_metadata(self, obj):
+        meta = obj.metadata.all()
+        serializer = MetadataSerializer(meta, many=True)
+        return serializer.data
 
     class Meta:
         model = Reply
         fields = ['id', 'comment', 'author', 'content_images', 'likes_count', 
-        'likes', 'text', 'created', 'main_text', 'recaptcha']
+        'likes', 'text', 'created', 'main_text', 'recaptcha', 'metadata']
 
     def validate(self, attrs):
         attrs.pop("recaptcha")
@@ -343,6 +377,7 @@ class CommentSerializer(serializers.ModelSerializer):
     content_images = serializers.SerializerMethodField(read_only=True) 
     likes_count = serializers.SerializerMethodField(read_only=True) 
     likes = serializers.SerializerMethodField(read_only=True) 
+    metadata = serializers.SerializerMethodField(read_only=True) 
     recaptcha = ReCaptchaV3Field(action="comment")
 
     def get_main_text(self, obj):  
@@ -366,9 +401,14 @@ class CommentSerializer(serializers.ModelSerializer):
         serializer = CommentLikeSerializer(likes, many=True)
         return serializer.data
 
+    def get_metadata(self, obj):
+        meta = obj.metadata.all()
+        serializer = MetadataSerializer(meta, many=True)
+        return serializer.data
+
     class Meta:
         model = Comment
-        fields = ['id', 'image', 'author', 'replies', 'content_images',
+        fields = ['id', 'image', 'author', 'replies', 'content_images', 'metadata',
             'text', 'created', 'main_text', 'likes_count', 'likes', 'recaptcha']
 
     def validate(self, attrs):

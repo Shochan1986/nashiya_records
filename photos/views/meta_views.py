@@ -1,5 +1,5 @@
 from photos.models import (
-    Image, Metadata
+    Image, Comment, Reply, Metadata
     )
 from photos.serializers import (
     MetadataSerializer,
@@ -24,9 +24,18 @@ def createMetadata(request):
         album = Image.objects.get(id=data['album'])
     except Image.DoesNotExist:
         album = None
-
+    try:
+        comment = Comment.objects.get(id=data['comment'])
+    except Comment.DoesNotExist:
+        comment = None
+    try:
+        reply = Reply.objects.get(id=data['reply'])
+    except Reply.DoesNotExist:
+        reply = None
     instance = Metadata()
     instance.album = album
+    instance.comment = comment
+    instance.reply = reply
     instance.note = data['note']
     instance.family = data['family']
     instance.site_url = data['site_url']
@@ -45,7 +54,8 @@ def createMetadata(request):
     else:
         pass
     instance.save()
-    return Response('メタデータがアップロードされました')
+    serializer = MetadataSerializer(instance, many=False)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -119,7 +129,17 @@ def updateMetadata(request, pk):
         album = Image.objects.get(id=data['album'])
     except Image.DoesNotExist:
         album = None
+    try:
+        comment = Comment.objects.get(id=data['comment'])
+    except Comment.DoesNotExist:
+        comment = None
+    try:
+        reply = Reply.objects.get(id=data['reply'])
+    except Reply.DoesNotExist:
+        reply = None
     meta.album = album
+    meta.comment = comment
+    meta.reply = reply
     meta.note = data['note']
     meta.family = data['family']
     meta.site_url = data['site_url']
