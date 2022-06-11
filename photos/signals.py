@@ -278,9 +278,6 @@ def comment_link_notification(sender, instance, created, **kwargs):
                     push.line_id, 
                     messages=[
                         TextSendMessage(text=message), 
-                        ImageSendMessage(
-                            original_content_url=instance.content_image.build_url(secure=True), 
-                            preview_image_url=instance.content_image.build_url(secure=True)) 
                         ])
     except:
         if instance.comment:
@@ -321,9 +318,6 @@ def reply_link_notification(sender, instance, created, **kwargs):
                     push.line_id, 
                     messages=[
                         TextSendMessage(text=message), 
-                        ImageSendMessage(
-                            original_content_url=instance.content_image.build_url(secure=True), 
-                            preview_image_url=instance.content_image.build_url(secure=True)) 
                         ])
     except:
         if instance.reply:
