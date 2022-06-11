@@ -4,6 +4,7 @@ from photos.models import (
     Reply, ContentImage, Metadata, CommentLike,
     )
 from django.utils.html import linebreaks, urlize
+from django.db.models import Count
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
 
@@ -459,11 +460,11 @@ class AlbumSerializer(serializers.ModelSerializer):
         serializer = TagsSerializer(tags, many=True)
         return serializer.data
     
-    def get_content_count(self, obj):  
-        return obj.content_images.count()
+    def get_content_count(self, obj):
+        return obj.content_images.filter(comment=None, reply=None).count()
     
-    def get_meta_count(self, obj):  
-        return obj.metadata.count()
+    def get_meta_count(self, obj):
+        return obj.metadata.filter(comment=None, reply=None).count()
 
     def to_representation(self, instance):
         representation = super(AlbumSerializer, self).to_representation(instance)
