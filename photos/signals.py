@@ -19,6 +19,7 @@ from photos.models import (
     ContentImage,
     CommentLike,
     ReplyLike,
+    Metadata,
 )
 from environs import Env 
 
@@ -255,4 +256,90 @@ def reply_image_notification(sender, instance, created, **kwargs):
                 bcc.append(user.email)
             email = EmailMultiAlternatives(subject, message, from_email, [], bcc)
             email.attach_alternative(image_html, "text/html")
+            email.send()
+
+
+@receiver(post_save, sender=Metadata)
+def comment_link_notification(sender, instance, created, **kwargs):
+    try:
+        if instance.comment:
+            context = {
+                'album_title': instance.album.title,
+                'text': instance.comment.text,
+                'author': instance.comment.author,
+                'title': instance.title,
+                'album_id' : instance.album.id,
+                'site_url' : instance.site_url,
+            }
+            message = render_to_string('photos/link_message.txt', context)
+            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=instance.content_image.build_url(secure=True), 
+                            preview_image_url=instance.content_image.build_url(secure=True)) 
+                        ])
+    except:
+        if instance.comment:
+            context = {
+                'album_title': instance.album.title,
+                'text': instance.comment.text,
+                'author': instance.comment.author,
+                'title': instance.title,
+                'album_id' : instance.album.id,
+                'site_url' : instance.site_url,
+            }
+            subject =  f'「リンク」@コメント アルバム: {instance.album.title}'
+            message = render_to_string('photos/link_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
+            email.send()
+
+
+@receiver(post_save, sender=Metadata)
+def reply_link_notification(sender, instance, created, **kwargs):
+    try:
+        if instance.reply:
+            context = {
+                'album_title': instance.album.title,
+                'text': instance.reply.text,
+                'author': instance.reply.author,
+                'title': instance.title,
+                'album_id' : instance.album.id,
+                'site_url' : instance.site_url,
+            }
+            message = render_to_string('photos/link_message.txt', context)
+            line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
+            for push in LinePush.objects.filter(unfollow=False):
+                line_bot_api.push_message(
+                    push.line_id, 
+                    messages=[
+                        TextSendMessage(text=message), 
+                        ImageSendMessage(
+                            original_content_url=instance.content_image.build_url(secure=True), 
+                            preview_image_url=instance.content_image.build_url(secure=True)) 
+                        ])
+    except:
+        if instance.reply:
+            context = {
+                'album_title': instance.album.title,
+                'text': instance.reply.text,
+                'author': instance.reply.author,
+                'title': instance.title,
+                'album_id' : instance.album.id,
+                'site_url' : instance.site_url,
+            }
+            subject =  f'「リンク」@返信 アルバム: {instance.album.title}'
+            message = render_to_string('photos/link_message.txt', context)
+            from_email = settings.DEFAULT_FROM_EMAIL
+            bcc = []
+            for user in User.objects.filter(is_staff=True):
+                bcc.append(user.email)
+            email = EmailMessage(subject, message, from_email, [], bcc)
             email.send()
