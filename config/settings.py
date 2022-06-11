@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     "drf_recaptcha", # new
     'crispy_forms', # new
     "crispy_bootstrap5", # new
+    'allauth', # new
+    'allauth.account', # new
 ]
 
 MIDDLEWARE = [
@@ -178,6 +180,15 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # new
+    'allauth.account.auth_backends.AuthenticationBackend', # new
+]
+
+SITE_ID = 1 # new
+
+ACCOUNT_ADAPTER = 'config.account_adapter.NoNewUsersAccountAdapter' # new
 
 from datetime import timedelta
 
