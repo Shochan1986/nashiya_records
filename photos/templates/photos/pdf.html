@@ -54,9 +54,11 @@
         <p style="text-align: right;">日付：{{album.date}} ({{album.date|date:"D"}})</p>
         <h1 style="text-align: center;font-weight: bold;">{{album.title}}</h1>
         {% if note %}<p style="text-align: center;">{{note}}</p>{% endif %}
-        <div style="display: grid;
-                grid-template-rows: 400px 400px;
-                grid-template-columns: 300px 2fr;">
+
+        <div style="display: flex; justify-content: center; align-items: center;">   
+            <div style="text-align: center;">
+                <img style="text-align: center; border-radius: 5%;" src="{{album.image_one.url}}" alt={{album.image_one.url}}/>
+            </div>
             {% for img in images %}
             <div style="text-align: center;">
                 {% if img.note %}<p>{{img.note}}</p>{% endif %}

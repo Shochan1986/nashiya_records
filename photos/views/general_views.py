@@ -287,7 +287,7 @@ def deleteReply(request, pk):
 def pdfExport(request, pk):
     template_name = "photos/pdf.html"
     album = Image.objects.get(id=pk)
-    images = ContentImage.objects.filter(image__id=pk)
+    images = ContentImage.objects.filter(image__id=pk, comment=None, reply=None)
     note = album.comment
     context = {
         "album": album, 
