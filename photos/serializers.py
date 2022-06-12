@@ -71,7 +71,7 @@ class MetadataSerializer(serializers.ModelSerializer):
         model = Metadata
         fields = ['id', 'site_url', 'title', 'image_url', 'note', 'family', 'album_author',
             'description', 'created', 'updated', 'site_name', 'comment_bool', 'reply_bool',
-            'album', 'album_id', 'album_title', 'comment_id', 'reply_id']
+            'album', 'album_id', 'album_title', 'comment_id', 'reply_id', 'author']
 
 
 class TagsSerializer(serializers.ModelSerializer):
@@ -178,8 +178,10 @@ class ContentImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentImage
-        fields = ['id', 'image', 'cImage', 'note', 'created', 'updated', 'comment_bool', 'reply_bool',
-            'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 'main_text', 'album_author']
+        fields = ['id', 'image', 'cImage', 'note', 'created', 'updated', 
+            'comment_bool', 'reply_bool', 'author',
+            'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 
+            'main_text', 'album_author']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):

@@ -34,6 +34,7 @@ def createMetadata(request):
         reply = None
     instance = Metadata()
     instance.album = album
+    instance.author = request.user.first_name
     instance.comment = comment
     instance.reply = reply
     instance.note = data['note']

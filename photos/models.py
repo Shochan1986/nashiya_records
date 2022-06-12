@@ -192,6 +192,7 @@ class ReplyLike(models.Model):
 
 
 class ContentImage(models.Model):
+    author = models.CharField('投稿者' , max_length=300, null=True, blank=True)
     image = models.ForeignKey(
         Image, 
         on_delete=models.CASCADE, 
@@ -245,6 +246,7 @@ class ContentImage(models.Model):
 
 
 class Metadata(models.Model):
+    author = models.CharField('投稿者' , max_length=300, null=True, blank=True)
     album = models.ForeignKey(Image, verbose_name='アルバム', related_name='metadata', null=True, blank=True, on_delete=models.CASCADE)
     comment = models.ForeignKey(Comment, verbose_name='コメント', related_name='metadata', null=True, blank=True, on_delete=models.CASCADE)
     reply = models.ForeignKey(Reply, verbose_name='返信', related_name='metadata', null=True, blank=True, on_delete=models.CASCADE)

@@ -62,6 +62,7 @@ def createContentImages(request):
         if reply:
             instance.reply = reply
         instance.note = data['note']
+        instance.author = request.user.first_name
         instance.content_image = photo
         request = request
         instance.save()
