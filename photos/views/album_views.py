@@ -166,6 +166,7 @@ def getIsPublicAlbum(request, pk):
 def createAlbum(request):
     album = Image.objects.create(
         title='作成中',
+        author=request.user.first_name,
         date=timezone.now().date(),
         draft=True,
     )

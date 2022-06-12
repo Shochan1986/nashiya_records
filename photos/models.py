@@ -76,8 +76,8 @@ class Image(models.Model):
 
     class Meta:
         ordering = ['-date']
-        verbose_name = '投稿'
-        verbose_name_plural = '投稿'
+        verbose_name = 'アルバム'
+        verbose_name_plural = 'アルバム'
 
     def line_push(self, request):
         message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'

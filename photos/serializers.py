@@ -421,7 +421,7 @@ class ImageTitleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'author']
 
 
 class AlbumSerializer(serializers.ModelSerializer):

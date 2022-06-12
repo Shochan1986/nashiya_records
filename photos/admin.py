@@ -67,12 +67,12 @@ class ImageAdmin(admin.ModelAdmin):
         CommentInline,
         AlbumLikesInline,
     ]
-    list_display = ('show_image', 'title', 'date', 'ct_is_public', 'cimg_is_public', 'special', 'comment',)
-    search_fields = ('title', 'comment', 'content', 'content_rt', 'tags__name', 'comments__author', 'comments__text')
-    list_editable = ('title', 'date', 'comment', 'ct_is_public', 'cimg_is_public', 'special')
+    list_display = ('show_image', 'title', 'author', 'date', 'ct_is_public', 'cimg_is_public', 'special', 'comment',)
+    search_fields = ('title', 'author', 'comment', 'content', 'content_rt', 'tags__name', 'comments__author', 'comments__text')
+    list_editable = ('title', 'author', 'date', 'comment', 'ct_is_public', 'cimg_is_public', 'special')
     exclude = ('content_rt',)
-    ordering = ('-created',)
-    list_per_page = 20
+    ordering = ('-date', '-created',)
+    list_per_page = 25
     actions = [notify]
     
     def show_image(self, obj):
