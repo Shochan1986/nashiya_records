@@ -32,6 +32,7 @@ class Tags(models.Model):
 
 
 class Image(models.Model):
+    author = models.CharField('投稿者' , max_length=300, null=True, blank=True)
     title = models.CharField('タイトル' , max_length=300, null=True, )
     date = models.DateField('日付', null=True, )
     comment = models.CharField('メモ', max_length=500, blank=True, null=True, )

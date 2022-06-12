@@ -22,7 +22,7 @@ from datetime import timedelta
 @permission_classes([IsAdminUser])
 def getContentImages(request):
     c_images = ContentImage.objects.filter(image__draft=False) \
-        .filter(image__date__gt=timezone.now().date()-timedelta(days=90)) \
+        .filter(image__date__gt=timezone.now().date()-timedelta(days=120)) \
         .annotate(num_comments=Count('comment')) \
         .filter(num_comments=0) \
         .annotate(num_replies=Count('reply')) \

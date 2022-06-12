@@ -321,7 +321,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'note', 'created', 'draft',
+        fields = ['id', 'title', 'date', 'note', 'created', 'draft', 'author',
             'image_one', 'image_two', 'tags', 'tags_data', 'tags_ids', 
             'thumb_one', 'thumb_two', 'content', 'content_rt', 
             'ctIsPublic', 'cimg_is_public' ,'special', 'blur',
@@ -495,7 +495,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ['id', 'title', 'date', 'created', 'draft',
+        fields = ['id', 'title', 'date', 'created', 'draft', 'author',
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
             'special', 'blur', 'content', 'content_rt', 
             'comments_count', 'likes_count', 'content_count', 'meta_count']
