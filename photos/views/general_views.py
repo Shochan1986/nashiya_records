@@ -298,7 +298,7 @@ def pdfExport(request, pk):
     html = template.render(context)
     response = HttpResponse(content_type='application/pdf')
     pdf_name = f"{album.title} {album.date}.pdf"
-    response['Content-Disposition'] = f'inline; filename="{pdf_name}"'
+    response['Content-Disposition'] = f'attachment; filename="{pdf_name}"'
     pdf_status = pisa.CreatePDF(html, dest=response)
     if pdf_status.err:
         return HttpResponse('何からのエラーが発生しました。 <pre>' + html + '</pre>')
