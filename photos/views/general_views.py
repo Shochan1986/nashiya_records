@@ -169,7 +169,8 @@ def email_send(request, pk):
         image.email_push(request) 
         return Response(f'「{image.title}」がEメールで送信されました。')
     except:
-        content = {'detail': f'「{image.title}」をEメールで送信できませんでした。'}
+        content = {'detail': f'「{image.title}」をEメールで送信できませんでした。\n \
+        少なくとも１枚の画像をサムネイルに指定してください。'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -181,7 +182,8 @@ def line_send(request, pk):
         image.line_push(request) 
         return Response(f'「{image.title}」がLINEで送信されました。')
     except:
-        content = {'detail': f'「{image.title}」をLINEで送信できませんでした。'}
+        content = {'detail': f'「{image.title}」をLINEで送信できませんでした。\n \
+        少なくとも１枚の画像をサムネイルに指定してください。'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -80,7 +80,10 @@ class Image(models.Model):
         verbose_name_plural = 'アルバム'
 
     def line_push(self, request):
-        message = f'になたくアルバム 「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
+        if self.author:
+            message = f'になたくアルバム「{self.title}」by {self.author} \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
+        else:
+            message = f'になたくアルバム「{self.title}」 \n URL: https://children-reactjs.netlify.app/photo/{self.id}'
         line_bot_api = LineBotApi(env("LINE_CHANNEL_ACCESS_TOKEN"))
         for push in LinePush.objects.filter(unfollow=False):
             line_bot_api.push_message(
@@ -93,7 +96,10 @@ class Image(models.Model):
                     ])
 
     def email_push(self, request):
-        subject = f'「{self.title}」| になたくアルバム'
+        if self.author:
+            subject = f'「{self.title}」| になたくアルバム by {self.author}'
+        else:
+            subject = f'「{self.title}」| になたくアルバム'
         message = f'「{self.title}」'
         image_html = f"リンクはこちら↓ <br /> https://children-reactjs.netlify.app/?redirect=photo/{self.id} <br /><br /> \
             <img src={self.image_one.build_url(secure=True)} alt={self.title} \

@@ -12,6 +12,7 @@ import cloudinary
 class MetadataSerializer(serializers.ModelSerializer):
     album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
+    album_author = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
     comment_id = serializers.SerializerMethodField(read_only=True)
     reply_id = serializers.SerializerMethodField(read_only=True)
@@ -33,6 +34,12 @@ class MetadataSerializer(serializers.ModelSerializer):
     def get_album_title(self, obj):
         if obj.album:
             return obj.album.title
+        else:
+            return None
+
+    def get_album_author(self, obj):
+        if obj.album:
+            return obj.album.author
         else:
             return None
 
@@ -62,7 +69,7 @@ class MetadataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Metadata
-        fields = ['id', 'site_url', 'title', 'image_url', 'note', 'family',
+        fields = ['id', 'site_url', 'title', 'image_url', 'note', 'family', 'album_author',
             'description', 'created', 'updated', 'site_name', 'comment_bool', 'reply_bool',
             'album', 'album_id', 'album_title', 'comment_id', 'reply_id']
 
@@ -81,6 +88,7 @@ class TagsSerializer(serializers.ModelSerializer):
 class ContentImageSerializer(serializers.ModelSerializer):
     album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
     album_title = serializers.SerializerMethodField(read_only=True)
+    album_author = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
     cImage = serializers.SerializerMethodField(read_only=True)
     thumbnail = serializers.SerializerMethodField(read_only=True)
@@ -98,6 +106,12 @@ class ContentImageSerializer(serializers.ModelSerializer):
     def get_album_id(self, obj):
         if obj.image:
             return obj.image.id
+        else:
+            return None
+
+    def get_album_author(self, obj):
+        if obj.image:
+            return obj.image.author
         else:
             return None
 
@@ -165,7 +179,7 @@ class ContentImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContentImage
         fields = ['id', 'image', 'cImage', 'note', 'created', 'updated', 'comment_bool', 'reply_bool',
-            'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 'main_text']
+            'thumbnail' ,'album', 'album_id', 'album_title', 'blur', 'main_text', 'album_author']
 
 
 class AlbumLikeSerializer(serializers.ModelSerializer):
