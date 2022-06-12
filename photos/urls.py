@@ -1,5 +1,6 @@
 import imp
 from django.urls import path
+from farm.views.others_view import pdfExport
 from photos.views.album_views import (
     deleteAlbum,
 
@@ -47,6 +48,8 @@ from photos.views.general_views import (
 
     email_send,
     line_send, 
+
+    pdfExport,
 )
 
 from photos.views.content_views import (
@@ -130,4 +133,6 @@ urlpatterns = [
 
     path('email/<str:pk>/', email_send),
     path('line/<str:pk>/', line_send),
+
+    path('pdf/<str:pk>/', pdfExport),
 ]

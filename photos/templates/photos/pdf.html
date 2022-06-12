@@ -1,0 +1,68 @@
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            * {
+                font-size: 15px;
+                font-family: HeiseiMin-W3;
+            }
+
+            img {  
+                width: 350px;
+                border-radius: 5px;
+                height: auto;
+                object-fit: cover;
+                max-width: 100%;
+            }
+
+            body {
+                margin: 10px;
+            }
+
+            table {
+                table-layout: fixed;
+                width: 100%;
+                border: 1px solid black;
+                -pdf-word-wrap: CJK;
+            }
+            @page {
+                size: a4 portrait;
+                @frame header_frame {           /* Static Frame */
+                    -pdf-frame-content: header_content;
+                    left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+                }
+                @frame content_frame {          /* Content Frame */
+                    left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+                }
+                @frame footer_frame {           /* Another static Frame */
+                    -pdf-frame-content: footer_content;
+                    left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Content for Static Frame 'header_frame' -->
+            <div id="header_content" style="text-align: left;">になたくアルバム</div>
+
+            <!-- Content for Static Frame 'footer_frame' -->
+            <div id="footer_content" style="text-align: center;">
+                ページ <pdf:pagenumber> / <pdf:pagecount>
+            </div>
+        <p style="text-align: right;">日付：{{album.date}} ({{album.date|date:"D"}})</p>
+        <h1 style="text-align: center;font-weight: bold;">{{album.title}}</h1>
+        {% if note %}<p style="text-align: center;">{{note}}</p>{% endif %}
+        <div style="display: grid;
+                grid-template-rows: 400px 400px;
+                grid-template-columns: 300px 2fr;">
+            {% for img in images %}
+            <div style="text-align: center;">
+                {% if img.note %}<p>{{img.note}}</p>{% endif %}
+                <img src="{{img.content_image.url}}" alt={{img.content_image.url}}/>
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

@@ -1,5 +1,5 @@
 from photos.models import (
-    Image, Comment, AlbumLike, 
+    Image, Comment, AlbumLike, ContentImage,
     Reply, Tags, CommentLike, ReplyLike,
     )
 from photos.serializers import (
@@ -18,6 +18,10 @@ from rest_framework import status
 from django.db.models import Q, Count
 from django.utils import timezone
 from datetime import timedelta
+from xhtml2pdf import pisa
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.http import FileResponse
 
 
 @api_view(['GET'])
@@ -276,3 +280,26 @@ def deleteReply(request, pk):
     reply = Reply.objects.get(id=pk)
     reply.delete()  
     return Response('返信が削除されました。')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def pdfExport(request, pk):
+    template_name = "photos/pdf.html"
+    album = Image.objects.get(id=pk)
+    images = ContentImage.objects.filter(image__id=pk)
+    note = album.comment
+    context = {
+        "album": album, 
+        "note": note,
+        "images": images,
+        }
+    template = get_template(template_name)
+    html = template.render(context)
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = f"{album.title} {album.date}.pdf"
+    response['Content-Disposition'] = f'inline; filename="{pdf_name}"'
+    pdf_status = pisa.CreatePDF(html, dest=response)
+    if pdf_status.err:
+        return HttpResponse('何からのエラーが発生しました。 <pre>' + html + '</pre>')
+    return response
