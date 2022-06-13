@@ -1,12 +1,55 @@
 from rest_framework import serializers
 from photos.models import (
-    Image, Comment, AlbumLike, Tags, ReplyLike,
+    Image, Comment, AlbumLike, Tags, ReplyLike, Video,
     Reply, ContentImage, Metadata, CommentLike,
     )
 from django.utils.html import linebreaks, urlize
-from django.db.models import Count
 from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    album_id = serializers.PrimaryKeyRelatedField(queryset=Image.objects.all(), write_only=True)
+    album_title = serializers.SerializerMethodField(read_only=True)
+    album_author = serializers.SerializerMethodField(read_only=True)
+    album = serializers.SerializerMethodField(read_only=True)
+    thumbnail = serializers.SerializerMethodField(read_only=True)
+    video = serializers.SerializerMethodField(read_only=True)
+
+    def get_album(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_id(self, obj):
+        if obj.album:
+            return obj.album.id
+        else:
+            return None
+
+    def get_album_title(self, obj):
+        if obj.album:
+            return obj.album.title
+        else:
+            return None
+
+    def get_album_author(self, obj):
+        if obj.album:
+            return obj.album.author
+        else:
+            return None
+
+    def get_thumbnail(self, obj):
+        return obj.thumbnail.build_url(secure=True)
+
+    def get_video(self, obj):
+        return obj.video.build_url(secure=True)
+
+    class Meta:
+        model = Metadata
+        fields = ['id', 'title', 'album_author', 'thumbnail', 'video',
+            'created', 'album', 'album_id', 'album_title', 'comment_id', 'reply_id']
 
 
 class MetadataSerializer(serializers.ModelSerializer):

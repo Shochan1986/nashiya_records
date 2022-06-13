@@ -50,6 +50,8 @@ from photos.views.general_views import (
     line_send, 
 
     pdfExport,
+
+    uploadVideo,
 )
 
 from photos.views.content_views import (
@@ -89,6 +91,7 @@ urlpatterns = [
     path('posts/', getTagsPosts),
 
     path('upload/', uploadAlbumImage),
+    path('upload-video/', uploadVideo),
 
     path('meta-create/', createMetadata),
     path('meta/', getMetadata),

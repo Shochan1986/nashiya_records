@@ -270,3 +270,43 @@ class Metadata(models.Model):
             return self.title
         else:
             return 'メタデータ'
+
+
+class Video(models.Model):
+    author_id = models.PositiveIntegerField('投稿者ID', null=True, blank=True)
+    author_name = models.CharField('投稿者名' , max_length=300, null=True, blank=True)
+    album = models.ForeignKey(Image, verbose_name='アルバム', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
+    title = models.CharField('名前', null=True, max_length=300)
+    thumbnail = CloudinaryField(
+        null=True, 
+        blank=True,
+        verbose_name=('サムネイル'),
+        transformation={ 
+            "quality": "auto", 
+            'dpr': "auto", 
+            "fetch_format":"auto", 
+            "angle":"exif", 
+            "effect":"auto_contrast",
+            "width": 600, 
+            }, 
+        )
+    video = CloudinaryField(
+        null=True, 
+        verbose_name=('動画'),
+        resource_type='video',
+        chunk_size = 6000000,
+        transformation={ 
+            'duration': "30",
+            "width" : 600,
+            "crop" : "scale",
+            }, 
+        )
+    created = models.DateTimeField('追加日', auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.title)
+
+    class Meta:
+        ordering = ['-created']
+        verbose_name = '動画'
+        verbose_name_plural = '動画'

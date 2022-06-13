@@ -1,6 +1,6 @@
 from photos.models import (
     Image, Comment, AlbumLike, ContentImage,
-    Reply, Tags, CommentLike, ReplyLike,
+    Reply, Tags, CommentLike, ReplyLike, Video,
     )
 from photos.serializers import (
     CommentSerializer, 
@@ -264,7 +264,6 @@ def getReply(request, pk):
     return Response(serializer.data)
 
 
-
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def updateReply(request, pk):
@@ -305,3 +304,15 @@ def pdfExport(request, pk):
     if pdf_status.err:
         return HttpResponse('何からのエラーが発生しました。 <pre>' + html + '</pre>')
     return response
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def uploadVideo(request, pk):
+    data = request.data
+    video = Video()
+    video.album = Image.objects.get(id=pk)
+    video.title = data['title']
+    video.video = request.FILES.get('video')
+    video.save()
+    return Response('動画がアップロードされました。')
