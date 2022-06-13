@@ -52,6 +52,11 @@ from photos.views.general_views import (
     pdfExport,
 
     uploadVideo,
+    getSingleVideo,
+    getVideos,
+    uploadVideoThumbnail,
+    updateVideo,
+    deleteVideo,
 )
 
 from photos.views.content_views import (
@@ -92,6 +97,7 @@ urlpatterns = [
 
     path('upload/', uploadAlbumImage),
     path('upload-video/', uploadVideo),
+    path('upload-thumbnail/', uploadVideoThumbnail),
 
     path('meta-create/', createMetadata),
     path('meta/', getMetadata),
@@ -102,6 +108,8 @@ urlpatterns = [
     path('create-images/', createContentImages),
     path('content-images/', getContentImages),
     path('content-images-list/', getContentListImages),
+
+    path('videos/', getVideos),
 
     path('meta/<str:pk>/', getSingleMetadata),
     path('meta/<str:pk>/update/', updateMetadata),
@@ -138,4 +146,8 @@ urlpatterns = [
     path('line/<str:pk>/', line_send),
 
     path('pdf/<str:pk>/', pdfExport),
+
+    path('video/<str:pk>/', getSingleVideo),
+    path('video/<str:pk>/update', updateVideo),
+    path('video/<str:pk>/delete', deleteVideo),
 ]

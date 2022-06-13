@@ -6,6 +6,7 @@ from photos.serializers import (
     CommentSerializer, 
     TagsSerializer,
     ReplySerializer,
+    VideoSerializer,
     )
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import (
@@ -308,11 +309,63 @@ def pdfExport(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-def uploadVideo(request, pk):
+def uploadVideo(request):
     data = request.data
     video = Video()
-    video.album = Image.objects.get(id=pk)
+    video.album = Image.objects.get(id=data['album_id'])
+    video.author_id = request.user.id
+    video.author_name = request.user.first_name
     video.title = data['title']
     video.video = request.FILES.get('video')
     video.save()
-    return Response('動画がアップロードされました。')
+    serializer = VideoSerializer(video, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getVideos(request):
+    videos = Video.objects.all()
+    serializer = VideoSerializer(videos, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getSingleVideo(request, pk):
+    video = Video.objects.get(id=pk)
+    serializer = VideoSerializer(video, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateVideo(request, pk):
+    data = request.data
+    video = Video.objects.get(id=pk)
+    video.album = Image.objects.get(id=data['album_id'])
+    video.author_id = request.user.id
+    video.author_name = request.user.first_name
+    video.title = data['title']
+    video.video = request.FILES.get('video')
+    video.save()
+    serializer = VideoSerializer(video, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def uploadVideoThumbnail(request, pk):
+    video = Video.objects.get(id=pk)
+    video.thumbnail = request.FILES.get('thumbnail')
+    video.save()
+    serializer = VideoSerializer(video, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteVideo(request, pk):
+    video = Video.objects.get(id=pk)
+    video.delete()  
+    return Response('動画が削除されました。')

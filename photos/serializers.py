@@ -41,15 +41,19 @@ class VideoSerializer(serializers.ModelSerializer):
             return None
 
     def get_thumbnail(self, obj):
-        return obj.thumbnail.build_url(secure=True)
+        if obj.thumbnail:
+            return obj.thumbnail.build_url(secure=True)
+        else:
+            None
 
     def get_video(self, obj):
         return obj.video.build_url(secure=True)
 
     class Meta:
-        model = Metadata
-        fields = ['id', 'title', 'album_author', 'thumbnail', 'video',
-            'created', 'album', 'album_id', 'album_title', 'comment_id', 'reply_id']
+        model = Video
+        fields = ['id', 'title', 'album_author', 'thumbnail', 
+            'video', 'author_id', 'author_name',
+            'created', 'album', 'album_id', 'album_title', ]
 
 
 class MetadataSerializer(serializers.ModelSerializer):
@@ -265,6 +269,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
     tags_data = serializers.SerializerMethodField(read_only=True)
     content_images = serializers.SerializerMethodField(read_only=True)
     metadata = serializers.SerializerMethodField(read_only=True)
+    videos = serializers.SerializerMethodField(read_only=True)
     recaptcha = ReCaptchaV3Field(action="children-images")
 
     def get_note(self, obj):
@@ -339,6 +344,11 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
         serializer = MetadataSerializer(meta, many=True)
         return serializer.data
 
+    def get_videos(self, obj):
+        video = obj.videos.all()
+        serializer = VideoSerializer(video, many=True)
+        return serializer.data
+
     def to_representation(self, instance):
         representation = super(ChildrenImageSerializer, self).to_representation(instance)
         if instance.image_one:
@@ -384,7 +394,7 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
             'image_one', 'image_two', 'tags', 'tags_data', 'tags_ids', 
             'thumb_one', 'thumb_two', 'content', 'content_rt', 
             'ctIsPublic', 'cimg_is_public' ,'special', 'blur',
-            'comments', 'comments_count', 'likes', 'likes_count', 
+            'comments', 'comments_count', 'likes', 'likes_count', 'videos',
             'content_images', 'metadata', 'recaptcha']
 
     def validate(self, attrs):
