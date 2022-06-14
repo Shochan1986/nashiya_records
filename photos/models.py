@@ -297,7 +297,7 @@ class Video(models.Model):
         chunk_size = 6000000,
         transformation={ 
             'duration': "60",
-            "width" : 1000,
+            "width" : 600,
             "crop" : "scale",
             }, 
         )
