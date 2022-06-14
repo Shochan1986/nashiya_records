@@ -312,7 +312,11 @@ def pdfExport(request, pk):
 def uploadVideo(request):
     data = request.data
     video = Video()
-    video.album = Image.objects.get(id=data['album_id'])
+    try:
+        album = Image.objects.get(id=data['album_id'])
+    except Image.DoesNotExist:
+        album = None
+    video.album = album
     video.author_id = request.user.id
     video.author_name = request.user.first_name
     video.title = data['title']
