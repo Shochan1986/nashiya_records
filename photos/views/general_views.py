@@ -309,7 +309,7 @@ def pdfExport(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
-def uploadVideo(request):
+def createVideo(request):
     data = request.data
     video = Video()
     try:
@@ -320,7 +320,7 @@ def uploadVideo(request):
     video.author_id = request.user.id
     video.author_name = request.user.first_name
     video.title = data['title']
-    video.video = request.FILES.get('video')
+    video.url = data['url']
     video.save()
     serializer = VideoSerializer(video, many=False)
     return Response(serializer.data)
@@ -329,9 +329,39 @@ def uploadVideo(request):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getVideos(request):
-    videos = Video.objects.all()
+    query = request.query_params.get('keyword')
+    if query == None:
+        query = ''
+    queryset = (
+        Q(title__icontains=query) |
+        Q(url__icontains=query) |
+        Q(album__title__icontains=query)
+        )
+    videos = Video.objects.all().order_by('-album__date')
+    page = request.query_params.get('page')
+    paginator = Paginator(videos, 25, orphans=2)
+    try:
+        videos = paginator.page(page)
+    except PageNotAnInteger:
+        videos = paginator.page(1)
+    except EmptyPage:
+        videos = paginator.page(paginator.num_pages)
+    if page == None:
+        page = 1
+    page = int(page)
+    start_index = videos.start_index()
+    end_index = videos.end_index()
     serializer = VideoSerializer(videos, many=True)
-    return Response(serializer.data)
+    return Response(
+        {
+            'data': serializer.data, 
+            'page': page, 
+            'pages': paginator.num_pages,
+            'count': paginator.count,
+            'start': start_index,
+            'end': end_index,
+        }
+    )
 
 
 @api_view(['GET'])
@@ -348,10 +378,7 @@ def updateVideo(request, pk):
     data = request.data
     video = Video.objects.get(id=pk)
     video.album = Image.objects.get(id=data['album_id'])
-    video.author_id = request.user.id
-    video.author_name = request.user.first_name
     video.title = data['title']
-    video.video = request.FILES.get('video')
     video.save()
     serializer = VideoSerializer(video, many=False)
     return Response(serializer.data)

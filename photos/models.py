@@ -230,7 +230,7 @@ class ContentImage(models.Model):
             "width": 1250, 
             }, 
         verbose_name='画像',
-        timeout=180.0,
+        timeout=60.0,
         )
     note = models.TextField('メモ', null=True, blank=True)
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
@@ -278,32 +278,8 @@ class Video(models.Model):
     author_id = models.PositiveIntegerField('投稿者ID', null=True, blank=True)
     author_name = models.CharField('投稿者名' , max_length=300, null=True, blank=True)
     album = models.ForeignKey(Image, verbose_name='アルバム', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
-    title = models.CharField('名前', null=True, blank=True, max_length=300)
-    thumbnail = CloudinaryField(
-        null=True, 
-        blank=True,
-        verbose_name=('サムネイル'),
-        transformation={ 
-            "quality": "auto", 
-            'dpr': "auto", 
-            "fetch_format":"auto", 
-            "angle":"exif", 
-            "effect":"auto_contrast",
-            "width": 600, 
-            }, 
-        )
-    video = CloudinaryField(
-        null=True, 
-        verbose_name=('動画'),
-        resource_type='video',
-        chunk_size = 6000000,
-        transformation={ 
-            'duration': "60",
-            "width" : 600,
-            "crop" : "scale",
-            }, 
-        timeout=180.0,
-        )
+    title = models.CharField('タイトル', null=True, blank=True, max_length=300)
+    url = models.URLField('動画URL', null=True, )
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
     def __str__(self):

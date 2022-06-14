@@ -13,7 +13,6 @@ class VideoSerializer(serializers.ModelSerializer):
     album_title = serializers.SerializerMethodField(read_only=True)
     album_author = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
-    video = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
         if obj.album:
@@ -39,13 +38,10 @@ class VideoSerializer(serializers.ModelSerializer):
         else:
             return None
 
-    def get_video(self, obj):
-        return obj.video.build_url(secure=True)
-
     class Meta:
         model = Video
         fields = ['id', 'title', 'album_author', 
-            'video', 'author_id', 'author_name',
+            'url', 'author_id', 'author_name',
             'created', 'album', 'album_id', 'album_title', ]
 
 
