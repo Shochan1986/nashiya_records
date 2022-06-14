@@ -54,7 +54,6 @@ from photos.views.general_views import (
     uploadVideo,
     getSingleVideo,
     getVideos,
-    uploadVideoThumbnail,
     updateVideo,
     deleteVideo,
 )
@@ -97,7 +96,6 @@ urlpatterns = [
 
     path('upload/', uploadAlbumImage),
     path('upload-video/', uploadVideo),
-    path('upload-thumbnail/', uploadVideoThumbnail),
 
     path('meta-create/', createMetadata),
     path('meta/', getMetadata),

@@ -276,7 +276,7 @@ class Video(models.Model):
     author_id = models.PositiveIntegerField('投稿者ID', null=True, blank=True)
     author_name = models.CharField('投稿者名' , max_length=300, null=True, blank=True)
     album = models.ForeignKey(Image, verbose_name='アルバム', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
-    title = models.CharField('名前', null=True, max_length=300)
+    title = models.CharField('名前', null=True, blank=True, max_length=300)
     thumbnail = CloudinaryField(
         null=True, 
         blank=True,
@@ -296,8 +296,8 @@ class Video(models.Model):
         resource_type='video',
         chunk_size = 6000000,
         transformation={ 
-            'duration': "30",
-            "width" : 600,
+            'duration': "60",
+            "width" : 1000,
             "crop" : "scale",
             }, 
         )

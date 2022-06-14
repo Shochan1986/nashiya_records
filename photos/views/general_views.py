@@ -352,17 +352,6 @@ def updateVideo(request, pk):
     serializer = VideoSerializer(video, many=False)
     return Response(serializer.data)
 
-
-@api_view(['POST'])
-@permission_classes([IsAdminUser])
-def uploadVideoThumbnail(request, pk):
-    video = Video.objects.get(id=pk)
-    video.thumbnail = request.FILES.get('thumbnail')
-    video.save()
-    serializer = VideoSerializer(video, many=False)
-    return Response(serializer.data)
-
-
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteVideo(request, pk):

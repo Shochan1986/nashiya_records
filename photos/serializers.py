@@ -13,7 +13,6 @@ class VideoSerializer(serializers.ModelSerializer):
     album_title = serializers.SerializerMethodField(read_only=True)
     album_author = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
-    thumbnail = serializers.SerializerMethodField(read_only=True)
     video = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
@@ -40,18 +39,12 @@ class VideoSerializer(serializers.ModelSerializer):
         else:
             return None
 
-    def get_thumbnail(self, obj):
-        if obj.thumbnail:
-            return obj.thumbnail.build_url(secure=True)
-        else:
-            None
-
     def get_video(self, obj):
         return obj.video.build_url(secure=True)
 
     class Meta:
         model = Video
-        fields = ['id', 'title', 'album_author', 'thumbnail', 
+        fields = ['id', 'title', 'album_author', 
             'video', 'author_id', 'author_name',
             'created', 'album', 'album_id', 'album_title', ]
 
@@ -501,6 +494,7 @@ class AlbumSerializer(serializers.ModelSerializer):
     likes_count = serializers.SerializerMethodField(read_only=True) 
     content_count = serializers.SerializerMethodField(read_only=True) 
     meta_count = serializers.SerializerMethodField(read_only=True) 
+    video_count = serializers.SerializerMethodField(read_only=True) 
     tags_data = serializers.SerializerMethodField(read_only=True)
 
     def get_thumb_one(self, obj):
@@ -534,6 +528,9 @@ class AlbumSerializer(serializers.ModelSerializer):
     
     def get_meta_count(self, obj):
         return obj.metadata.filter(comment=None, reply=None).count()
+    
+    def get_video_count(self, obj):
+        return obj.videos.all().count()
 
     def to_representation(self, instance):
         representation = super(AlbumSerializer, self).to_representation(instance)
@@ -566,6 +563,6 @@ class AlbumSerializer(serializers.ModelSerializer):
         model = Image
         fields = ['id', 'title', 'date', 'created', 'draft', 'author',
             'tags_data', 'thumb_one', 'ctIsPublic', 'cimg_is_public' ,
-            'special', 'blur', 'content', 'content_rt', 
+            'special', 'blur', 'content', 'content_rt', 'video_count',
             'comments_count', 'likes_count', 'content_count', 'meta_count']
 
