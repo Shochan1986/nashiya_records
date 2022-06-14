@@ -1,3 +1,4 @@
+from async_timeout import timeout
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -199,7 +200,7 @@ class ContentImage(models.Model):
         null=True, 
         blank=True,
         related_name='content_images',
-        verbose_name='アルバム'
+        verbose_name='アルバム',
     )
     comment = models.ForeignKey(
         Comment,
@@ -228,7 +229,8 @@ class ContentImage(models.Model):
             "effect":"auto_contrast",
             "width": 1250, 
             }, 
-        verbose_name='画像'
+        verbose_name='画像',
+        timeout=60000,
         )
     note = models.TextField('メモ', null=True, blank=True)
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )
@@ -300,6 +302,7 @@ class Video(models.Model):
             "width" : 600,
             "crop" : "scale",
             }, 
+        timeout=60000,
         )
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
