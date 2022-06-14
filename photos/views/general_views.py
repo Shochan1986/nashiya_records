@@ -337,7 +337,7 @@ def getVideos(request):
         Q(url__icontains=query) |
         Q(album__title__icontains=query)
         )
-    videos = Video.objects.all().order_by('-album__date')
+    videos = Video.objects.filter(queryset).distinct().order_by('-album__date')
     page = request.query_params.get('page')
     paginator = Paginator(videos, 25, orphans=2)
     try:
