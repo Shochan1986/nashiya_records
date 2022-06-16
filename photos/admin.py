@@ -124,6 +124,14 @@ class MetadataAdmin(admin.ModelAdmin):
     list_per_page = 30
 
 
+class VideoAdmin(admin.ModelAdmin):
+    model = Video
+    list_display = ('url', 'title', 'thumbnail', 'public_id')
+    search_fields = ('url', 'title', 'album__title')
+    list_editable = ('title', 'thumbnail', 'public_id')
+    list_per_page = 30
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(ContentImage, ContentImageAdmin)
 admin.site.register(Comment, CommentAdmin)
@@ -133,6 +141,6 @@ admin.site.register(CommentLike)
 admin.site.register(ReplyLike)
 admin.site.register(Tags, TagsAdmin)
 admin.site.register(Metadata, MetadataAdmin)
-admin.site.register(Video)
+admin.site.register(Video, VideoAdmin)
 
 notify.short_description = 'Line・Emailに転載する'
