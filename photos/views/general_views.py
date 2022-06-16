@@ -313,10 +313,20 @@ def createVideo(request):
     data = request.data
     video = Video()
     try:
-        album = Image.objects.get(id=data['album_id'])
+        album = Image.objects.get(id=data['album'])
     except Image.DoesNotExist:
         album = None
+    try:
+        comment = Comment.objects.get(id=data['comment'])
+    except Comment.DoesNotExist:
+        comment = None
+    try:
+        reply = Reply.objects.get(id=data['reply'])
+    except Reply.DoesNotExist:
+        reply = None
     video.album = album
+    video.comment = comment
+    video.reply = reply
     video.author_id = request.user.id
     video.author_name = request.user.first_name
     video.title = data['title']
@@ -380,7 +390,7 @@ def getSingleVideo(request, pk):
 def updateVideo(request, pk):
     data = request.data
     video = Video.objects.get(id=pk)
-    video.album = Image.objects.get(id=data['album_id'])
+    video.album = Image.objects.get(id=data['album'])
     video.title = data['title']
     video.save()
     serializer = VideoSerializer(video, many=False)

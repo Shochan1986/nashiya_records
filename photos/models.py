@@ -278,6 +278,8 @@ class Video(models.Model):
     author_id = models.PositiveIntegerField('投稿者ID', null=True, blank=True)
     author_name = models.CharField('投稿者名' , max_length=300, null=True, blank=True)
     album = models.ForeignKey(Image, verbose_name='アルバム', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, verbose_name='コメント', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, verbose_name='返信', related_name='videos', null=True, blank=True, on_delete=models.CASCADE)
     title = models.CharField('タイトル', null=True, blank=True, max_length=600)
     public_id = models.CharField('パブリックID', null=True, blank=True, max_length=300)
     thumbnail = models.URLField('サムネイル', null=True, blank=True)

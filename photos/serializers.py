@@ -13,6 +13,8 @@ class VideoSerializer(serializers.ModelSerializer):
     album_title = serializers.SerializerMethodField(read_only=True)
     album_author = serializers.SerializerMethodField(read_only=True)
     album = serializers.SerializerMethodField(read_only=True)
+    comment_bool = serializers.SerializerMethodField(read_only=True)
+    reply_bool = serializers.SerializerMethodField(read_only=True)
 
     def get_album(self, obj):
         if obj.album:
@@ -38,10 +40,22 @@ class VideoSerializer(serializers.ModelSerializer):
         else:
             return None
 
+    def get_comment_bool(self, obj):  
+        if obj.comment:
+            return True
+        else:
+            return False
+
+    def get_reply_bool(self, obj):  
+        if obj.reply:
+            return True
+        else:
+            return False
+
     class Meta:
         model = Video
         fields = ['id', 'title', 'album_author', 'public_id', 'bytes',
-            'url', 'author_id', 'author_name', 'thumbnail',
+            'url', 'author_id', 'author_name', 'thumbnail', 'comment_bool', 'reply_bool',
             'created', 'album', 'album_id', 'album_title', ]
 
 
