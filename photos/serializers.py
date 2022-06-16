@@ -172,13 +172,13 @@ class ContentImageSerializer(serializers.ModelSerializer):
             return None
 
     def get_cImage(self, obj):
-        return obj.content_image.build_url(secure=True)
+        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
 
     def get_thumbnail(self, obj):
-        return obj.content_image.build_url(secure=True)
+        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
 
     def get_blur(self, obj):
-        return obj.content_image.build_url(secure=True)
+        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
 
     def get_main_text(self, obj):  
         if obj.note is not None:
@@ -280,25 +280,25 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     def get_image_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True)
+            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             None
 
     def get_image_two(self, obj):
         if obj.image_two:
-            return obj.image_two.build_url(secure=True)
+            return obj.image_two.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             return None
 
     def get_thumb_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True)
+            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             return None
 
     def get_blur(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True)
+            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             None
 
@@ -509,13 +509,13 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     def get_thumb_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True)
+            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             return None
 
     def get_blur(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True)
+            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
         else:
             None
 
