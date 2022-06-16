@@ -323,6 +323,7 @@ def createVideo(request):
     video.url = data['url']
     video.thumbnail = data['thumbnail']
     video.public_id = data['public_id']
+    video.bytes = data['bytes']
     video.save()
     serializer = VideoSerializer(video, many=False)
     return Response(serializer.data)

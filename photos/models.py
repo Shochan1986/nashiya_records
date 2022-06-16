@@ -282,6 +282,7 @@ class Video(models.Model):
     public_id = models.CharField('パブリックID', null=True, blank=True, max_length=300)
     thumbnail = models.URLField('サムネイル', null=True, blank=True)
     url = models.URLField('動画URL', null=True, )
+    bytes = models.PositiveBigIntegerField('バイト', null=True, blank=True)
     created = models.DateTimeField('追加日', auto_now_add=True, null=True)
 
     def __str__(self):
