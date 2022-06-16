@@ -172,13 +172,13 @@ class ContentImageSerializer(serializers.ModelSerializer):
             return None
 
     def get_cImage(self, obj):
-        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
+        return obj.content_image.build_url(secure=True)
 
     def get_thumbnail(self, obj):
-        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
+        return obj.content_image.build_url(secure=True)
 
     def get_blur(self, obj):
-        return obj.content_image.build_url(secure=True, sign_url=True, type="authenticated")
+        return obj.content_image.build_url(secure=True)
 
     def get_main_text(self, obj):  
         if obj.note is not None:
@@ -197,6 +197,20 @@ class ContentImageSerializer(serializers.ModelSerializer):
             return True
         else:
             return False
+
+    def to_representation(self, instance):
+        representation = super(ContentImageSerializer, self).to_representation(instance)
+        thumbnailUrl = cloudinary.utils.cloudinary_url(
+            instance.content_image.build_url(
+            secure=True,
+            transformation=[
+            {'width': 1250 },
+            {'fetch_format': "auto"},
+            {'quality': 'auto:best'},
+            {'dpr': 'auto'},
+            {'effect': 'auto_contrast'},
+            ]))
+        representation['cImage'] = thumbnailUrl[0]
 
     def to_representation(self, instance):
         representation = super(ContentImageSerializer, self).to_representation(instance)
@@ -280,25 +294,25 @@ class ChildrenImageSerializer(serializers.ModelSerializer):
 
     def get_image_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_one.build_url(secure=True)
         else:
             None
 
     def get_image_two(self, obj):
         if obj.image_two:
-            return obj.image_two.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_two.build_url(secure=True)
         else:
             return None
 
     def get_thumb_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_one.build_url(secure=True)
         else:
             return None
 
     def get_blur(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_one.build_url(secure=True)
         else:
             None
 
@@ -509,13 +523,13 @@ class AlbumSerializer(serializers.ModelSerializer):
 
     def get_thumb_one(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_one.build_url(secure=True)
         else:
             return None
 
     def get_blur(self, obj):
         if obj.image_one:
-            return obj.image_one.build_url(secure=True, sign_url=True, type="authenticated")
+            return obj.image_one.build_url(secure=True)
         else:
             None
 
