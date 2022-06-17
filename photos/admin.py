@@ -141,6 +141,6 @@ admin.site.register(CommentLike)
 admin.site.register(ReplyLike)
 admin.site.register(Tags, TagsAdmin)
 admin.site.register(Metadata, MetadataAdmin)
-admin.site.register(Video, VideoAdmin)
+# admin.site.register(Video, VideoAdmin)
 
 notify.short_description = 'Line・Emailに転載する'
