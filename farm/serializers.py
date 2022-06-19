@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper']
+        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', ]
 
     def get_isAdmin(self, obj):
         return obj.is_staff
@@ -36,7 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only=True)
-    recaptcha = ReCaptchaV3Field(action="auth")
+    recaptcha = ReCaptchaV3Field(action="auth", required_score=0.6,)
     class Meta:
         model = User
         fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', 'token', 'recaptcha' ]
