@@ -10,6 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
+from rest_framework_simplejwt import exceptions as jwt_exp
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -38,7 +39,16 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class =  MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = MyTokenObtainPairSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except jwt_exp.TokenError as e:
+            raise jwt_exp.InvalidToken(e.args[0])
+        
+        res = Response(serializer.validated_data, status=status.HTTP_200_OK)
+        return res
 
 
 @api_view(['POST'])
