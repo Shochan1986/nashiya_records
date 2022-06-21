@@ -54,15 +54,15 @@ class Review(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='ユーザー')
-    paymentMethod = models.CharField(max_length=200, null=True, blank=True)
-    taxPrice = models.DecimalField(max_digits=7, decimal_places=0, null=True, blank=True)
-    shippingPrice = models.DecimalField(max_digits=7, decimal_places=0, null=True, blank=True)
-    totalPrice = models.DecimalField(max_digits=7, decimal_places=0, null=True, blank=True)
-    isPaid = models.BooleanField(default=False)
-    paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    isDelivered = models.BooleanField(default=False)
-    deliveredAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    paymentMethod = models.CharField('支払方法', max_length=200, null=True, blank=True)
+    taxPrice = models.PositiveIntegerField('税額', null=True, blank=True)
+    shippingPrice = models.PositiveIntegerField('送料', null=True, blank=True)
+    totalPrice = models.PositiveIntegerField('合計金額', null=True, blank=True)
+    isPaid = models.BooleanField('支払済', default=False)
+    paidAt = models.DateTimeField('支払日時', auto_now_add=False, null=True, blank=True)
+    isDelivered = models.BooleanField('発送済', default=False)
+    deliveredAt = models.DateTimeField('発送日時', auto_now_add=False, null=True, blank=True)
+    createdAt = models.DateTimeField('登録日', auto_now_add=True)
 
     def __str__(self):
         return str(self.createdAt)
@@ -73,12 +73,12 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    name = models.CharField(max_length=200, null=True, blank=True)
-    qty = models.PositiveIntegerField(null=True, blank=True, default=0)
-    price = models.DecimalField(max_digits=7, decimal_places=0, null=True, blank=True)
-    image = models.CharField(max_length=200, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name='商品')
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, verbose_name='注文')
+    name = models.CharField('名前', max_length=200, null=True, blank=True)
+    qty = models.PositiveIntegerField('数量', null=True, blank=True, default=0)
+    price = models.PositiveIntegerField('価格', null=True, blank=True)
+    image = models.CharField('画像', max_length=200, null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -89,12 +89,12 @@ class OrderItem(models.Model):
 
 
 class ShippingAddress(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE, null=True, blank=True)
-    address = models.CharField(max_length=200, null=True, blank=True)
-    city = models.CharField(max_length=200, null=True, blank=True)
-    postalCode = models.CharField(max_length=200, null=True, blank=True)
-    country = models.CharField(max_length=200, null=True, blank=True)
-    shippingPrice = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, null=True, blank=True, verbose_name='注文')
+    address = models.CharField('住所', max_length=200, null=True, blank=True)
+    city = models.CharField('市町村', max_length=200, null=True, blank=True)
+    postalCode = models.CharField('郵便番号', max_length=200, null=True, blank=True)
+    country = models.CharField('都道府県', max_length=200, null=True, blank=True)
+    shippingPrice = models.PositiveIntegerField('', null=True, blank=True)
 
     def __str__(self):
         return str(self.address)
