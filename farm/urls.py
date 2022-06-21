@@ -6,6 +6,9 @@ from farm.views.user_views import (
     updateUser,
     deleteUser,
     registerUser,
+
+    getUserProfile,
+    updateUserProfile,
 )
 
 from farm.views.article_views import (
@@ -61,6 +64,8 @@ urlpatterns = [
     path('users/<str:pk>/', getUserById, name="user"),
     path('users/update/<str:pk>/', updateUser, name="user-update"),
     path('users/delete/<str:pk>/', deleteUser, name="user-delete"),
+    path('users/profile/', getUserProfile, name="users-profile"),
+    path('users/profile/update/', updateUserProfile, name="users-profile-update"),
 
     path('articles/', getArticles,),
     path('articles/public/', getPublicArticles,),

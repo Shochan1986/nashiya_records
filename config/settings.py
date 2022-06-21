@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'farm.apps.FarmConfig', # new
     'drawings.apps.DrawingsConfig', # new
     'photos.apps.PhotosConfig', # new
+    'payment.apps.PaymentConfig', # new
 
     'rest_framework', # new
     'rest_framework_simplejwt.token_blacklist', # new

@@ -56,6 +56,9 @@ from photos.views.general_views import (
     getVideos,
     updateVideo,
     deleteVideo,
+
+    test_payment,
+    save_stripe_info,
 )
 
 from photos.views.content_views import (
@@ -108,6 +111,9 @@ urlpatterns = [
     path('content-images-list/', getContentListImages),
 
     path('videos/', getVideos),
+
+    path('test-payment/', test_payment),
+    path('save-stripe-info/', save_stripe_info),
 
     path('meta/<str:pk>/', getSingleMetadata),
     path('meta/<str:pk>/update/', updateMetadata),

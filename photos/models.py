@@ -230,7 +230,6 @@ class ContentImage(models.Model):
             "width": 1250, 
             }, 
         verbose_name='画像',
-        timeout=60.0,
         )
     note = models.TextField('メモ', null=True, blank=True)
     created = models.DateTimeField('登録日時', auto_now_add=True, null=True, )

@@ -16,13 +16,12 @@ from drf_recaptcha.fields import ReCaptchaV3Field
 import cloudinary
 
 class UserSerializer(serializers.ModelSerializer):
-    _id = serializers.SerializerMethodField(read_only=True)
     isAdmin = serializers.SerializerMethodField(read_only=True)
     isSuper = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', ]
+        fields = ['id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', ]
 
     def get_isAdmin(self, obj):
         return obj.is_staff
@@ -39,7 +38,7 @@ class UserSerializerWithToken(UserSerializer):
     recaptcha = ReCaptchaV3Field(action="auth", required_score=0.6,)
     class Meta:
         model = User
-        fields = ['id', '_id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', 'token', 'recaptcha' ]
+        fields = ['id', 'first_name', 'username', 'email', 'isAdmin', 'isSuper', 'token', 'recaptcha' ]
     
     def get_token(self, obj):
         token = RefreshToken.for_user(obj)
